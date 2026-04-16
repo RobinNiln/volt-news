@@ -183,6 +183,24 @@ body{padding-bottom:0}
 .hero-title{font-size:clamp(36px,4vw,60px)}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr}
 }
+
+/* ARTICLE MODULES */
+.art-quote{font-size:20px;font-weight:600;line-height:1.45;color:var(--navy);border-left:3px solid var(--v);padding:12px 16px;margin:20px 0;font-style:italic}
+.mod-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:var(--v)}
+.mod-label-dark{color:var(--dark)}
+.mod-label-navy{color:var(--navy)}
+.mod-context{background:var(--surface);border-left:3px solid var(--v);padding:14px 16px;margin:20px 0}
+.mod-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;color:var(--dark)}
+.mod-text{font-size:13px;line-height:1.65;color:var(--mid)}
+.mod-updates{border:1px solid var(--border);margin:20px 0;overflow:hidden}
+.upd-item{display:flex;gap:12px;padding:10px 14px;border-top:1px solid var(--border);align-items:flex-start}
+.upd-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);flex-shrink:0;padding-top:2px;width:34px}
+.upd-text{font-size:13px;line-height:1.5;color:var(--dark)}
+.upd-text strong{color:var(--navy)}
+.mod-local{background:var(--surface);border:1px solid var(--border);margin:20px 0;overflow:hidden}
+.mod-local-intro{font-size:12px;color:var(--muted);padding:6px 14px 10px;line-height:1.5}
+.src-grid .srci{padding:8px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;transition:.15s}
+.src-grid .srci:hover{background:var(--bg)}
 </style>
 </head>
 <body>
@@ -347,7 +365,6 @@ body{padding-bottom:0}
 </div>
 </div>
 
-<!-- ARTICLE -->
 <div class="page" id="page-article">
 <div class="art-page">
   <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80" alt="">
@@ -359,28 +376,52 @@ body{padding-bottom:0}
       <span class="art-ab hu">✦ Granskad av journalist</span>
       <span class="art-time">Uppdaterad 14:32</span>
     </div>
-    <p class="ingress">Samma mönster dyker upp i 14 kommuner: vårdcentraler som inte kan tillsätta läkartjänster. VOLT har kartlagt hur ett lokalt problem blivit en nationell kris.</p>
-    <p class="atext">Under de senaste tre veckorna har redaktioner i Luleå, Skellefteå, Uppsala, Norrköping och Linköping — tillsammans med nio andra orter — rapporterat om <strong>vårdcentraler som inte kan rekrytera läkare.</strong></p>
-    <p class="atext">En journalist på VOLT kontaktade Socialstyrelsen och tre regiondirektörer. Region Norrbotten beskriver läget som "allvarligt". Socialstyrelsens generaldirektör uppger att nationell samordning diskuteras internt.</p>
-    <div class="tl">
-      <div class="tlh">Uppdateringar</div>
-      <div class="tli"><div class="tlt">14:32</div><div class="tltext"><strong>Nytt:</strong> Socialstyrelsen bekräftar att en nationell insats planeras.</div></div>
-      <div class="tli"><div class="tlt">11:40</div><div class="tltext">Tre regiondirektörer kommenterar. Region Norrbotten: "allvarligt läge".</div></div>
-      <div class="tli"><div class="tlt">08:15</div><div class="tltext">Artikeln publiceras.</div></div>
+
+    <p class="ingress">Det börjar med en lapp på anslagstavlan. Sedan en vikarie. Sedan ingenting. I 14 svenska kommuner har vårdcentraler det senaste kvartalet stått utan fast läkare — och ingen vet riktigt hur det ska lösas.</p>
+
+    <p class="atext">I Luleå stängde Bergvikens vårdcentral sina bokningsbara tider för nya patienter i februari. I Östersund har en vårdcentral drivits på vikarier i snart ett år. I Uppsala varslar nu universitetssjukhuset 180 anställda — samtidigt som behovet av primärvårdsläkare aldrig har varit större.</p>
+
+    <p class="atext">Det är ingen tillfällighet att dessa nyheter dyker upp samtidigt. <strong>VOLT:s redaktioner på 14 orter har under tre veckor rapporterat om exakt samma problem</strong>, formulerat på olika sätt men med samma kärna: det finns inte tillräckligt många läkare, och de som finns väljer bort landsbygden.</p>
+
+    <div class="mod-context">
+      <div class="mod-label">⚡ Bakgrund</div>
+      <div class="mod-title">Varför är det brist på läkare i Sverige?</div>
+      <p class="mod-text">Sverige utbildar färre läkare per capita än de flesta jämförbara länder. Samtidigt har antalet listade patienter per läkare ökat med 18 procent sedan 2015. Landsbygdskommuner konkurrerar om samma begränsade pool av nyutexaminerade — och förlorar ofta mot storstädernas löner och karriärmöjligheter.</p>
     </div>
-    <div class="src">
-      <div class="srch">Lokala källor</div>
-      <div class="srci"><div><div class="srcn">Norrländska Socialdemokraten</div><div class="srcl">◎ Luleå · 12 apr</div></div><span class="srclink">Läs →</span></div>
-      <div class="srci"><div><div class="srcn">Uppsala Nya Tidning</div><div class="srcl">◎ Uppsala · 13 apr</div></div><span class="srclink">Läs →</span></div>
-      <div class="srci"><div><div class="srcn">Östgöta Correspondenten</div><div class="srcl">◎ Linköping · 14 apr</div></div><span class="srclink">Läs →</span></div>
-      <div class="srci"><div><div class="srcn">Norrköpings Tidningar</div><div class="srcl">◎ Norrköping · 14 apr</div></div><span class="srclink">Läs →</span></div>
-      <div class="srci"><div><div class="srcn">Norran</div><div class="srcl">◎ Skellefteå · 15 apr</div></div><span class="srclink">Läs →</span></div>
+
+    <p class="atext">Maria Lindqvist är distriktsläkare i Skellefteå och har arbetat inom primärvården i 22 år. Hon beskriver ett system under press.</p>
+
+    <blockquote class="art-quote">"Vi lappar och lagar. Det är inte hållbart på sikt. Kollegorna slutar inte för att de inte trivs — de slutar för att de är utmattade."</blockquote>
+
+    <p class="atext">Socialstyrelsens generaldirektör bekräftade under torsdagen att myndigheten följer utvecklingen och att en nationell samordning diskuteras internt. Något officiellt beslut har ännu inte fattats, men signalerna är tydliga.</p>
+
+    <p class="atext">Tre regiondirektörer som VOLT talat med pekar på samma strukturella problem: utbildningsplatser, lönesättning och de administrativa bördor som fått allt fler läkare att lämna yrket i förtid. Region Norrbotten beskriver läget som "allvarligt" och uppger att man överväger att ansöka om statligt stöd.</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-dark">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">14:32</span><span class="upd-text"><strong>Nytt:</strong> Socialstyrelsen bekräftar att en nationell insats planeras under våren.</span></div>
+      <div class="upd-item"><span class="upd-time">11:40</span><span class="upd-text">Tre regiondirektörer kommenterar. Region Norrbotten kallar läget "allvarligt".</span></div>
+      <div class="upd-item"><span class="upd-time">08:15</span><span class="upd-text">Artikeln publiceras baserad på rapporter från 14 lokala redaktioner.</span></div>
     </div>
-    <div class="ad" style="margin:20px -16px;width:calc(100% + 32px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Region Vård</div><div class="atag">Vi söker läkare</div></div></div></div>
+
+    <p class="atext">Frågan är nu vad som händer härnäst. Flera partier i riksdagen har begärt en interpellation om primärvårdens bemanning. Socialminister Jakob Forssmed har ännu inte svarat på VOLT:s begäran om kommentar.</p>
+
+    <div class="mod-local">
+      <div class="mod-label mod-label-navy">◎ Samma sak händer nära dig</div>
+      <p class="mod-local-intro">Den här artikeln bygger på rapportering från 14 av VOLT:s lokala redaktioner. Klicka för att läsa originalet.</p>
+      <div class="src-grid">
+        <div class="srci"><div><div class="srcn">Norrländska Socialdemokraten</div><div class="srcl">◎ Luleå · 12 apr</div></div><span class="srclink">Läs →</span></div>
+        <div class="srci"><div><div class="srcn">Uppsala Nya Tidning</div><div class="srcl">◎ Uppsala · 13 apr</div></div><span class="srclink">Läs →</span></div>
+        <div class="srci"><div><div class="srcn">Östgöta Correspondenten</div><div class="srcl">◎ Linköping · 14 apr</div></div><span class="srclink">Läs →</span></div>
+        <div class="srci"><div><div class="srcn">Norrköpings Tidningar</div><div class="srcl">◎ Norrköping · 14 apr</div></div><span class="srclink">Läs →</span></div>
+        <div class="srci"><div><div class="srcn">Norran</div><div class="srcl">◎ Skellefteå · 15 apr</div></div><span class="srclink">Läs →</span></div>
+      </div>
+    </div>
+
+    <div class="ad" style="margin:24px -16px;width:calc(100% + 32px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Region Vård</div><div class="atag">Vi söker läkare</div></div></div></div>
   </div>
 </div>
 </div>
-
 <!-- LOCAL -->
 <div class="page" id="page-local">
 <div style="padding:16px;max-width:800px;margin:0 auto">
