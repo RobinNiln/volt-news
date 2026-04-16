@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VOLT</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 :root{--v:#F5C500;--navy:#1B2A4A;--bg:#FFFFFF;--surface:#F7F7F5;--dark:#0D0D0D;--mid:#555;--muted:#999;--border:#EBEBEB;--red:#E8302A}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -39,7 +39,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--navy)}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 
 /* CATEGORY LABEL */
-.cat{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--v);background:var(--navy);display:inline-block;padding:2px 8px;margin-bottom:8px}
+.cat{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--v);background:var(--navy);display:inline-block;padding:2px 8px;margin-bottom:8px}
 .cat.red{background:var(--red)}
 .cat.dark{background:var(--dark)}
 
@@ -48,7 +48,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--navy)}
 .hero img{width:100%;height:60vw;max-height:500px;object-fit:cover;display:block}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.3) 50%,transparent 100%)}
 .hero-content{position:absolute;bottom:0;left:0;right:0;padding:20px 16px 24px}
-.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,6vw,52px);font-weight:900;line-height:1.0;color:#fff;text-transform:uppercase;margin-bottom:10px;letter-spacing:.5px}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,6vw,52px);font-weight:700;line-height:1.0;color:#fff;text-transform:uppercase;margin-bottom:10px;letter-spacing:.5px}
 .hero-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .ab{display:inline-flex;align-items:center;gap:3px;font-family:'DM Mono',monospace;font-size:9px;padding:2px 6px;border-radius:1px;letter-spacing:.5px}
 .ab.ai{background:rgba(245,197,0,.2);color:var(--v);border:1px solid rgba(245,197,0,.4)}
@@ -68,7 +68,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--navy)}
 .card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
 .card.sq img{aspect-ratio:1}
 .cb{padding:12px}
-.ctitle{font-family:'Barlow Condensed',sans-serif;font-size:clamp(17px,2.5vw,22px);font-weight:800;line-height:1.1;letter-spacing:.2px;margin-bottom:6px;color:var(--dark)}
+.ctitle{font-family:'Barlow Condensed',sans-serif;font-size:clamp(17px,2.5vw,22px);font-weight:600;line-height:1.15;letter-spacing:.1px;margin-bottom:6px;color:var(--dark)}
 .cdesc{font-size:13px;color:var(--mid);line-height:1.5;margin-bottom:8px}
 .cmeta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .ctime{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
@@ -84,7 +84,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--navy)}
 
 /* SECTION HEADER */
 .sh{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0;border-top:3px solid var(--dark);margin:0}
-.sh-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:1px;text-transform:uppercase}
+.sh-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
 .sh-more{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;cursor:pointer}
 
 /* TRENDS */
@@ -106,7 +106,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--navy)}
 .art-page{max-width:720px;margin:0 auto}
 .art-page>img{width:100%;height:56vw;max-height:420px;object-fit:cover;display:block}
 .art-body{padding:20px 16px}
-.art-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(30px,7vw,52px);font-weight:900;line-height:1.0;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.art-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(30px,7vw,52px);font-weight:700;line-height:1.0;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
 .art-byline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--border);margin-bottom:14px}
 .art-ab{display:inline-flex;align-items:center;gap:3px;font-family:'DM Mono',monospace;font-size:9px;padding:2px 6px;border-radius:1px;letter-spacing:.5px}
 .art-ab.ai{background:rgba(245,197,0,.15);color:#7a6000;border:1px solid rgba(245,197,0,.4)}
@@ -322,21 +322,21 @@ body{padding-bottom:0}
     <div style="border:1px solid var(--border);border-top:none">
       <div class="card-h" onclick="showPage('local')" style="padding:10px 12px">
         <div class="cb" style="padding:0">
-          <div class="cname" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Luleå</div>
+          <div class="cname" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Luleå</div>
           <div class="ccnt" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)">12 artiklar · Hög aktivitet</div>
         </div>
         <div class="ldot" style="flex-shrink:0"></div>
       </div>
       <div class="card-h" onclick="showPage('local')" style="padding:10px 12px;border-top:1px solid var(--border)">
         <div class="cb" style="padding:0">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Uppsala</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Uppsala</div>
           <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)">11 artiklar · Hög aktivitet</div>
         </div>
         <div class="ldot" style="flex-shrink:0"></div>
       </div>
       <div class="card-h" onclick="showPage('local')" style="padding:10px 12px;border-top:1px solid var(--border)">
         <div class="cb" style="padding:0">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Skellefteå</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Skellefteå</div>
           <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)">9 artiklar</div>
         </div>
       </div>
