@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLT — Nyheter som rör sig</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --volt: #E8FF00;
+    --volt-dim: #c9dc00;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --mid: #1e1e1e;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --muted: #888;
+    --white: #ffffff;
+    --ai-color: #E8FF00;
+    --human-color: #00e5ff;
+    --auto-color: #ff6b35;
+    --ad-bg: #161616;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--black);
+    border-bottom: 1px solid var(--border);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--volt);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .logo span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--volt);
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--volt);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--volt);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .menu-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .menu-btn span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: var(--text);
+  }
+
+  /* ─── TICKER ─── */
+  .ticker {
+    margin-top: 56px;
+    background: var(--volt);
+    color: var(--black);
+    height: 32px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker-label {
+    background: var(--black);
+    color: var(--volt);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    padding: 0 12px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+
+  .ticker-track {
+    display: flex;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-track span {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 0 24px;
+    letter-spacing: 0.5px;
+  }
+
+  .ticker-track span::before {
+    content: '·';
+    margin-right: 24px;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ─── LAYOUT ─── */
+  .page {
+    display: none;
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+  .page.active { display: block; }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 55vw;
+    max-height: 420px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.5);
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 20px 16px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.95));
+  }
+
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+
+  .ai-badge.assisted {
+    background: rgba(232,255,0,0.15);
+    color: var(--ai-color);
+    border: 1px solid rgba(232,255,0,0.3);
+  }
+
+  .ai-badge.journalist {
+    background: rgba(0,229,255,0.1);
+    color: var(--human-color);
+    border: 1px solid rgba(0,229,255,0.25);
+  }
+
+  .ai-badge.auto {
+    background: rgba(255,107,53,0.1);
+    color: var(--auto-color);
+    border: 1px solid rgba(255,107,53,0.25);
+  }
+
+  .hero-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--volt);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 6vw, 42px);
+    line-height: 1.05;
+    color: var(--white);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .hero-meta {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ─── FEED ─── */
+  .feed {
+    padding: 0;
+  }
+
+  /* ─── AD UNIT ─── */
+  .ad-unit {
+    background: var(--ad-bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .ad-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .ad-content-mobile {
+    width: 320px;
+    height: 100px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ad-content-mobile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255,255,255,0.02) 10px,
+      rgba(255,255,255,0.02) 20px
+    );
+  }
+
+  .ad-inner {
+    text-align: center;
+    z-index: 1;
+  }
+
+  .ad-inner .ad-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: white;
+    letter-spacing: 3px;
+  }
+
+  .ad-inner .ad-tagline {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ─── ARTICLE CARD ─── */
+  .article-card {
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    gap: 0;
+  }
+
+  .article-card:hover { background: var(--mid); }
+
+  .article-card.featured {
+    flex-direction: column;
+  }
+
+  .article-card.featured .card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.85);
+  }
+
+  .article-card.featured .card-body {
+    padding: 14px 16px 16px;
+  }
+
+  .article-card.small {
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .article-card.small .card-body {
+    flex: 1;
+  }
+
+  .article-card.small .card-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 3px;
+    flex-shrink: 0;
+    filter: brightness(0.85);
+  }
+
+  .card-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--volt);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.3;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .article-card.featured .card-title {
+    font-size: 18px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .card-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .card-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .card-location::before {
+    content: '◎';
+    font-size: 9px;
+    color: var(--volt);
+  }
+
+  /* ─── SECTION HEADER ─── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+
+  .section-title span {
+    color: var(--volt);
+  }
+
+  .section-more {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1px;
+    cursor: pointer;
+  }
+
+  /* ─── TRENDS ─── */
+  .trends-strip {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .trends-strip::-webkit-scrollbar { display: none; }
+
+  .trends-inner {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px;
+    width: max-content;
+  }
+
+  .trend-chip {
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .trend-chip:hover, .trend-chip.active {
+    background: var(--volt);
+    color: var(--black);
+    border-color: var(--volt);
+  }
+
+  .trend-chip .trend-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    opacity: 0.6;
+  }
+
+  /* ─── ARTICLE PAGE ─── */
+  .article-page {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .article-hero-img {
+    width: 100%;
+    height: 56vw;
+    max-height: 380px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.8);
+  }
+
+  .article-body {
+    padding: 20px 16px;
+  }
+
+  .article-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--volt);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .article-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(30px, 7vw, 48px);
+    line-height: 1.02;
+    letter-spacing: 1px;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  /* AI Status Bar */
+  .ai-status-bar {
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .ai-status-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .ai-dot.yellow { background: var(--ai-color); }
+  .ai-dot.cyan { background: var(--human-color); }
+  .ai-dot.updated { background: var(--muted); }
+
+  .ai-status-item.label {
+    color: var(--muted);
+  }
+
+  .ai-status-item.value {
+    color: var(--text);
+  }
+
+  .article-ingress {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--white);
+    margin-bottom: 20px;
+    border-left: 3px solid var(--volt);
+    padding-left: 14px;
+  }
+
+  .article-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+
+  .article-text strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .timeline-header {
+    background: var(--mid);
+    padding: 10px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--volt);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .timeline-item {
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+  }
+
+  .timeline-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    flex-shrink: 0;
+    padding-top: 2px;
+    width: 40px;
+  }
+
+  .timeline-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .timeline-text strong {
+    color: var(--volt);
+  }
+
+  /* ─── SOURCES ─── */
+  .sources-section {
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .sources-header {
+    background: var(--mid);
+    padding: 10px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .source-item {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .source-info { flex: 1; }
+
+  .source-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+
+  .source-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .source-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--volt);
+    text-decoration: none;
+    letter-spacing: 1px;
+    border: 1px solid rgba(232,255,0,0.3);
+    padding: 3px 8px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  /* ─── LOCAL PAGE ─── */
+  .local-page { padding: 16px; }
+
+  .local-intro {
+    margin-bottom: 20px;
+  }
+
+  .local-intro h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .local-intro p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .cities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .city-card {
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .city-card:hover {
+    border-color: var(--volt);
+    background: #1a1a1a;
+  }
+
+  .city-card.hot::after {
+    content: '●';
+    position: absolute;
+    top: 8px; right: 8px;
+    color: var(--volt);
+    font-size: 8px;
+    animation: pulse 1.5s infinite;
+  }
+
+  .city-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+
+  .city-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .city-activity {
+    margin-top: 6px;
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .city-activity-bar {
+    height: 100%;
+    background: var(--volt);
+    border-radius: 1px;
+  }
+
+  /* ─── ABOUT PAGE ─── */
+  .about-page { padding: 24px 16px; max-width: 600px; margin: 0 auto; }
+
+  .about-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: var(--volt);
+    letter-spacing: 8px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .about-tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .about-block {
+    margin-bottom: 28px;
+  }
+
+  .about-block h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--volt);
+    margin-bottom: 8px;
+  }
+
+  .about-block p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #bbb;
+  }
+
+  .ai-explainer {
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    margin: 20px 0;
+  }
+
+  .ai-explainer-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--volt);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .ai-legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .ai-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .ai-legend-item p {
+    font-size: 13px;
+    color: #bbb;
+    margin: 0;
+  }
+
+  .ai-legend-item strong {
+    color: var(--white);
+    display: block;
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  /* ─── BOTTOM NAV ─── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    display: flex;
+    height: 60px;
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--muted);
+    transition: color 0.2s;
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .nav-item.active { color: var(--volt); }
+  .nav-item:hover { color: var(--text); }
+
+  .nav-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  /* ─── DESKTOP ─── */
+  @media (min-width: 768px) {
+    header { padding: 0 32px; }
+
+    .desktop-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr 300px;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: calc(100vh - 88px);
+    }
+
+    .desktop-sidebar-left {
+      border-right: 1px solid var(--border);
+      padding: 20px 16px;
+      position: sticky;
+      top: 88px;
+      height: calc(100vh - 88px);
+      overflow-y: auto;
+    }
+
+    .desktop-main { border-right: 1px solid var(--border); }
+
+    .desktop-sidebar-right { padding: 20px 16px; }
+
+    .sidebar-nav { margin-bottom: 24px; }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: all 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-nav-item:hover { background: var(--mid); color: var(--text); }
+    .sidebar-nav-item.active { background: var(--mid); color: var(--volt); }
+
+    .sidebar-section-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0 10px;
+      margin: 16px 0 6px;
+    }
+
+    .ad-content-desktop {
+      width: 100%;
+      height: 250px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .ad-content-desktop::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 10px,
+        rgba(255,255,255,0.02) 10px,
+        rgba(255,255,255,0.02) 20px
+      );
+    }
+
+    .ad-300x600 {
+      height: 600px;
+    }
+
+    .bottom-nav { display: none; }
+
+    body { padding-bottom: 0; }
+
+    .hero-image { height: 380px; max-height: none; }
+
+    .article-card.featured .card-image { height: 260px; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .page.active { animation: fadeIn 0.3s ease; }
+
+  .trend-chip, .article-card, .city-card {
+    transition: all 0.15s ease;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">VOLT<span></span></div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <button class="menu-btn"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">JUST NU</div>
+  <div class="ticker-track">
+    <span>Riksbanken håller räntan oförändrad</span>
+    <span>Northvolt-utredningen presenteras i dag</span>
+    <span>Bemanningsbristen på äldreboenden ökar i 14 kommuner</span>
+    <span>Luleå: Ny batterifabrik skapar 400 jobb</span>
+    <span>Uppsala: Universitetssjukhuset varslar 180</span>
+    <span>Riksbanken håller räntan oförändrad</span>
+    <span>Northvolt-utredningen presenteras i dag</span>
+    <span>Bemanningsbristen på äldreboenden ökar i 14 kommuner</span>
+    <span>Luleå: Ny batterifabrik skapar 400 jobb</span>
+    <span>Uppsala: Universitetssjukhuset varslar 180</span>
+  </div>
+</div>
+
+<!-- PAGE: START -->
+<div class="page active" id="page-start">
+  <div class="desktop-layout">
+
+    <!-- DESKTOP LEFT -->
+    <aside class="desktop-sidebar-left">
+      <div class="sidebar-nav">
+        <div class="sidebar-nav-item active">⚡ Startsida</div>
+        <div class="sidebar-nav-item" onclick="showPage('local')">◎ Lokalt</div>
+        <div class="sidebar-nav-item">📈 Trender</div>
+        <div class="sidebar-nav-item">🔍 Sök</div>
+      </div>
+      <div class="sidebar-section-title">Ämnen</div>
+      <div class="sidebar-nav-item">Politik</div>
+      <div class="sidebar-nav-item">Ekonomi</div>
+      <div class="sidebar-nav-item">Samhälle</div>
+      <div class="sidebar-nav-item">Näringsliv</div>
+      <div class="sidebar-nav-item">Klimat</div>
+      <div class="sidebar-nav-item">Sport</div>
+    </aside>
+
+    <!-- MAIN FEED -->
+    <main class="desktop-main">
+
+      <!-- HERO -->
+      <div class="hero" onclick="showPage('article')">
+        <img class="hero-image" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80" alt="Hero">
+        <div class="hero-content">
+          <div style="display:flex;gap:6px;margin-bottom:8px;">
+            <span class="ai-badge assisted">⚡ AI-ASSISTERAD</span>
+            <span class="ai-badge journalist">✦ GRANSKAD</span>
+          </div>
+          <div class="hero-category">Nationell trend · Samhälle</div>
+          <div class="hero-title">Läkarbristen slår nu mot 14 av Sveriges kommuner — VOLT kartlägger krisen</div>
+          <div class="hero-meta">08:47 · Baserat på rapporter från Luleå, Uppsala, Norrköping +11 orter</div>
+        </div>
+      </div>
+
+      <!-- TRENDS -->
+      <div class="trends-strip">
+        <div class="trends-inner">
+          <div class="trend-chip active">Alla <span class="trend-count">247</span></div>
+          <div class="trend-chip">Politik <span class="trend-count">43</span></div>
+          <div class="trend-chip">Ekonomi <span class="trend-count">38</span></div>
+          <div class="trend-chip">Vård <span class="trend-count">31</span></div>
+          <div class="trend-chip">Industri <span class="trend-count">28</span></div>
+          <div class="trend-chip">Klimat <span class="trend-count">22</span></div>
+          <div class="trend-chip">Bostad <span class="trend-count">19</span></div>
+        </div>
+      </div>
+
+      <!-- ARTICLES -->
+      <div class="feed">
+
+        <article class="article-card featured" onclick="showPage('article')">
+          <img class="card-image" src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80" alt="">
+          <div class="card-body">
+            <div class="card-category">Industri · Norrbotten</div>
+            <div class="card-title">Northvolt-kraschen skapar ny möjlighet — tre bolag redo att ta över fabriken i Skellefteå</div>
+            <div class="card-meta">
+              <span class="ai-badge assisted" style="font-size:9px;padding:2px 6px;">⚡ AI-ASSISTERAD</span>
+              <span class="card-time">09:14</span>
+              <span class="card-location">Skellefteå</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- AD UNIT MOBILE -->
+        <div class="ad-unit">
+          <div class="ad-label">Annons</div>
+          <div class="ad-content-mobile">
+            <div class="ad-inner">
+              <div class="ad-brand">SWEDBANK</div>
+              <div class="ad-tagline">Bostadslån med fast ränta — ansök idag</div>
+            </div>
+          </div>
+        </div>
+
+        <article class="article-card small" onclick="showPage('article')">
+          <div class="card-body">
+            <div class="card-category">Politik</div>
+            <div class="card-title">Regeringen presenterar ny infrastrukturplan — E4 i fokus</div>
+            <div class="card-meta">
+              <span class="ai-badge journalist" style="font-size:9px;padding:2px 6px;">✦ JOURNALIST</span>
+              <span class="card-time">10:02</span>
+            </div>
+          </div>
+          <img class="card-thumb" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80" alt="">
+        </article>
+
+        <article class="article-card small" onclick="showPage('article')">
+          <div class="card-body">
+            <div class="card-category">Ekonomi</div>
+            <div class="card-title">Riksbanken: Räntan ligger kvar — men signalerar sänkning i höst</div>
+            <div class="card-meta">
+              <span class="ai-badge auto" style="font-size:9px;padding:2px 6px;">◈ AUTO</span>
+              <span class="card-time">10:30</span>
+            </div>
+          </div>
+          <img class="card-thumb" src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=200&q=80" alt="">
+        </article>
+
+        <article class="article-card small" onclick="showPage('article')">
+          <div class="card-body">
+            <div class="card-category">Samhälle · Uppsala</div>
+            <div class="card-title">Universitetssjukhuset varslar 180 — "Vi har inget val"</div>
+            <div class="card-meta">
+              <span class="ai-badge journalist" style="font-size:9px;padding:2px 6px;">✦ JOURNALIST</span>
+              <span class="card-time">11:15</span>
+              <span class="card-location">Uppsala</span>
+            </div>
+          </div>
+          <img class="card-thumb" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=200&q=80" alt="">
+        </article>
+
+        <div class="section-header">
+          <div class="section-title">SENASTE <span>TRENDERNA</span></div>
+          <span class="section-more">Visa alla →</span>
+        </div>
+
+        <article class="article-card small" onclick="showPage('article')">
+          <div class="card-body">
+            <div class="card-category">Klimat</div>
+            <div class="card-title">Extremvärmen drabbar norra Sverige tidigare än väntat</div>
+            <div class="card-meta">
+              <span class="ai-badge assisted" style="font-size:9px;padding:2px 6px;">⚡ AI-ASSISTERAD</span>
+              <span class="card-time">12:00</span>
+            </div>
+          </div>
+          <img class="card-thumb" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=200&q=80" alt="">
+        </article>
+
+        <article class="article-card small" onclick="showPage('article')">
+          <div class="card-body">
+            <div class="card-category">Bostad · Linköping</div>
+            <div class="card-title">Bostadspriserna i Linköping stiger för tredje månaden i rad</div>
+            <div class="card-meta">
+              <span class="ai-badge auto" style="font-size:9px;padding:2px 6px;">◈ AUTO</span>
+              <span class="card-time">12:44</span>
+              <span class="card-location">Linköping</span>
+            </div>
+          </div>
+          <img class="card-thumb" src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=200&q=80" alt="">
+        </article>
+
+        <!-- AD UNIT 2 -->
+        <div class="ad-unit">
+          <div class="ad-label">Annons</div>
+          <div class="ad-content-mobile">
+            <div class="ad-inner">
+              <div class="ad-brand">VATTENFALL</div>
+              <div class="ad-tagline">100% förnybar el — byt idag</div>
+            </div>
+          </div>
+        </div>
+
+        <article class="article-card small" onclick="showPage('article')">
+          <div class="card-body">
+            <div class="card-category">Sport · Norrköping</div>
+            <div class="card-title">IFK Norrköping klar för Europa — "Historiskt för klubben"</div>
+            <div class="card-meta">
+              <span class="ai-badge auto" style="font-size:9px;padding:2px 6px;">◈ AUTO</span>
+              <span class="card-time">13:10</span>
+              <span class="card-location">Norrköping</span>
+            </div>
+          </div>
+          <img class="card-thumb" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=200&q=80" alt="">
+        </article>
+
+      </div>
+    </main>
+
+    <!-- DESKTOP RIGHT SIDEBAR -->
+    <aside class="desktop-sidebar-right">
+      <div class="ad-unit" style="padding:0;border:none;margin-bottom:16px;">
+        <div class="ad-label" style="margin-bottom:6px;">Annons</div>
+        <div class="ad-content-desktop">
+          <div class="ad-inner">
+            <div class="ad-brand">SWEDBANK</div>
+            <div class="ad-tagline">Bostadslån — ansök online</div>
+          </div>
+        </div>
+        <div class="ad-content-desktop ad-300x600" style="margin-top:8px;">
+          <div class="ad-inner">
+            <div class="ad-brand">VATTENFALL</div>
+            <div class="ad-tagline">Grön energi för alla</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- PAGE: ARTICLE -->
+<div class="page" id="page-article">
+  <div class="article-page">
+    <img class="article-hero-img" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80" alt="">
+    <div class="article-body">
+      <div class="article-category">Nationell trend · Samhälle</div>
+      <h1 class="article-title">Läkarbristen slår nu mot 14 av Sveriges kommuner — VOLT kartlägger krisen</h1>
+
+      <!-- AI STATUS BAR -->
+      <div class="ai-status-bar">
+        <div class="ai-status-item">
+          <div class="ai-dot yellow"></div>
+          <span style="color:var(--ai-color);">AI-ASSISTERAD</span>
+        </div>
+        <div class="ai-status-item">
+          <div class="ai-dot cyan"></div>
+          <span style="color:var(--human-color);">GRANSKAD AV JOURNALIST</span>
+        </div>
+        <div class="ai-status-item">
+          <div class="ai-dot updated"></div>
+          <span style="color:var(--muted);">UPPDATERAD 14:32</span>
+        </div>
+      </div>
+
+      <p class="article-ingress">
+        VOLT:s AI identifierade ett mönster i rapporteringen från 14 lokala redaktioner: läkarbristen är inte längre ett lokalt problem — det är en nationell kris som eskalerar tyst.
+      </p>
+
+      <p class="article-text">
+        Under de senaste tre veckorna har redaktioner i Luleå, Skellefteå, Uppsala, Norrköping och Linköping — tillsammans med nio andra orter — publicerat artiklar om samma problem: <strong>vårdcentraler som inte kan tillsätta läkartjänster.</strong>
+      </p>
+
+      <p class="article-text">
+        VOLT:s system flaggade mönstret den 14 april. Det som i varje enskild rapportering verkade som ett lokalt problem visade sig vara koordinerat och systematiskt. En journalist på VOLT kontaktade Socialstyrelsen och tre regiondirektörer för att komplettera bilden.
+      </p>
+
+      <!-- TIMELINE -->
+      <div class="timeline">
+        <div class="timeline-header">
+          <span>⚡</span> ARTIKELNS TIDSLINJE
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">14:32</div>
+          <div class="timeline-text"><strong>NYTT:</strong> Socialstyrelsen bekräftar att en nationell insats planeras.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">11:40</div>
+          <div class="timeline-text">Tre regiondirektörer kommenterar situationen. Region Norrbotten beskriver läget som "allvarligt".</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">08:15</div>
+          <div class="timeline-text">Artikel publiceras. VOLT:s AI identifierade mönstret baserat på 14 lokala rapporter.</div>
+        </div>
+      </div>
+
+      <p class="article-text">
+        Socialstyrelsens generaldirektör uppger att myndigheten följer utvecklingen noga och att en nationell samordning diskuteras internt. Något officiellt beslut har ännu inte fattats.
+      </p>
+
+      <!-- SOURCES -->
+      <div class="sources-section">
+        <div class="sources-header">KÄLLOR — LOKALA RAPPORTER SOM LIGGER TILL GRUND</div>
+        <div class="source-item">
+          <div class="source-info">
+            <div class="source-name">Norrländska Socialdemokraten</div>
+            <div class="source-location">◎ Luleå · Publicerad 12 apr</div>
+          </div>
+          <span class="source-link">LÄSA →</span>
+        </div>
+        <div class="source-item">
+          <div class="source-info">
+            <div class="source-name">Uppsala Nya Tidning</div>
+            <div class="source-location">◎ Uppsala · Publicerad 13 apr</div>
+          </div>
+          <span class="source-link">LÄSA →</span>
+        </div>
+        <div class="source-item">
+          <div class="source-info">
+            <div class="source-name">Östgöta Correspondenten</div>
+            <div class="source-location">◎ Linköping · Publicerad 14 apr</div>
+          </div>
+          <span class="source-link">LÄSA →</span>
+        </div>
+        <div class="source-item">
+          <div class="source-info">
+            <div class="source-name">Norrköpings Tidningar</div>
+            <div class="source-location">◎ Norrköping · Publicerad 14 apr</div>
+          </div>
+          <span class="source-link">LÄSA →</span>
+        </div>
+        <div class="source-item">
+          <div class="source-info">
+            <div class="source-name">Norran</div>
+            <div class="source-location">◎ Skellefteå · Publicerad 15 apr</div>
+          </div>
+          <span class="source-link">LÄSA →</span>
+        </div>
+      </div>
+
+      <!-- AD IN ARTICLE -->
+      <div class="ad-unit" style="margin: 24px -16px; width: calc(100% + 32px);">
+        <div class="ad-label">Annons</div>
+        <div class="ad-content-mobile">
+          <div class="ad-inner">
+            <div class="ad-brand">REGION VÅRD</div>
+            <div class="ad-tagline">Vi söker läkare — se lediga tjänster</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: LOCAL -->
+<div class="page" id="page-local">
+  <div class="local-page">
+    <div class="local-intro">
+      <h2>VOLT LOKALT</h2>
+      <p>17 redaktioner. 17 orter. Lokala nyheter som formar den nationella bilden.</p>
+    </div>
+
+    <div class="cities-grid">
+      <div class="city-card hot">
+        <div class="city-name">Luleå</div>
+        <div class="city-count">12 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:90%"></div></div>
+      </div>
+      <div class="city-card hot">
+        <div class="city-name">Skellefteå</div>
+        <div class="city-count">9 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:75%"></div></div>
+      </div>
+      <div class="city-card hot">
+        <div class="city-name">Uppsala</div>
+        <div class="city-count">11 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:85%"></div></div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">Linköping</div>
+        <div class="city-count">7 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:60%"></div></div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">Norrköping</div>
+        <div class="city-count">8 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:65%"></div></div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">Sundsvall</div>
+        <div class="city-count">5 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:40%"></div></div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">Östersund</div>
+        <div class="city-count">4 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:32%"></div></div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">Gävle</div>
+        <div class="city-count">6 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:50%"></div></div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">Umeå</div>
+        <div class="city-count">7 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:58%"></div></div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">Falun</div>
+        <div class="city-count">3 artiklar idag</div>
+        <div class="city-activity"><div class="city-activity-bar" style="width:25%"></div></div>
+      </div>
+    </div>
+
+    <div class="section-header" style="padding-left:0;padding-right:0;">
+      <div class="section-title">TRENDING <span>LOKALT</span></div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <article class="article-card small" onclick="showPage('article')">
+        <div class="card-body">
+          <div class="card-category">Industri · Skellefteå</div>
+          <div class="card-title">Tre bolag redo att ta över Northvolt-fabriken</div>
+          <div class="card-meta">
+            <span class="card-time">09:14</span>
+            <span class="card-location">Skellefteå</span>
+          </div>
+        </div>
+        <img class="card-thumb" src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&q=80" alt="">
+      </article>
+
+      <article class="article-card small" onclick="showPage('article')">
+        <div class="card-body">
+          <div class="card-category">Samhälle · Uppsala</div>
+          <div class="card-title">Sjukhuset varslar 180 — personalen chockad</div>
+          <div class="card-meta">
+            <span class="card-time">11:15</span>
+            <span class="card-location">Uppsala</span>
+          </div>
+        </div>
+        <img class="card-thumb" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=200&q=80" alt="">
+      </article>
+
+      <article class="article-card small" onclick="showPage('article')">
+        <div class="card-body">
+          <div class="card-category">Näringsliv · Luleå</div>
+          <div class="card-title">Ny batterifabrik skapar 400 jobb i Luleå</div>
+          <div class="card-meta">
+            <span class="card-time">08:30</span>
+            <span class="card-location">Luleå</span>
+          </div>
+        </div>
+        <img class="card-thumb" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=200&q=80" alt="">
+      </article>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: ABOUT -->
+<div class="page" id="page-about">
+  <div class="about-page">
+    <div class="about-logo">VOLT</div>
+    <div class="about-tagline">Nyheter som rör sig</div>
+
+    <div class="about-block">
+      <h3>Vad är VOLT?</h3>
+      <p>VOLT är en nationell nyhetssajt byggd på ett nätverk av 17 lokala redaktioner runt om i Sverige. Vi använder AI för att hitta mönster i lokal rapportering och lyfta dem till nationell nivå — utan betalvägg, utan filter.</p>
+    </div>
+
+    <div class="ai-explainer">
+      <div class="ai-explainer-title">Så här märker vi vårt innehåll</div>
+      <div class="ai-legend-item">
+        <div class="ai-legend-dot" style="background:var(--ai-color)"></div>
+        <div>
+          <strong>⚡ AI-ASSISTERAD</strong>
+          <p>AI har skrivit ett första utkast baserat på lokala källor. En journalist har granskat, redigerat och godkänt artikeln innan publicering.</p>
+        </div>
+      </div>
+      <div class="ai-legend-item">
+        <div class="ai-legend-dot" style="background:var(--human-color)"></div>
+        <div>
+          <strong>✦ JOURNALIST</strong>
+          <p>Artikeln är skriven och rapporterad av en journalist på VOLT. AI kan ha använts som research-verktyg.</p>
+        </div>
+      </div>
+      <div class="ai-legend-item">
+        <div class="ai-legend-dot" style="background:var(--auto-color)"></div>
+        <div>
+          <strong>◈ AUTOMATISERAD</strong>
+          <p>Faktabaserat innehåll — resultat, börskurser, väder — genererat automatiskt och publicerat utan manuell granskning. Alltid med länk till ursprungskälla.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <h3>Nätverket</h3>
+      <p>Våra 17 lokala redaktioner finns på orter från Luleå i norr till Norrköping i söder. De rapporterar lokalt — VOLT ser helheten. Varje dag matar nätverket VOLT med hundratals artiklar som analyseras i realtid.</p>
+    </div>
+
+    <div class="about-block">
+      <h3>Affärsmodell</h3>
+      <p>VOLT finansieras av annonsintäkter. Inget innehåll är låst. Vi säljer aldrig användardata. Alla annonser är tydligt märkta och kontextuellt placerade — aldrig beteendestyrda.</p>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showPage('start', this)">
+    <span class="nav-icon">⚡</span>
+    <span>Start</span>
+  </button>
+  <button class="nav-item" onclick="showPage('local', this)">
+    <span class="nav-icon">◎</span>
+    <span>Lokalt</span>
+  </button>
+  <button class="nav-item" onclick="showPage('start', this)">
+    <span class="nav-icon">🔍</span>
+    <span>Sök</span>
+  </button>
+  <button class="nav-item" onclick="showPage('about', this)">
+    <span class="nav-icon">◈</span>
+    <span>Om VOLT</span>
+  </button>
+</nav>
+
+<script>
+  function showPage(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById('page-' + name);
+    if (page) {
+      page.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+    if (btn) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  }
+
+  // Trend chips
+  document.querySelectorAll('.trend-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.trend-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
