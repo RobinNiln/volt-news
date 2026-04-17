@@ -1,0 +1,11 @@
+{
+  "name": "grid-news",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "cd server && node index.js",
+    "install": "cd server && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
