@@ -16,11 +16,8 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:2px solid var(--v);transition:background .2s}
 .hbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:48px}
 .logo img{height:26px;width:auto;display:block}
-@media(min-width:520px){nav{display:none}body{padding-bottom:0}.dl{display:grid;grid-template-columns:1fr 300px}.dsr{display:block;padding:20px 16px}.dsr-sticky{position:sticky;top:74px}}
+body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 
-.hnav{display:flex}
-.hnav a{color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:0 12px;text-decoration:none;line-height:48px;transition:.15s}
-.hnav a:hover{color:var(--v)}
 }
 .live{display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px}
 .ldot{width:5px;height:5px;background:var(--red);border-radius:50%;animation:p 1.5s infinite}
@@ -179,7 +176,6 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface)
 /* DESKTOP */
 
 
-.dl{display:block;max-width:1200px;margin:0 auto}
 .dm{border-right:1px solid var(--border);min-width:0}
 
 .dsr-sticky{position:sticky;top:74px}
@@ -279,6 +275,17 @@ body.light .logo-light{display:block}
 .sidebar-news-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
 .sidebar-news-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;line-height:1.2;color:var(--text);margin-bottom:4px}
 .sidebar-news-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
+
+.dl{max-width:1200px;margin:0 auto}
+.dsr{display:none}
+@media(min-width:520px){
+  nav{display:none}
+  body{padding-bottom:0}
+  .dl{display:grid;grid-template-columns:1fr 300px}
+  .dsr{display:block;padding:20px 16px}
+  .dsr-sticky{position:sticky;top:74px}
+  .hnav{display:flex}
+}
 </style>
 </head>
 <body class="dark">
