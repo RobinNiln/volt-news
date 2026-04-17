@@ -6,12 +6,14 @@
 <title>VOLT</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-:root{--v:#F5C500;--bg:#0D0D0D;--surface:#161616;--card:#1A1A1A;--dark:#0D0D0D;--text:#F0F0F0;--mid:#AAAAAA;--muted:#666;--border:#2A2A2A;--red:#E8302A;--navy:#1B2A4A}
+:root{--v:#F5C500;--red:#E8302A}
+body.dark{--bg:#0D0D0D;--surface:#161616;--card:#1A1A1A;--text:#F0F0F0;--mid:#AAAAAA;--muted:#666;--border:#2A2A2A}
+body.light{--bg:#FFFFFF;--surface:#F5F5F3;--card:#EDEDE9;--text:#0D0D0D;--mid:#444444;--muted:#999999;--border:#E0E0E0}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:16px;overflow-x:hidden}
 
 /* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:2px solid var(--v)}
+header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:2px solid var(--v);transition:background .2s}
 .hbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:48px}
 .logo img{height:26px;width:auto;display:block}
 .hnav{display:none}
@@ -185,9 +187,30 @@ body{padding-bottom:0}
 .hero img{height:60vw;max-height:560px}
 .grid-2 .card img{aspect-ratio:3/2}
 }
+
+body.light .logo img{filter:none}
+body.light .about-hero .alogo img{filter:none}
+body.dark .logo img{filter:brightness(0) invert(1)}
+body.dark .about-hero .alogo img{filter:brightness(0) invert(1)}
+body.light .hero img{filter:brightness(.65)}
+body.light .card img{filter:brightness(.95)}
+body.light .card-h img{filter:brightness(.95)}
+body.light .art-page>img{filter:brightness(.85)}
+body.light .art-quote{color:var(--text)}
+body.light nav{background:var(--surface)}
+body.light .ticker{background:var(--surface)}
+body.light .trends{background:var(--surface)}
+body.light .mod-context{background:var(--surface)}
+body.light .mod-updates{background:var(--bg)}
+body.light .mod-local{background:var(--surface)}
+body.light .about-hero{background:var(--surface)}
+body.light .abox,.body.light .dabox{border-color:var(--border)}
+body.light .ad{background:var(--surface)}
+body.light #theme-btn{border-color:var(--border);color:var(--text)}
+
 </style>
 </head>
-<body>
+<body class="dark">
 
 <header>
   <div class="hbar">
@@ -196,6 +219,7 @@ body{padding-bottom:0}
       <a href="#">Politik</a><a href="#">Ekonomi</a><a href="#">Samhälle</a><a href="#">Industri</a><a href="#">Klimat</a><a href="#">Lokalt</a>
     </nav>
     <div class="live"><div class="ldot"></div>LIVE</div>
+    <button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s">☀ Ljust</button>
   </div>
 </header>
 
@@ -520,6 +544,25 @@ body{padding-bottom:0}
 <script>
 function showPage(n,b){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('page-'+n);if(pg){pg.classList.add('active');window.scrollTo(0,0)}if(b){document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));b.classList.add('on')}}
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on')}));
+</script>
+
+<script>
+function toggleTheme(){
+  const b=document.body;
+  const btn=document.getElementById('theme-btn');
+  if(b.classList.contains('dark')){
+    b.classList.replace('dark','light');
+    btn.textContent='☾ Mörkt';
+    localStorage.setItem('volt-theme','light');
+  } else {
+    b.classList.replace('light','dark');
+    btn.textContent='☀ Ljust';
+    localStorage.setItem('volt-theme','dark');
+  }
+}
+// Restore saved preference
+const saved=localStorage.getItem('volt-theme');
+if(saved==='light'){document.body.classList.replace('dark','light');document.getElementById('theme-btn').textContent='☾ Mörkt';}
 </script>
 </body>
 </html>
