@@ -16,8 +16,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:2px solid var(--v);transition:background .2s}
 .hbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:48px}
 .logo img{height:26px;width:auto;display:block}
-.hnav{display:none}
-@media(min-width:520px){
+.h@media(min-width:520px){
 .hnav{display:flex}
 .hnav a{color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:0 12px;text-decoration:none;line-height:48px;transition:.15s}
 .hnav a:hover{color:var(--v)}
@@ -178,7 +177,6 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface)
 
 /* DESKTOP */
 @media(min-width:520px){
-nav{display:none}
 body{padding-bottom:0}
 .dl{display:grid;grid-template-columns:1fr 300px;max-width:1200px;margin:0 auto}
 .dm{border-right:1px solid var(--border);min-width:0}
@@ -271,6 +269,12 @@ body.light .logo-light{display:block}
 
 @media(min-width:520px){
 .sni.on{background:var(--surface);color:var(--v);font-weight:600}
+}
+
+@media(min-width:520px){
+  nav{display:flex}
+  .ni{font-size:12px;height:58px}
+  .ni span:first-child{font-size:18px}
 }
 </style>
 </head>
