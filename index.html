@@ -11,7 +11,7 @@
 body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:16px;overflow-x:hidden}
 
 /* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--bg);border-bottom:2px solid var(--v)}
+header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:2px solid var(--v)}
 .hbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:48px}
 .logo img{height:26px;width:auto;display:block}
 .hnav{display:none}
@@ -25,7 +25,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--bg);bord
 @keyframes p{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* TICKER */
-.ticker{margin-top:48px;background:var(--surface);height:26px;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--border)}
+.ticker{margin-top:48px;background:var(--surface);height:26px;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--border);position:relative;z-index:10}
 .tlabel{background:var(--v);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;padding:0 10px;height:100%;display:flex;align-items:center;flex-shrink:0;font-weight:700;text-transform:uppercase}
 .ttrack{display:flex;animation:tick 40s linear infinite;white-space:nowrap}
 .ttrack span{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);padding:0 20px}
@@ -201,8 +201,10 @@ body{padding-bottom:0}
 
 <div class="ticker">
   <div class="tlabel">Just nu</div>
+  <div style="overflow:hidden;flex:1;display:flex;align-items:center">
   <div class="ttrack">
     <span>Riksbanken håller räntan oförändrad</span><span>Northvolt-utredningen presenteras i dag</span><span>Bemanningsbristen ökar i 14 kommuner</span><span>Luleå: Ny batterifabrik skapar 400 jobb</span><span>Uppsala: Universitetssjukhuset varslar 180</span><span>Riksbanken håller räntan oförändrad</span><span>Northvolt-utredningen presenteras i dag</span><span>Bemanningsbristen ökar i 14 kommuner</span><span>Luleå: Ny batterifabrik skapar 400 jobb</span><span>Uppsala: Universitetssjukhuset varslar 180</span>
+  </div>
   </div>
 </div>
 
