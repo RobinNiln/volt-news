@@ -310,6 +310,10 @@ body.light .logo-light{display:block}
 .mod-media-footer{padding:8px 14px;border-top:1px solid var(--border);background:var(--surface);font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.3px}
 
 .mm-logo.grid{background:var(--v);color:#000}
+
+.admin-desktop-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s}
+.admin-desktop-btn:hover{color:var(--v);border-color:var(--v)}
+@media(min-width:520px){#admin-btn{display:block!important}}
 </style>
 </head>
 <body class="dark">
@@ -324,6 +328,7 @@ body.light .logo-light{display:block}
       <a href="#">Politik</a><a href="#">Ekonomi</a><a href="#">Samhälle</a><a href="#">Industri</a><a href="#">Klimat</a><a href="#">Lokalt</a>
     </nav>
     <div class="live"><div class="ldot"></div>LIVE</div>
+    <button onclick="showPage('cms')" style="display:none" id="admin-btn" class="admin-desktop-btn">✎ Admin</button>
     <button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s">☀ Ljust</button>
   </div>
 </header>
