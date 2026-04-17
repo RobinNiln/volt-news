@@ -16,7 +16,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:2px solid var(--v);transition:background .2s}
 .hbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:48px}
 .logo img{height:26px;width:auto;display:block}
-.h@media(min-width:520px){nav{display:none}body{padding-bottom:0}
+@media(min-width:520px){nav{display:none}body{padding-bottom:0}
 body{padding-bottom:0}
 
 .hnav{display:flex}
@@ -178,7 +178,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface)
 .ni span:first-child{font-size:16px}
 
 /* DESKTOP */
-@media(min-width:520px){nav{display:none}body{padding-bottom:0}
+
 body{padding-bottom:0}
 
 body{padding-bottom:0}
@@ -271,11 +271,18 @@ body.light .logo-light{display:block}
 .mod-related-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;line-height:1.15;color:var(--text);margin-bottom:6px}
 .mod-related-meta{display:flex;align-items:center;gap:6px}
 
-@media(min-width:520px){nav{display:none}body{padding-bottom:0}
+
 body{padding-bottom:0}
 
 .sni.on{background:var(--surface);color:var(--v);font-weight:600}
 }
+
+.sidebar-news-item{padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
+.sidebar-news-item:hover .sidebar-news-title{color:var(--v)}
+.sidebar-news-item:last-child{border-bottom:none}
+.sidebar-news-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.sidebar-news-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;line-height:1.2;color:var(--text);margin-bottom:4px}
+.sidebar-news-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
 </style>
 </head>
 <body class="dark">
@@ -496,19 +503,6 @@ body{padding-bottom:0}
   <div class="dsr-sticky">
     <div class="alabel" style="display:block;margin-bottom:8px">Annons</div>
     <div class="dabox" style="height:250px"><div><div class="abrand">Swedbank</div><div class="atag">Ansök online</div></div></div>
-    <div class="feed-label" style="padding-left:0;margin-top:20px;border-top:2px solid var(--v)">Lokalt</div>
-    <div class="card-h" onclick="showPage('local')" style="padding:10px 0">
-      <div class="cb" style="padding:0"><div class="cname">Luleå</div><div class="ccnt">12 artiklar · Hög aktivitet</div></div>
-      <div class="ldot"></div>
-    </div>
-    <div class="card-h" onclick="showPage('local')" style="padding:10px 0">
-      <div class="cb" style="padding:0"><div class="cname">Uppsala</div><div class="ccnt">11 artiklar · Hög aktivitet</div></div>
-      <div class="ldot"></div>
-    </div>
-    <div class="card-h" onclick="showPage('local')" style="padding:10px 0">
-      <div class="cb" style="padding:0"><div class="cname">Skellefteå</div><div class="ccnt">9 artiklar</div></div>
-    </div>
-    <div class="dabox" style="height:560px;margin-top:20px"><div><div class="abrand">Vattenfall</div><div class="atag">Grön energi</div></div></div>
   </div>
 </aside>
 </div>
