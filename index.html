@@ -10,14 +10,13 @@
 body.dark{--bg:#0D0D0D;--surface:#161616;--card:#1A1A1A;--text:#F0F0F0;--mid:#AAAAAA;--muted:#666;--border:#2A2A2A}
 body.light{--bg:#FFFFFF;--surface:#F5F5F3;--card:#EDEDE9;--text:#0D0D0D;--mid:#444444;--muted:#999999;--border:#E0E0E0}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:16px;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:16px;overflow-x:hidden;padding-bottom:58px}
 
 /* HEADER */
 header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:2px solid var(--v);transition:background .2s}
 .hbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:48px}
 .logo img{height:26px;width:auto;display:block}
 @media(min-width:520px){nav{display:none}body{padding-bottom:0}.dl{display:grid;grid-template-columns:1fr 300px}.dsr{display:block;padding:20px 16px;background:var(--bg)}.dsr-sticky{position:sticky;top:74px}
-body{padding-bottom:0}
 
 .hnav{display:flex}
 .hnav a{color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:0 12px;text-decoration:none;line-height:48px;transition:.15s}
@@ -179,9 +178,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface)
 
 /* DESKTOP */
 
-body{padding-bottom:0}
 
-body{padding-bottom:0}
 .dl{display:block;max-width:1200px;margin:0 auto}
 .dm{border-right:1px solid var(--border);min-width:0}
 
@@ -272,7 +269,6 @@ body.light .logo-light{display:block}
 .mod-related-meta{display:flex;align-items:center;gap:6px}
 
 
-body{padding-bottom:0}
 
 .sni.on{background:var(--surface);color:var(--v);font-weight:600}
 }
