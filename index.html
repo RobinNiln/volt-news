@@ -268,6 +268,10 @@ body.light .logo-light{display:block}
 .mod-related-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
 .mod-related-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;line-height:1.15;color:var(--text);margin-bottom:6px}
 .mod-related-meta{display:flex;align-items:center;gap:6px}
+
+@media(min-width:768px){
+.sni.on{background:var(--surface);color:var(--v);font-weight:600}
+}
 </style>
 </head>
 <body class="dark">
@@ -1386,7 +1390,16 @@ body.light .logo-light{display:block}
   <button class="ni" onclick="showPage('about',this)"><span>▪</span><span>Om GRID</span></button>
 </nav>
 <script>
-function showPage(n,b){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('page-'+n);if(pg){pg.classList.add('active');window.scrollTo(0,0)}if(b){document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));b.classList.add('on')}}
+function showPage(n,b){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-'+n);
+  if(pg){pg.classList.add('active');window.scrollTo(0,0)}
+  if(b){
+    document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.sni').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+  }
+}
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on')}));
 </script>
 
