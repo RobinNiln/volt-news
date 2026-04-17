@@ -240,6 +240,34 @@ body.dark .logo-dark{display:block}
 body.dark .logo-light{display:none}
 body.light .logo-dark{display:none}
 body.light .logo-light{display:block}
+
+.kronika-header{background:var(--surface);border-bottom:3px solid var(--v);padding:16px 14px}
+.kronika-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--v);margin-bottom:12px}
+.kronika-author{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.kronika-avatar{width:40px;height:40px;border-radius:50%;background:var(--v);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kronika-name{font-size:14px;font-weight:600;color:var(--text)}
+.kronika-role{font-size:11px;color:var(--muted);margin-top:1px}
+.kronika-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.5px}
+.kronika-footer{border-top:1px solid var(--border);padding-top:16px;margin-top:24px}
+
+.card.kronika-card{border-left:3px solid var(--v)}
+.kronika-card .cb{padding:12px 14px}
+.kronika-card .kronika-byline{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.kronika-card .kronika-mini-avatar{width:28px;height:28px;border-radius:50%;background:var(--v);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kronika-card .kronika-byline-text{font-size:11px;color:var(--muted)}
+.kronika-card .kronika-byline-text strong{color:var(--text);font-size:12px;display:block}
+
+.mod-related{margin:24px 0;border:1px solid var(--border)}
+.mod-related-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border)}
+.mod-related-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
+.mod-related-more{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;cursor:pointer;text-transform:uppercase}
+.mod-related-item{display:flex;gap:12px;padding:12px 14px;border-top:1px solid var(--border);cursor:pointer;transition:.15s}
+.mod-related-item:hover{background:var(--card)}
+.mod-related-item img{width:72px;height:72px;object-fit:cover;flex-shrink:0;filter:brightness(.8)}
+.mod-related-body{flex:1}
+.mod-related-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.mod-related-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;line-height:1.15;color:var(--text);margin-bottom:6px}
+.mod-related-meta{display:flex;align-items:center;gap:6px}
 </style>
 </head>
 <body class="dark">
@@ -341,6 +369,20 @@ body.light .logo-light{display:block}
   <div class="ad"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Vattenfall</div><div class="atag">100% förnybar el</div></div></div></div>
 
   <div class="feed-label" style="border-top:2px solid var(--v)">Industri &amp; Näringsliv</div>
+  <div class="card kronika-card" onclick="showPage('kronika-northvolt')" style="border-bottom:1px solid var(--border)">
+    <div class="cb">
+      <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:8px;background:var(--v);color:#000">Krönika · Industri</div>
+      <div class="kronika-byline">
+        <div class="kronika-mini-avatar">PL</div>
+        <div class="kronika-byline-text">
+          <strong>Per Lindström</strong>
+          Näringslivskommentator
+        </div>
+      </div>
+      <div class="ctitle" style="font-size:clamp(18px,3vw,24px)">Northvolt var inte ett misstag. Det var ett nödvändigt experiment.</div>
+      <div class="cmeta" style="margin-top:6px"><span class="ctime">17 apr</span></div>
+    </div>
+  </div>
   <div class="grid-2">
     <div class="card" onclick="showPage('ericsson')">
       <img src="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&q=80" alt="">
@@ -1247,6 +1289,96 @@ body.light .logo-light{display:block}
 </div>
 </div>
 
+<div class="page" id="page-kronika-northvolt">
+<div class="art-page">
+  <div class="kronika-header">
+    <div class="kronika-label">Krönika</div>
+    <div class="kronika-author">
+      <div class="kronika-avatar">PL</div>
+      <div>
+        <div class="kronika-name">Per Lindström</div>
+        <div class="kronika-role">Näringslivskommentator, GRID</div>
+      </div>
+    </div>
+    <div class="kronika-date">17 april 2026</div>
+  </div>
+  <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80" alt="" style="width:100%;height:52vw;max-height:400px;object-fit:cover;display:block;filter:brightness(.6)">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Industri · Krönika</div>
+    <h1 class="art-title">Northvolt var inte ett misstag. Det var ett nödvändigt experiment.</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">17 apr 2026</span>
+    </div>
+
+    <p class="ingress">Det är lätt att håna Northvolt i efterhand. Facit är känt: miljarder borta, fabriken tom, drömmen krossad. Men den berättelsen missar något viktigt.</p>
+
+    <p class="atext">Låt oss börja med det uppenbara. Peter Carlssons vision var inte fel — den var för tidig, för snabb och underfinansierad i förhållande till ambitionens storlek. Det är en avgörande skillnad. <strong>Att misslyckas med rätt idé är inte samma sak som att ha fel.</strong></p>
+
+    <p class="atext">Europa behöver batterifabriker. Det är inte en åsikt — det är ett geopolitiskt faktum. Den som kontrollerar batteritillverkningen kontrollerar elektrifieringen av kontinenten. Northvolt förstod det 2016, när ingen annan europeisk aktör hade modet att se det. Det förtjänar respekt, oavsett utgången.</p>
+
+    <blockquote class="art-quote">"Det finns ingen skam i att försöka göra något som inte gjorts förut och misslyckas. Skammen vore att inte ha försökt."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Per Lindström</p>
+
+    <p class="atext">Vad gick då fel? Inte visionen. Inte ens tekniken, som trots allt fungerade. Det som gick fel var skalningen — tron att man kunde gå från noll till världsklass på tre år med en personalstyrka som växte snabbare än kulturen och processerna som skulle hålla ihop den.</p>
+
+    <p class="atext">Jag har pratat med ett dussin tidigare Northvolt-anställda det senaste halvåret. Bilden de ger är inte av ett korrumperat bolag eller av ledning som visste att det gick åt helvete. Det är av människor som trodde på något och jobbade hårdare än de borde ha behövt — i ett system som aldrig hann mogna.</p>
+
+    <p class="atext">Det finns en tendens i svensk affärsjournalistik att behandla industriella misslyckanden som moraliska domar. Northvolt har blivit en symbol för hybris, för övertro, för allt som är fel med statliga miljardsatsningar. Det är en bekväm berättelse. Den är också för enkel.</p>
+
+    <p class="atext"><strong>Sverige har nu en tom batterifabrik i Skellefteå, kompetens som sprids för vinden och en infrastruktur som kostade enormt att bygga.</strong> Det tragiska är inte att pengarna är borta — det är att vi riskerar att dra fel lärdom. Om lärdomen är "satsa aldrig stort igen" har vi missförstått situationen helt.</p>
+
+    <p class="atext">Den rätta lärdomen är en annan: bygg långsammare, bygg med djupare industriell kompetens, bygg utan tron att Silicon Valley-metoder fungerar i tung tillverkningsindustri. Det är lärdomar som kan bära Sverige in i nästa fas av den gröna industriomvandlingen — om vi orkar dra dem.</p>
+
+    <p class="atext">Fabriken i Skellefteå kommer att få en ny ägare. Kanske ett sydkoreanskt bolag, kanske ett europeiskt konsortium. De kommer att dra nytta av allt som Northvolt byggde upp — nätverket, infrastrukturen, den lokala kompetensen. På ett perverst sätt är Northvolts konkurs inte slutet på berättelsen. Det är mellanlandet.</p>
+
+    <p class="atext">Experimentet misslyckades. Men det nödvändiga experimentet är inte över.</p>
+
+
+    <div class="mod-related">
+      <div class="mod-related-header">
+        <div class="mod-related-label">Senaste om Northvolt</div>
+        <span class="mod-related-more" onclick="showPage('northvolt')">Visa alla →</span>
+      </div>
+      <div class="mod-related-item" onclick="showPage('northvolt')">
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&q=80" alt="">
+        <div class="mod-related-body">
+          <div class="mod-related-cat">Industri</div>
+          <div class="mod-related-title">Tre bolag redo att ta över Northvolt-fabriken — men villkoren är hårda</div>
+          <div class="mod-related-meta"><span class="ab ai" style="font-size:8px;padding:1px 5px">⚡ AI</span><span class="ctime">09:14</span></div>
+        </div>
+      </div>
+      <div class="mod-related-item" onclick="showPage('lulea-fabrik')">
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=200&q=80" alt="">
+        <div class="mod-related-body">
+          <div class="mod-related-cat">Näringsliv · Luleå</div>
+          <div class="mod-related-title">Ny batterifabrik i Luleå skapar 400 jobb — men bostadsbristen oroar</div>
+          <div class="mod-related-meta"><span class="ctime">08:30</span></div>
+        </div>
+      </div>
+      <div class="mod-related-item" onclick="showPage('ericsson')">
+        <img src="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=200&q=80" alt="">
+        <div class="mod-related-body">
+          <div class="mod-related-cat">Näringsliv</div>
+          <div class="mod-related-title">Ericsson varslar 1 200 i Sverige — satsar hårt på AI-driven nätverksteknik</div>
+          <div class="mod-related-meta"><span class="ctime">07:30</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="kronika-footer">
+      <div class="kronika-author" style="margin-bottom:0">
+        <div class="kronika-avatar">PL</div>
+        <div>
+          <div class="kronika-name">Per Lindström</div>
+          <div class="kronika-role">Skriver om industri, energi och svensk ekonomisk omvandling. Tidigare finansredaktör på Dagens Industri.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">GRID</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
 <nav>
   <button class="ni on" onclick="showPage('start',this)"><span>⚡</span><span>Start</span></button>
   <button class="ni" onclick="showPage('local',this)"><span>◎</span><span>Lokalt</span></button>
