@@ -219,6 +219,19 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
 
 .mod-warn-icon{width:32px;height:32px;border-radius:50%;background:rgba(245,197,0,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--v)}
 .src-headline{font-size:13px;font-weight:500;color:var(--text);line-height:1.35;margin-bottom:4px}
+
+.mod-video{margin:22px 0}
+.video-wrap{display:flex;gap:12px;align-items:flex-start}
+.video-inner{flex-shrink:0;width:120px}
+.video-thumb{position:relative;width:120px;height:213px;border-radius:4px;overflow:hidden;cursor:pointer}
+.video-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.video-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.1) 50%,transparent 100%)}
+.video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:44px;height:44px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.6);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:4px}
+.video-duration{position:absolute;bottom:8px;right:8px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.8);background:rgba(0,0,0,.5);padding:1px 5px;border-radius:2px}
+.video-caption{position:absolute;bottom:0;left:0;right:0;padding:6px 8px 8px;font-size:10px;font-weight:600;color:#fff;line-height:1.3}
+.video-meta{flex:1;padding-top:4px}
+.video-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--v);letter-spacing:.5px;margin-bottom:6px}
+.video-desc{font-size:13px;color:var(--mid);line-height:1.5}
 </style>
 </head>
 <body class="dark">
@@ -248,7 +261,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
 <div class="dl">
 <main class="dm">
 
-  <div class="hero" onclick="showPage('article')">
+  <div class="hero" onclick="showPage('lakarbrist')">
     <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80" alt="">
     <div class="hero-content">
       <div class="cat red">Nationell trend</div>
@@ -272,7 +285,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
   </div></div>
 
   <div class="grid-2">
-    <div class="card" onclick="showPage('article')">
+    <div class="card" onclick="showPage('northvolt')">
       <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80" alt="">
       <div class="cb">
         <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:6px">Industri</div>
@@ -280,7 +293,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
         <div class="cmeta"><span class="ctime">09:14</span><span class="cloc">Skellefteå</span></div>
       </div>
     </div>
-    <div class="card" onclick="showPage('article')">
+    <div class="card" onclick="showPage('lakarbrist')">
       <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&q=80" alt="">
       <div class="cb">
         <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:6px">Samhälle</div>
@@ -293,23 +306,23 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
   <div class="ad"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Swedbank</div><div class="atag">Bostadslån med fast ränta</div></div></div></div>
 
   <div class="feed-label">Senaste</div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('infrastruktur')">
     <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Politik</div><div class="ctitle">Regeringen presenterar ny infrastrukturplan — E4 i fokus</div><div class="cmeta"><span class="ctime">10:02</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('riksbank')">
     <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Ekonomi</div><div class="ctitle">Riksbanken: Räntan ligger kvar — signalerar sänkning i höst</div><div class="cmeta"><span class="ctime">10:30</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('torka')">
     <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Klimat</div><div class="ctitle">Extremvärmen drabbar norra Sverige tidigare än väntat</div><div class="cmeta"><span class="ctime">12:00</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('norrkoeping-europa')">
     <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Sport</div><div class="ctitle">IFK Norrköping klar för Europa — "Historiskt för klubben"</div><div class="cmeta"><span class="ctime">13:10</span><span class="cloc">Norrköping</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('bostadspriser')">
     <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Bostad</div><div class="ctitle">Bostadspriserna i Linköping stiger för tredje månaden i rad</div><div class="cmeta"><span class="ctime">12:44</span><span class="cloc">Linköping</span></div></div>
   </div>
@@ -318,7 +331,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
 
   <div class="feed-label" style="border-top:2px solid var(--v)">Industri &amp; Näringsliv</div>
   <div class="grid-2">
-    <div class="card" onclick="showPage('article')">
+    <div class="card" onclick="showPage('ericsson')">
       <img src="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&q=80" alt="">
       <div class="cb">
         <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:6px">Näringsliv</div>
@@ -326,7 +339,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
         <div class="cmeta"><span class="ctime">07:30</span></div>
       </div>
     </div>
-    <div class="card" onclick="showPage('article')">
+    <div class="card" onclick="showPage('torka')">
       <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80" alt="">
       <div class="cb">
         <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:6px">Näringsliv</div>
@@ -337,7 +350,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
   </div>
 
   <div class="feed-label" style="border-top:2px solid var(--v)">Klimat &amp; Miljö</div>
-  <div class="card" onclick="showPage('article')" style="border-bottom:1px solid var(--border)">
+  <div class="card" onclick="showPage('bostadspriser')" style="border-bottom:1px solid var(--border)">
     <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80" alt="" style="width:100%;height:48vw;max-height:320px;object-fit:cover;display:block;filter:brightness(.6)">
     <div class="cb">
       <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:6px">Klimat</div>
@@ -347,11 +360,11 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
     </div>
   </div>
 
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('sd-m-budget')">
     <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Klimat</div><div class="ctitle">Sverige missar klimatmålen för tredje året i rad</div><div class="cmeta"><span class="ctime">10:15</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('klimatmal')">
     <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Energi</div><div class="ctitle">Elpriser rasar i norr — stiger kraftigt i söder</div><div class="cmeta"><span class="ctime">11:00</span></div></div>
   </div>
@@ -359,22 +372,22 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
   <div class="ad"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Volvo Cars</div><div class="atag">Upplev framtidens mobilitet</div></div></div></div>
 
   <div class="feed-label" style="border-top:2px solid var(--v)">Politik</div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('kulturhuset-sara')">
     <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Politik</div><div class="ctitle">SD och M går isär i budgetförhandlingarna — krisen eskalerar</div><div class="cmeta"><span class="ctime">08:20</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('lulea-hockey')">
     <img src="https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Politik</div><div class="ctitle">Oppositionens misstroendeförklaring avvisas med en rösts marginal</div><div class="cmeta"><span class="ab hu" style="font-size:8px;padding:1px 5px">✦ Journalist</span><span class="ctime">13:55</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('duplantis')">
     <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">EU</div><div class="ctitle">EU-kommissionen kräver svar från Sverige om datalagring</div><div class="cmeta"><span class="ctime">14:30</span></div></div>
   </div>
 
   <div class="feed-label" style="border-top:2px solid var(--v)">Lokalt i fokus</div>
   <div class="grid-2">
-    <div class="card" onclick="showPage('article')">
+    <div class="card" onclick="showPage('eu-datalagring')">
       <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&q=80" alt="">
       <div class="cb">
         <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:6px">Luleå</div>
@@ -382,7 +395,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
         <div class="cmeta"><span class="ctime">08:30</span><span class="cloc">Luleå</span></div>
       </div>
     </div>
-    <div class="card" onclick="showPage('article')">
+    <div class="card" onclick="showPage('elpriser')">
       <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=600&q=80" alt="">
       <div class="cb">
         <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:6px">Norrköping</div>
@@ -391,11 +404,11 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
       </div>
     </div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('volvo')">
     <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Uppsala</div><div class="ctitle">Universitetet varslar — studenterna protesterar utanför rektorskontoret</div><div class="cmeta"><span class="ctime">11:40</span><span class="cloc">Uppsala</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('lulea-fabrik')">
     <img src="https://images.unsplash.com/photo-1512850183-6d7990f42385?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Skellefteå</div><div class="ctitle">Kulturhuset Sara fyller tre år — blivit en motor för inflyttning</div><div class="cmeta"><span class="ctime">12:20</span><span class="cloc">Skellefteå</span></div></div>
   </div>
@@ -403,15 +416,15 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
   <div class="ad"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">ICA</div><div class="atag">Veckans erbjudanden — handla online</div></div></div></div>
 
   <div class="feed-label" style="border-top:2px solid var(--v)">Sport</div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('stockholm-bostader')">
     <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Fotboll</div><div class="ctitle">IFK Norrköping klar för Europa — "Historiskt för klubben"</div><div class="cmeta"><span class="ctime">13:10</span><span class="cloc">Norrköping</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('uppsalaprotester')">
     <img src="https://images.unsplash.com/photo-1515703407324-5f753afd8be8?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Hockey</div><div class="ctitle">Luleå HF till SM-final efter dramatisk övertidsseger</div><div class="cmeta"><span class="ctime">22:45</span><span class="cloc">Luleå</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('uppsalaprotester')">
     <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Friidrott</div><div class="ctitle">Armand Duplantis sätter nytt världsrekord i stavhopp — igen</div><div class="cmeta"><span class="ctime">20:10</span></div></div>
   </div>
@@ -440,25 +453,38 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
 </div>
 </div>
 
-<!-- ARTICLE -->
-<div class="page" id="page-article">
+<div class="page" id="page-lakarbrist">
 <div class="art-page">
   <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80" alt="">
   <div class="art-body">
-    <div class="cat red" style="margin-bottom:12px">Nationell trend · Samhälle</div>
+    <div class="cat red" style="margin-bottom:12px">Samhälle</div>
     <h1 class="art-title">Läkarbristen slår mot 14 kommuner — VOLT kartlägger krisen</h1>
     <div class="art-byline">
       <span class="art-ab ai">⚡ AI-assisterad</span>
-      <span class="art-ab hu">✦ Granskad av journalist</span>
-      <span class="art-time">Uppdaterad 14:32</span>
+      <span class="art-time">Uppdaterad 08:47</span>
     </div>
-
     <p class="ingress">Det börjar med en lapp på anslagstavlan. Sedan en vikarie. Sedan ingenting. I 14 svenska kommuner har vårdcentraler det senaste kvartalet stått utan fast läkare — och ingen vet riktigt hur det ska lösas.</p>
-
+    <div class="mod-video">
+      <div class="mod-label" style="margin-bottom:8px">▶ Förklarad på 60 sekunder</div>
+      <div class="video-wrap">
+        <div class="video-inner">
+          <div class="video-thumb">
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=80" alt="">
+            <div class="video-overlay"></div>
+            <div class="video-play"><svg width="14" height="17" viewBox="0 0 14 17" fill="none"><polygon points="0,0 14,8.5 0,17" fill="white"/></svg></div>
+            <div class="video-duration">0:58</div>
+          </div>
+        </div>
+        <div class="video-meta">
+          <div class="video-tag">⚡ AI-producerad förklaring</div>
+          <div class="video-desc">En kort genomgång av bakgrunden — automatiskt genererad från artikelns källor.</div>
+        </div>
+      </div>
+    </div>
     <p class="atext">I Luleå stängde Bergvikens vårdcentral sina bokningsbara tider för nya patienter i februari. I Östersund har en vårdcentral drivits på vikarier i snart ett år. I Uppsala varslar nu universitetssjukhuset 180 anställda — samtidigt som behovet av primärvårdsläkare aldrig har varit större.</p>
-
     <p class="atext">Det är ingen tillfällighet att dessa nyheter dyker upp samtidigt. <strong>VOLT:s redaktioner på 14 orter har under tre veckor rapporterat om exakt samma problem</strong> — formulerat på olika sätt men med samma kärna: det finns inte tillräckligt många läkare, och de som finns väljer bort landsbygden.</p>
-
+    <blockquote class="art-quote">"Vi lappar och lagar. Det är inte hållbart på sikt. Kollegorna slutar inte för att de inte trivs — de slutar för att de är utmattade."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Maria Lindqvist, distriktsläkare Skellefteå</p>
     <div class="mod-context">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
         <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
@@ -467,27 +493,15 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
       <div class="mod-title">Varför är det brist på läkare i Sverige?</div>
       <p class="mod-text">Sverige utbildar färre läkare per capita än de flesta jämförbara länder. Samtidigt har antalet listade patienter per läkare ökat med 18 procent sedan 2015. Landsbygdskommuner konkurrerar om samma begränsade pool av nyutexaminerade — och förlorar ofta mot storstädernas löner och karriärmöjligheter.</p>
     </div>
-
-    <p class="atext">Maria Lindqvist är distriktsläkare i Skellefteå och har arbetat inom primärvården i 22 år. Hon beskriver ett system under press.</p>
-
-    <blockquote class="art-quote">"Vi lappar och lagar. Det är inte hållbart på sikt. Kollegorna slutar inte för att de inte trivs — de slutar för att de är utmattade."</blockquote>
-
-    <p class="atext">Socialstyrelsens generaldirektör bekräftade under torsdagen att myndigheten följer utvecklingen och att en nationell samordning diskuteras internt. Tre regiondirektörer pekar på samma strukturella problem: utbildningsplatser, lönesättning och administrativa bördor som fått allt fler läkare att lämna yrket i förtid.</p>
-
     <div class="mod-updates">
       <div class="mod-label mod-label-muted">Uppdateringar</div>
       <div class="upd-item"><span class="upd-time">14:32</span><span class="upd-text"><strong>Nytt:</strong> Socialstyrelsen bekräftar att en nationell insats planeras under våren.</span></div>
-      <div class="upd-item"><span class="upd-time">11:40</span><span class="upd-text">Tre regiondirektörer kommenterar. Region Norrbotten kallar läget "allvarligt".</span></div>
+      <div class="upd-item"><span class="upd-time">11:40</span><span class="upd-text">Tre regiondirektörer kommenterar. Region Norrbotten kallar läget 'allvarligt'.</span></div>
       <div class="upd-item"><span class="upd-time">08:15</span><span class="upd-text">Artikeln publiceras baserad på rapporter från 14 lokala redaktioner.</span></div>
     </div>
-
-    <p class="atext">Frågan är nu vad som händer härnäst. Flera partier i riksdagen har begärt en interpellation om primärvårdens bemanning. Socialminister Jakob Forssmed har ännu inte svarat på VOLT:s begäran om kommentar.</p>
-
     <div class="mod-local">
       <div class="mod-local-header">
-        <div class="mod-warn-icon">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg>
-        </div>
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
         <div>
           <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
           <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
@@ -497,10 +511,674 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
       <div class="srci"><div class="src-left"><div class="src-headline">Universitetssjukhuset varslar — och nu saknas också läkare i primärvården</div><div class="srcl">Uppsala Nya Tidning · Uppsala · 13 apr</div></div><span class="srclink">Läs ↗</span></div>
       <div class="srci"><div class="src-left"><div class="src-headline">Vårdcentralen i Vikingstad har stått utan fast läkare i åtta månader</div><div class="srcl">Östgöta Correspondenten · Linköping · 14 apr</div></div><span class="srclink">Läs ↗</span></div>
       <div class="srci"><div class="src-left"><div class="src-headline">Regionen erbjuder bonusar — men läkarna tackar ändå nej</div><div class="srcl">Norrköpings Tidningar · Norrköping · 14 apr</div></div><span class="srclink">Läs ↗</span></div>
-      <div class="srci"><div class="src-left"><div class="src-headline">Northvolt-krisen spiller över — nu flyr även sjukvårdspersonal från Skellefteå</div><div class="srcl">Norran · Skellefteå · 15 apr</div></div><span class="srclink">Läs ↗</span></div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Northvolt-krisen spiller över — nu flyr även sjukvårdspersonal</div><div class="srcl">Norran · Skellefteå · 15 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-northvolt">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat red" style="margin-bottom:12px">Industri</div>
+    <h1 class="art-title">Tre bolag redo att ta över Northvolt-fabriken — men villkoren är hårda</h1>
+    <div class="art-byline">
+      <span class="art-ab ai">⚡ AI-assisterad</span>
+      <span class="art-time">Uppdaterad 09:14</span>
+    </div>
+    <p class="ingress">Sex månader efter Northvolts konkurs börjar konturerna av ett nytt ägarskap ta form. Tre industribolag har lämnat formella intresseanmälningar till konkursförvaltaren — men priset de är beredda att betala är långt under vad staten hoppades på.</p>
+    <div class="mod-video">
+      <div class="mod-label" style="margin-bottom:8px">▶ Förklarad på 60 sekunder</div>
+      <div class="video-wrap">
+        <div class="video-inner">
+          <div class="video-thumb">
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=80" alt="">
+            <div class="video-overlay"></div>
+            <div class="video-play"><svg width="14" height="17" viewBox="0 0 14 17" fill="none"><polygon points="0,0 14,8.5 0,17" fill="white"/></svg></div>
+            <div class="video-duration">0:58</div>
+          </div>
+        </div>
+        <div class="video-meta">
+          <div class="video-tag">⚡ AI-producerad förklaring</div>
+          <div class="video-desc">En kort genomgång av bakgrunden — automatiskt genererad från artikelns källor.</div>
+        </div>
+      </div>
+    </div>
+    <p class="atext">Fabriken i Skellefteå representerar en av de största industriinvesteringarna i norra Sverige på decennier. Byggnaden är intakt, maskinerna är på plats — men utan ett fungerande bolag bakom är anläggningen nästan värdelös.</p>
+    <p class="atext">Konkursförvaltaren Magnus Rehn bekräftar att tre parter visat seriöst intresse. Han vägrar namnge dem, men källor nära processen pekar mot ett sydkoreanskt batteribolag, en europeisk industrigrupp och ett konsortium med svenska pensionsfonder.</p>
+    <blockquote class="art-quote">"Det finns ett genuint intresse. Men alla parter vet att de sitter i en stark förhandlingsposition — det finns fler säljare än köpare just nu."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Källa nära konkursförvaltningen</p>
+    <div class="mod-context">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+        <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
+      </div>
+      <div class="mod-title">Vad hände med Northvolt?</div>
+      <p class="mod-text">Northvolt ansökte om konkurs i november 2024 efter att ha misslyckats med att nå produktionsmålen för sina batterier. Bolaget hade tagit in över 15 miljarder dollar i kapital men brottades med kvalitetsproblem och förseningar. Fabriken i Skellefteå sysselsatte som mest 3 500 personer.</p>
+    </div>
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">16:10</span><span class="upd-text"><strong>Nytt:</strong> Konkursförvaltaren bekräftar att bindande bud ska lämnas senast 30 maj.</span></div>
+      <div class="upd-item"><span class="upd-time">09:30</span><span class="upd-text">Det sydkoreanska bolaget Samsung SDI uppges vara en av intressenterna.</span></div>
+    </div>
+    <div class="mod-local">
+      <div class="mod-local-header">
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Fabriken kan få ny ägare — anställda hoppas på besked</div><div class="srcl">Norran · Skellefteå · 14 apr</div></div><span class="srclink">Läs ↗</span></div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Tre budgivare på Northvolt-fabriken — en är utländsk</div><div class="srcl">Norrländska Socialdemokraten · Luleå · 15 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-riksbank">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Ekonomi</div>
+    <h1 class="art-title">Riksbanken håller räntan — men signalerar sänkning redan i juni</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 10:30</span>
+    </div>
+    <p class="ingress">Riksbankens direktion lämnade styrräntan oförändrad på 2,25 procent vid torsdagens möte. Men signalerna om vad som väntar i sommar var tydligare än väntat.</p>
+
+    <p class="atext">Direktionen var enig i beslutet att hålla räntan oförändrad, men i det penningpolitiska protokollet framgår att majoriteten av ledamöterna nu ser ett utrymme för sänkning vid junisammanträdet om inflationen fortsätter att falla.</p>
+    <p class="atext">Kronans försvagning under våren utgör det viktigaste osäkerhetsmomentet. En svagare krona driver upp importpriserna, vilket komplicerar bilden för en centralbank som vill sänka.</p>
+    <blockquote class="art-quote">"Inflationen är på väg i rätt riktning. Vi är beredda att agera om utvecklingen håller i sig."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Erik Thedéen, riksbankschef</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">10:30</span><span class="upd-text"><strong>Nytt:</strong> Kronkursen stärktes 0,4 procent mot euron efter beskedet.</span></div>
+      <div class="upd-item"><span class="upd-time">09:00</span><span class="upd-text">Riksbankens beslut publicerades klockan 09:00.</span></div>
     </div>
 
-    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Region Vård</div><div class="atag">Vi söker läkare</div></div></div></div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-infrastruktur">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Politik</div>
+    <h1 class="art-title">Regeringen presenterar ny infrastrukturplan — E4 och järnväg i norr prioriteras</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 10:02</span>
+    </div>
+    <p class="ingress">Infrastrukturminister Andreas Carlson presenterade på torsdagen den mest omfattande infrastrukturpropositionen på tio år. Totalt rör det sig om 740 miljarder kronor fram till 2040.</p>
+
+    <p class="atext">Utbyggnad av E4 genom Västernorrland och en ny järnvägssträcka mellan Luleå och Boden är de två största enskilda projekten. Båda motiveras med den gröna industriomvandlingen i norr och behovet av att transportera gods från de nya fabrikerna.</p>
+    <p class="atext">Oppositionens kritik är skarp. Socialdemokraterna menar att pengarna till södra Sverige är otillräckliga och att Stockholmsregionen systematiskt nedprioriteras till förmån för norrländska infrastruktursatsningar.</p>
+    <blockquote class="art-quote">"Det här är en plan för hela Sverige — men vi är tydliga med att den gröna omställningen i norr kräver investeringar nu."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Andreas Carlson, infrastrukturminister</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">14:00</span><span class="upd-text"><strong>Nytt:</strong> Oppositionspartierna begär en extra budgetdebatt i riksdagen.</span></div>
+      <div class="upd-item"><span class="upd-time">10:02</span><span class="upd-text">Propositionen presenterades vid en presskonferens i Regeringskansliet.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-torka">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat red" style="margin-bottom:12px">Klimat</div>
+    <h1 class="art-title">Torkan i Mälardalen når rekordnivåer — bönder larmar om skördeförluster</h1>
+    <div class="art-byline">
+      <span class="art-ab ai">⚡ AI-assisterad</span>
+      <span class="art-time">Uppdaterad 09:45</span>
+    </div>
+    <p class="ingress">Grundvattennivåerna i östra Sverige är nu lägre än vid någon uppmätt tidpunkt sedan mätningarna startade 1965. Lantbrukare i Uppland och Södermanland beskriver en situation som är värre än torksommaren 2018.</p>
+    <div class="mod-video">
+      <div class="mod-label" style="margin-bottom:8px">▶ Förklarad på 60 sekunder</div>
+      <div class="video-wrap">
+        <div class="video-inner">
+          <div class="video-thumb">
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=80" alt="">
+            <div class="video-overlay"></div>
+            <div class="video-play"><svg width="14" height="17" viewBox="0 0 14 17" fill="none"><polygon points="0,0 14,8.5 0,17" fill="white"/></svg></div>
+            <div class="video-duration">0:58</div>
+          </div>
+        </div>
+        <div class="video-meta">
+          <div class="video-tag">⚡ AI-producerad förklaring</div>
+          <div class="video-desc">En kort genomgång av bakgrunden — automatiskt genererad från artikelns källor.</div>
+        </div>
+      </div>
+    </div>
+    <p class="atext">SMHI konstaterar att nederbördsunderskottet sedan oktober förra året är det största sedan mätningarna startade. Åtta av tio lantbrukare i Mälardalens slättbygder uppger att de redan nu ser tecken på att årets skörd kommer att bli kraftigt reducerad.</p>
+    <p class="atext">Länsstyrelserna i Uppsala, Södermanland och Västmanland har gått ut med bevattningsförbud för vattendrag under en viss storlek. Dricksvattenförsörjningen i mindre kommuner börjar bli ett orosmoment.</p>
+    <blockquote class="art-quote">"Jag har brukat den här jorden i 35 år. Jag har aldrig sett det så här torrt i april månad."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Lars-Erik Svensson, lantbrukare i Enköping</p>
+    <div class="mod-context">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+        <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
+      </div>
+      <div class="mod-title">Vad är ett nederbördsunderskott?</div>
+      <p class="mod-text">Ett nederbördsunderskott uppstår när ett område under en längre period får mindre regn eller snö än det historiska genomsnittet. När underskottet varar under månader påverkar det grundvattennivåer, jordbruk och ekosystem. Sverige har haft tre av de fem torraste vårarna sedan 2018.</p>
+    </div>
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">13:20</span><span class="upd-text"><strong>Nytt:</strong> Jordbruksverket kallar till krissamtal med lantbruksorganisationerna på fredag.</span></div>
+      <div class="upd-item"><span class="upd-time">09:45</span><span class="upd-text">SMHI: april 2026 är den torraste aprilmånaden sedan 1965.</span></div>
+    </div>
+    <div class="mod-local">
+      <div class="mod-local-header">
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Bönderna i Uppland ser mot en katastrofal skörd</div><div class="srcl">Uppsala Nya Tidning · Uppsala · 16 apr</div></div><span class="srclink">Läs ↗</span></div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Bevattningsförbud i Södermanland — lantbrukare förtvivlade</div><div class="srcl">Eskilstuna-Kuriren · Eskilstuna · 16 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-ericsson">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Näringsliv</div>
+    <h1 class="art-title">Ericsson varslar 1 200 i Sverige — satsar hårt på AI-driven nätverksteknik</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 07:30</span>
+    </div>
+    <p class="ingress">Telekomjätten Ericsson meddelade på torsdagen att man varslar 1 200 anställda i Sverige, huvudsakligen inom administration och supportfunktioner. Samtidigt annonseras en ny satsning på AI-driven nätverksövervakning.</p>
+
+    <p class="atext">Varselbeskedet är det fjärde på tre år och innebär att Ericsson nu sysselsätter ungefär hälften så många i Sverige som för tio år sedan. Facken är kritiska och kräver förhandlingar innan varslen verkställs.</p>
+    <p class="atext">VD Börje Ekholm presenterade samtidigt en ny produktlinje för autonoma mobilnät, där AI-system ska kunna optimera och felsöka nätverk utan mänsklig inblandning. Det är den tekniken som ska bära bolaget framåt, enligt Ekholm.</p>
+    <blockquote class="art-quote">"Vi är i en transformation. Det är smärtsamt på kort sikt men nödvändigt för att Ericsson ska vara relevant om tio år."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Börje Ekholm, VD Ericsson</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">15:00</span><span class="upd-text"><strong>Nytt:</strong> IF Metall och Unionen begär omedelbar central förhandling.</span></div>
+      <div class="upd-item"><span class="upd-time">07:30</span><span class="upd-text">Varselbeskedet presenterades vid en kapitalmarknadsdag i Stockholm.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-bostadspriser">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Ekonomi</div>
+    <h1 class="art-title">Bostadspriserna stiger i 12 av 17 orter i VOLT:s nätverk — störst uppgång i Linköping</h1>
+    <div class="art-byline">
+      <span class="art-ab ai">⚡ AI-assisterad</span>
+      <span class="art-time">Uppdaterad 12:44</span>
+    </div>
+    <p class="ingress">För tredje månaden i rad stiger bostadspriserna i majoriteten av de orter som VOLT bevakar. Linköping toppar listan med en uppgång på 4,2 procent jämfört med mars.</p>
+
+    <p class="atext">Mönstret är tydligt: orter med stark arbetsmarknad och pågående nyindustrialisering leder uppgången. Luleå och Skellefteå — som länge hade stillastående priser — är nu bland de orter med snabbast stigande priser i landet.</p>
+    <p class="atext">Ekonomer pekar på två faktorer: den förväntade räntesänkningen i juni och en markant minskning av antalet objekt till salu. Det senare hänger samman med att fler väljer att bo kvar snarare än att sälja med förlust.</p>
+    <blockquote class="art-quote">"Det är ett klassiskt utbudsunderskott. Folk vill sälja men inte till gårdagens priser — och köparna börjar återvända."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Anna Felländer, ekonom</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">12:44</span><span class="upd-text"><strong>Nytt:</strong> Mäklarstatistik för mars publicerad — Linköping +4,2%.</span></div>
+    </div>
+    <div class="mod-local">
+      <div class="mod-local-header">
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Bostadsmarknaden vaknar — priserna stiger snabbare än väntat</div><div class="srcl">Östgöta Correspondenten · Linköping · 17 apr</div></div><span class="srclink">Läs ↗</span></div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Fler bostadsköp i april — marknaden vänder</div><div class="srcl">Norrköpings Tidningar · Norrköping · 17 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-norrkoeping-europa">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Sport</div>
+    <h1 class="art-title">IFK Norrköping klart för Europa efter dramatisk sista omgång</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 22:45</span>
+    </div>
+    <p class="ingress">Med en 2–1-seger mot Häcken på Östgötaporten säkrade IFK Norrköping en europaplatsen — lagets första sedan 2021. Segern firades vilt av 12 000 åskådare.</p>
+
+    <p class="atext">Det var en sista omgång av det slag som fotbollsfans minns länge. IFK låg under med 0–1 i halvtid men vände matchen med två mål i den andra halvleken, det sista via en straffar i matchens sista minut.</p>
+    <p class="atext">Tränaren Oscar Hiljemark, som tog över laget i höstas efter en svajig säsongsinledning, bröt ihop i tårar på presskonferensen efteråt. 'Det här är för alla som inte gav upp', sa han.</p>
+    <blockquote class="art-quote">"Jag har aldrig känt något liknande på en fotbollsplan. Aldrig."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Oscar Hiljemark, tränare IFK Norrköping</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">22:30</span><span class="upd-text"><strong>Nytt:</strong> UEFA-lottningen för kvalomgången sker 28 april.</span></div>
+      <div class="upd-item"><span class="upd-time">21:15</span><span class="upd-text">Slutresultat: IFK Norrköping–Häcken 2–1.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-lulea-fabrik">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Näringsliv</div>
+    <h1 class="art-title">Ny batterifabrik i Luleå skapar 400 jobb — men bostadsbristen oroar</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 08:30</span>
+    </div>
+    <p class="ingress">Det finska energibolaget Fortum bekräftar att man bygger en ny fabrik för batterienergisystem utanför Luleå. Anläggningen beräknas vara i drift 2027 och ge 400 direkta jobb.</p>
+
+    <p class="atext">Fabriken ska producera storskaliga batterisystem för stabilisering av elnätet — en växande marknad i takt med att andelen förnybar el ökar. Luleå valdes framför alternativ i Polen och Finland, delvis tack vare närheten till grön el och befintlig industriinfrastruktur.</p>
+    <p class="atext">Kommunstyrelsens ordförande Niklas Nordström är nöjd men understryker utmaningarna. 'Vi välkomnar jobben men vi måste bygga bostäder och skolor i samma takt — annars riskerar vi att tacka nej till investeringar för att vi inte kan husera personalen.'</p>
+    <blockquote class="art-quote">"Luleå är nu en av de mest attraktiva industriorterna i norra Europa. Det var otänkbart för tio år sedan."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Niklas Nordström, kommunstyrelsens ordförande Luleå</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">08:30</span><span class="upd-text"><strong>Nytt:</strong> Fortum bekräftar: byggstart hösten 2026.</span></div>
+    </div>
+    <div class="mod-local">
+      <div class="mod-local-header">
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Ny fabrik — 400 jobb till Luleå</div><div class="srcl">Norrländska Socialdemokraten · Luleå · 17 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-sd-m-budget">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Politik</div>
+    <h1 class="art-title">SD och M går isär i budgetförhandlingarna — krisen inom Tidösamarbetet eskalerar</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 08:20</span>
+    </div>
+    <p class="ingress">Budgetförhandlingarna inom Tidöpartierna har strandat. Sverigedemokraterna kräver kraftigare nedskärningar i biståndet, Moderaterna vill värna om EU-relationer. Ingen lösning är i sikte.</p>
+
+    <p class="atext">Enligt källor inom Moderaterna är läget allvarligare än vad som framkommit publikt. Finansminister Elisabeth Svantesson ska vid ett möte i tisdags ha varnat för att en regeringskris inte kan uteslutas om förhandlingarna inte löser sig inom de närmaste veckorna.</p>
+    <p class="atext">SD:s ekonomiskpolitiske talesperson Oscar Sjöstedt tonar ner dramatiken men bekräftar att partierna 'fortfarande förhandlar om grundläggande prioriteringar'. Statsminister Ulf Kristersson har inte kommenterat uppgifterna.</p>
+    <blockquote class="art-quote">"Alla regeringar har interna spänningar. Det avgörande är om man kan enas om budgeten — och det är min bedömning att vi kan det."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Källa nära statsministern</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">16:45</span><span class="upd-text"><strong>Nytt:</strong> Statsrådsberedningen bekräftar att ett nytt förhandlingsmöte äger rum på fredag.</span></div>
+      <div class="upd-item"><span class="upd-time">08:20</span><span class="upd-text">Uppgifterna om budgetkris publicerades av TT tidigt på morgonen.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-klimatmal">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Klimat</div>
+    <h1 class="art-title">Sverige missar klimatmålen för tredje året i rad — utsläppen från transporter ökar</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 10:15</span>
+    </div>
+    <p class="ingress">Naturvårdsverkets årsrapport slår fast att Sverige inte är på väg att nå sina klimatmål för 2030. Transportsektorn är den enskilt största boven.</p>
+
+    <p class="atext">Rapporten visar att de totala utsläppen minskade med 0,8 procent under 2025 — långt under den takt som krävs för att nå 2030-målet. Transportsektorn ökade till och med sina utsläpp med 1,1 procent, vilket Naturvårdsverket förklarar med ökad lastbilstrafik och en svagare ökning av elbilar än prognostiserat.</p>
+    <p class="atext">Klimatminister Romina Pourmokhtari menar att takten i omställningen är tillräcklig på lång sikt men erkänner att transportsektorn är en utmaning.</p>
+    <blockquote class="art-quote">"Vi är på rätt väg men vi behöver gå fortare. Transportsektorn är ett område där vi behöver starkare styrmedel."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Romina Pourmokhtari, klimatminister</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">10:15</span><span class="upd-text"><strong>Nytt:</strong> Rapporten finns tillgänglig på Naturvårdsverkets webbplats.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-kulturhuset-sara">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1512850183-6d7990f42385?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Kultur</div>
+    <h1 class="art-title">Kulturhuset Sara fyller tre år — har blivit en magnet för inflyttning till Skellefteå</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 12:20</span>
+    </div>
+    <p class="ingress">Tre år efter invigningen kan Kulturhuset Sara konstatera att byggnaden förändrat Skellefteå. Inte bara som kulturhus — utan som varumärke och drivkraft för inflyttning.</p>
+
+    <p class="atext">En ny rapport från kommunen visar att var fjärde person som flyttat till Skellefteå under de senaste två åren uppger att Saras existens spelade roll i beslutet. Bland de inflyttade i åldern 25–40 år är andelen ännu högre.</p>
+    <p class="atext">Kulturhuschefen Carin Torstensson är stolt men nykter. 'Vi kan inte vila på lagrarna. Det som lockade folk hit för tre år sedan är nu en förväntning — vi måste fortsätta utvecklas.'</p>
+    <blockquote class="art-quote">"Sara visade att ett kulturhus kan vara en industriell tillgång lika mycket som ett kulturellt projekt."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Carin Torstensson, kulturhuschef</p>
+
+
+    <div class="mod-local">
+      <div class="mod-local-header">
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Sara fyller tre — och Skellefteå förändras</div><div class="srcl">Norran · Skellefteå · 16 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-lulea-hockey">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1515703407324-5f753afd8be8?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Sport</div>
+    <h1 class="art-title">Luleå HF till SM-final efter dramatisk övertidsseger mot Frölunda</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 22:45</span>
+    </div>
+    <p class="ingress">Med ett övertidsmål av Victor Öhman säkrade Luleå HF avancemang till SM-finalen. Matchen spelades inför fullsatt arena och avgjordes på den femte övertidsperioden.</p>
+
+    <p class="atext">Det var ett drama som höll 10 000 åskådare i Coop Norrbotten Arena på tårna i mer än tre timmar. Den reguljära matchen slutade 2–2, förlängningen likaså — och det dröjde ända till den femte övertiden innan Öhman tryckte in vinningsmålet.</p>
+    <p class="atext">Luleå möter antingen Djurgårdens IF eller Brynäs i finalen som börjar nästa vecka. För Luleå är det första SM-final på elva år.</p>
+    <blockquote class="art-quote">"Jag är bara glad att det är slut. Jag visste inte om jag hade en övertid till i benen."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Victor Öhman, matchhjälte Luleå HF</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">22:45</span><span class="upd-text"><strong>Nytt:</strong> SM-finalens spelschema presenteras på fredag.</span></div>
+      <div class="upd-item"><span class="upd-time">21:30</span><span class="upd-text">Övertidsmål av Öhman — Luleå till final.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-duplantis">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Sport</div>
+    <h1 class="art-title">Duplantis sätter nytt världsrekord — hoppar 6,27 i Doha</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 20:10</span>
+    </div>
+    <p class="ingress">Armand Duplantis satte sitt 16:e världsrekord i stavhopp under Diamond League-galan i Doha. Höjden 6,27 meter är ny världsrekord — en centimeter över hans tidigare rekord.</p>
+
+    <p class="atext">Duplantis missade på 6,25 och 6,26 men lyckades på 6,27 i sitt tredje och sista försök. Publiken i Doha fick se en av friidrottens mest spektakulära prestationer under det senaste decenniet.</p>
+    <p class="atext">Den svenske stjärnan, som just fyller 27 år, verkar inte ha nått sitt tak. Tränarteamet signalerar att 6,30 är nästa delmål.</p>
+    <blockquote class="art-quote">"Jag visste att höjden var möjlig. Jag kände det i uppvärmningen."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Armand Duplantis</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">20:10</span><span class="upd-text"><strong>Nytt:</strong> Världsrekord bekräftat av World Athletics.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-eu-datalagring">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">EU</div>
+    <h1 class="art-title">EU-kommissionen kräver svar från Sverige om datalagring inom 30 dagar</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 14:30</span>
+    </div>
+    <p class="ingress">Kommissionen har formellt begärt att Sverige redogör för hur landet lever upp till EU:s direktiv om datalagring för brottsbekämpning. Sverige riskerar en anmälan till EU-domstolen.</p>
+
+    <p class="atext">Frågan om datalagring har länge varit kontroversiell i Sverige, där Datainspektionen och integritetsskyddsorgan länge kritiserat den nationella implementeringen av EU-direktivet. Nu eskalerar konflikten.</p>
+    <p class="atext">Justitiedepartementet uppger att man 'tar begäran på stort allvar' och att svar kommer att ges inom den utsatta tidsfristen. Integritetsskyddsmyndigheten, IMY, välkomnar prövningen.</p>
+    <blockquote class="art-quote">"Sverige har i för stor utsträckning tolkat direktivet till förmån för integritetsskydd på bekostnad av brottsbekämpningseffektivitet — det är EU-kommissionens bedömning."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">EU-kommissionens talesperson</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">14:30</span><span class="upd-text"><strong>Nytt:</strong> IMY: 'Vi välkomnar att frågan prövas.'</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-elpriser">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Energi</div>
+    <h1 class="art-title">Elpriserna rasar i norr och stiger i söder — klyftan är nu den största på tre år</h1>
+    <div class="art-byline">
+      <span class="art-ab ai">⚡ AI-assisterad</span>
+      <span class="art-time">Uppdaterad 11:00</span>
+    </div>
+    <p class="ingress">Skillnaden i elpris mellan norra och södra Sverige är nu på sin högsta nivå sedan vintern 2023. Hushåll i Malmö betalar mer än tre gånger så mycket per kilowattimme som i Luleå.</p>
+    <div class="mod-video">
+      <div class="mod-label" style="margin-bottom:8px">▶ Förklarad på 60 sekunder</div>
+      <div class="video-wrap">
+        <div class="video-inner">
+          <div class="video-thumb">
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=80" alt="">
+            <div class="video-overlay"></div>
+            <div class="video-play"><svg width="14" height="17" viewBox="0 0 14 17" fill="none"><polygon points="0,0 14,8.5 0,17" fill="white"/></svg></div>
+            <div class="video-duration">0:58</div>
+          </div>
+        </div>
+        <div class="video-meta">
+          <div class="video-tag">⚡ AI-producerad förklaring</div>
+          <div class="video-desc">En kort genomgång av bakgrunden — automatiskt genererad från artikelns källor.</div>
+        </div>
+      </div>
+    </div>
+    <p class="atext">Bakgrunden är en kombination av ovanligt hög vattenkraftsproduktion i norr och kapacitetsbrist i det svenska stamnätet som hindrar el från att flöda söderut i tillräcklig mängd. Svenska kraftnät arbetar med förstärkning av ledningarna men det dröjer till 2029 innan full kapacitet finns på plats.</p>
+    <p class="atext">För industrin i norr är de låga elpriserna en konkurrensfördel — det är en del av förklaringen till att Luleå och Skellefteå attraherar industriinvesteringar. Men för hushåll i södra Sverige är situationen frustrerande.</p>
+    <blockquote class="art-quote">"Vi exporterar el till kontinenten medan södra Sverige betalar dyrt. Det är inte ett hållbart system på sikt."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Energianalytiker på Vattenfall</p>
+    <div class="mod-context">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+        <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
+      </div>
+      <div class="mod-title">Varför är elpriserna olika i Sverige?</div>
+      <p class="mod-text">Sverige är uppdelat i fyra elpriszoner — SE1 i norr till SE4 i söder. Prisskillnaden beror på att elnätet inte kan transportera all el som produceras i norr ner till sydligare regioner. Resultatet är att norr har överskott och låga priser medan söder har underskott och höga priser.</p>
+    </div>
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">11:00</span><span class="upd-text"><strong>Nytt:</strong> Spotpriset i SE4 nådde 1,82 kr/kWh under morgontoppen.</span></div>
+      <div class="upd-item"><span class="upd-time">09:00</span><span class="upd-text">Prisskillnad SE1–SE4: 1,68 kr/kWh — ny treårshögsta.</span></div>
+    </div>
+    <div class="mod-local">
+      <div class="mod-local-header">
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Billig el lockar industrin — men nätkapaciteten bromsar</div><div class="srcl">Norrländska Socialdemokraten · Luleå · 17 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-volvo">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Näringsliv</div>
+    <h1 class="art-title">Volvo Cars redovisar rekordresultat — men varnar för osäker andra halvlek</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 08:00</span>
+    </div>
+    <p class="ingress">Volvo Cars omsatte 108 miljarder kronor under första kvartalet 2026 — en ökning med 12 procent. Rörelseresultatet slog analytikernas förväntningar. Men bolaget är försiktigt med framtidsutsikterna.</p>
+
+    <p class="atext">Resultatet drivs av stark försäljning av laddhybrider, framför allt i Europa och Kina. Helelbilarna har dock haft det tuffare och tappat marknadsandelar till kinesiska konkurrenter som BYD och NIO.</p>
+    <p class="atext">Vd Jim Rowan betonar att tulloron är det största osäkerhetsmomentet. Eventuella nya tullar mellan EU och USA kan slå hårt mot Volvos fabrik i South Carolina, som exporterar en stor del av sin produktion till Europa.</p>
+    <blockquote class="art-quote">"Vi har ett starkt kvartal bakom oss. Men vi navigerar i en geopolitisk miljö som är mer osäker än på länge."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Jim Rowan, VD Volvo Cars</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">08:00</span><span class="upd-text"><strong>Nytt:</strong> Volvo Cars-aktien steg 3,2 procent vid öppningen.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-stockholm-bostader">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Bostad</div>
+    <h1 class="art-title">Stockholms stad: 8 000 planerade bostäder skjuts på framtiden — finansieringen saknas</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 11:30</span>
+    </div>
+    <p class="ingress">Stockholms stad tvingas skjuta upp byggandet av 8 000 planerade lägenheter. Orsaken är en kombination av höga byggkostnader och bortfall av statliga investeringsstöd.</p>
+
+    <p class="atext">Det framgår av stadens reviderade bostadsförsörjningsprogram som presenterades på onsdagen. De projekt som skjuts upp finns framförallt i Järva och Farsta, områden med stor efterfrågan på prisvärda hyresrätter.</p>
+    <p class="atext">Oppositionsborgarrådet Ann-Margarethe Livh (V) är kraftigt kritisk. 'Det är en skandal att vi i en stad med bostadsbrist väljer att lägga planerade hyresrätter på is.'</p>
+    <blockquote class="art-quote">"Läget är svårt. Vi kan inte bygga med förlust — kommunen har inte råd med det."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Bostadsborgarrådet Dennis Wedin</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">11:30</span><span class="upd-text"><strong>Nytt:</strong> Kommunfullmäktige debatterar frågan 29 april.</span></div>
+    </div>
+
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-vasteras-vatten">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Samhälle</div>
+    <h1 class="art-title">Dricksvattenkrisen i Västerås: kommunen uppmanar alla att halvera förbrukningen</h1>
+    <div class="art-byline">
+      <span class="art-ab ai">⚡ AI-assisterad</span>
+      <span class="art-time">Uppdaterad 10:00</span>
+    </div>
+    <p class="ingress">Västerås stad går ut med en kraftfull uppmaning till sina 160 000 invånare: halvera vattenförbrukningen omedelbart. Grundvattennivåerna har nått kritisk nivå.</p>
+
+    <p class="atext">Situationen har försämrats snabbt de senaste veckorna. Torkan i kombination med ett ovanligt tidigt vårsäsong har tömt grundvattenmagasinen snabbare än normalt. Vattenverket uppger att man utan åtgärder riskerar driftstörningar inom tre till fyra veckor.</p>
+    <p class="atext">Kommunen inför även tillfälliga begränsningar för bevattning av trädgårdar och biltvätt. Restauranger och livsmedelsverksamheter undantas.</p>
+    <blockquote class="art-quote">"Det här är inte en övning. Vi behöver att alla hjälper till — annars kan vi inte garantera tillgången."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">VA-chef Västerås stad</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">14:00</span><span class="upd-text"><strong>Nytt:</strong> Krisledningsnämnden samlas för extrainsatt möte på torsdag kväll.</span></div>
+      <div class="upd-item"><span class="upd-time">10:00</span><span class="upd-text">Kommunen går ut med bevattningsförbud och vattensparbegäran.</span></div>
+    </div>
+    <div class="mod-local">
+      <div class="mod-local-header">
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Kommunen: Halvera vattenförbrukningen nu</div><div class="srcl">Vestmanlands Läns Tidning · Västerås · 17 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-uppsalaprotester">
+<div class="art-page">
+  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80" alt="">
+  <div class="art-body">
+    <div class="cat" style="margin-bottom:12px">Samhälle</div>
+    <h1 class="art-title">Studenter protesterar utanför rektorskontoret i Uppsala mot varsel och nedskärningar</h1>
+    <div class="art-byline">
+      <span class="art-ab hu">✦ Journalist</span>
+      <span class="art-time">Uppdaterad 11:40</span>
+    </div>
+    <p class="ingress">Hundratals studenter samlades utanför Uppsala universitets rektorskontor på torsdagen för att protestera mot de planerade varselbeskedena och nedskärningarna i universitetets verksamhet.</p>
+
+    <p class="atext">Demonstrationen är den hittills största i en rad aktioner under våren. Studentkårens ordförande Viktor Lindqvist läste upp ett brev till rektor som kräver att varslen stoppas och att dialog med studenterna inleds.</p>
+    <p class="atext">Universitetets rektor Eva Åkesson mötte demonstranterna och lovade ett skriftligt svar inom en vecka, men gav inga löften om att varslen återtas. 'Vi befinner oss i en besvärlig ekonomisk situation som kräver svåra beslut', sa hon.</p>
+    <blockquote class="art-quote">"Vi utbildar framtidens Sverige. Det är inte en kostnad — det är en investering."</blockquote>
+    <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Viktor Lindqvist, studentkårens ordförande</p>
+
+    <div class="mod-updates">
+      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="upd-item"><span class="upd-time">15:30</span><span class="upd-text"><strong>Nytt:</strong> Rektor lovar skriftligt svar inom en vecka.</span></div>
+      <div class="upd-item"><span class="upd-time">11:40</span><span class="upd-text">Demonstrationen samlade uppskattningsvis 400 studenter.</span></div>
+    </div>
+    <div class="mod-local">
+      <div class="mod-local-header">
+        <div class="mod-warn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg></div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Studenter stormar rektorskontoret — kräver stopp för varsel</div><div class="srcl">Uppsala Nya Tidning · Uppsala · 17 apr</div></div><span class="srclink">Läs ↗</span></div>
+    </div>
+    <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">VOLT</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>
   </div>
 </div>
 </div>
@@ -523,11 +1201,11 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
     <div class="ccrd"><div class="cname">Falun</div><div class="ccnt">3 artiklar idag</div><div class="cbar"><div style="width:25%"></div></div></div>
   </div>
   <div class="feed-label" style="padding-left:0;border-top:2px solid var(--v)">Trending lokalt</div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('northvolt')">
     <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Industri</div><div class="ctitle">Tre bolag redo att ta över Northvolt-fabriken</div><div class="cmeta"><span class="ctime">09:14</span><span class="cloc">Skellefteå</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('article')">
+  <div class="card-h" onclick="showPage('uppsalaprotester')">
     <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Samhälle</div><div class="ctitle">Sjukhuset varslar 180 — personalen chockad</div><div class="cmeta"><span class="ctime">11:15</span><span class="cloc">Uppsala</span></div></div>
   </div>
