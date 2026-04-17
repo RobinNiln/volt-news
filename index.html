@@ -189,10 +189,10 @@ body{padding-bottom:0}
 .grid-2 .card img{aspect-ratio:3/2}
 }
 
-body.light .logo img{filter:none}
-body.light .about-hero .alogo img{filter:none}
-body.dark .logo img{filter:brightness(0) invert(1)}
-body.dark .about-hero .alogo img{filter:brightness(0) invert(1)}
+
+
+
+
 body.light .hero img{filter:brightness(.65)}
 body.light .card img{filter:brightness(.95)}
 body.light .card-h img{filter:brightness(.95)}
@@ -235,13 +235,21 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
 
 .mod-updates .mod-label{background:var(--surface);padding:8px 14px;margin:0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
 .mod-updates .mod-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--v);display:inline-block;flex-shrink:0}
+
+body.dark .logo-dark{display:block}
+body.dark .logo-light{display:none}
+body.light .logo-dark{display:none}
+body.light .logo-light{display:block}
 </style>
 </head>
 <body class="dark">
 
 <header>
   <div class="hbar">
-    <div class="logo" onclick="showPage('start')" style="cursor:pointer"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODUgNDgiIHdpZHRoPSIxODUiIGhlaWdodD0iNDgiPgogIDx0ZXh0IHg9IjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDYiIGZpbGw9IndoaXRlIiBsZXR0ZXItc3BhY2luZz0iLTIiPkdSSUQ8L3RleHQ+CiAgPHJlY3QgeD0iMCIgeT0iNDMiIHdpZHRoPSIxNDgiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgogIDxyZWN0IHg9IjE1NSIgeT0iNDMiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNGNUM1MDAiLz4KICA8cmVjdCB4PSIxNjMiIHk9IjQzIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+CiAgPHJlY3QgeD0iMTcxIiB5PSI0MyIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgo8L3N2Zz4=" alt="GRID"></div>
+    <div class="logo" onclick="showPage('start')" style="cursor:pointer">
+    <img class="logo-dark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODUgNDgiIHdpZHRoPSIxODUiIGhlaWdodD0iNDgiPgogIDx0ZXh0IHg9IjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDYiIGZpbGw9IndoaXRlIiBsZXR0ZXItc3BhY2luZz0iLTIiPkdSSUQ8L3RleHQ+CiAgPHJlY3QgeD0iMCIgeT0iNDMiIHdpZHRoPSIxNDgiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgogIDxyZWN0IHg9IjE1NSIgeT0iNDMiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNGNUM1MDAiLz4KICA8cmVjdCB4PSIxNjMiIHk9IjQzIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+CiAgPHJlY3QgeD0iMTcxIiB5PSI0MyIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgo8L3N2Zz4=" alt="GRID">
+    <img class="logo-light" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODUgNDgiIHdpZHRoPSIxODUiIGhlaWdodD0iNDgiPgogIDx0ZXh0IHg9IjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDYiIGZpbGw9IiMwRDBEMEQiIGxldHRlci1zcGFjaW5nPSItMiI+R1JJRDwvdGV4dD4KICA8cmVjdCB4PSIwIiB5PSI0MyIgd2lkdGg9IjE0OCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+CiAgPHJlY3QgeD0iMTU1IiB5PSI0MyIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgogIDxyZWN0IHg9IjE2MyIgeT0iNDMiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNGNUM1MDAiLz4KICA8cmVjdCB4PSIxNzEiIHk9IjQzIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+Cjwvc3ZnPg==" alt="GRID" style="display:none">
+  </div>
     <nav class="hnav">
       <a href="#">Politik</a><a href="#">Ekonomi</a><a href="#">Samhälle</a><a href="#">Industri</a><a href="#">Klimat</a><a href="#">Lokalt</a>
     </nav>
@@ -1221,7 +1229,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
 <div class="page" id="page-about">
 <div class="apage">
   <div class="about-hero">
-    <div class="alogo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODUgNDgiIHdpZHRoPSIxODUiIGhlaWdodD0iNDgiPgogIDx0ZXh0IHg9IjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDYiIGZpbGw9IndoaXRlIiBsZXR0ZXItc3BhY2luZz0iLTIiPkdSSUQ8L3RleHQ+CiAgPHJlY3QgeD0iMCIgeT0iNDMiIHdpZHRoPSIxNDgiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgogIDxyZWN0IHg9IjE1NSIgeT0iNDMiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNGNUM1MDAiLz4KICA8cmVjdCB4PSIxNjMiIHk9IjQzIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+CiAgPHJlY3QgeD0iMTcxIiB5PSI0MyIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgo8L3N2Zz4=" alt="GRID"></div>
+    <div class="alogo"><img class="logo-dark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODUgNDgiIHdpZHRoPSIxODUiIGhlaWdodD0iNDgiPgogIDx0ZXh0IHg9IjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDYiIGZpbGw9IndoaXRlIiBsZXR0ZXItc3BhY2luZz0iLTIiPkdSSUQ8L3RleHQ+CiAgPHJlY3QgeD0iMCIgeT0iNDMiIHdpZHRoPSIxNDgiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgogIDxyZWN0IHg9IjE1NSIgeT0iNDMiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNGNUM1MDAiLz4KICA8cmVjdCB4PSIxNjMiIHk9IjQzIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+CiAgPHJlY3QgeD0iMTcxIiB5PSI0MyIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgo8L3N2Zz4=" alt="GRID"><img class="logo-light" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODUgNDgiIHdpZHRoPSIxODUiIGhlaWdodD0iNDgiPgogIDx0ZXh0IHg9IjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDYiIGZpbGw9IiMwRDBEMEQiIGxldHRlci1zcGFjaW5nPSItMiI+R1JJRDwvdGV4dD4KICA8cmVjdCB4PSIwIiB5PSI0MyIgd2lkdGg9IjE0OCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+CiAgPHJlY3QgeD0iMTU1IiB5PSI0MyIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgogIDxyZWN0IHg9IjE2MyIgeT0iNDMiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNGNUM1MDAiLz4KICA8cmVjdCB4PSIxNzEiIHk9IjQzIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+Cjwvc3ZnPg==" alt="GRID" style="display:none"></div>
     <div class="about-tag">Nyheter som rör sig</div>
   </div>
   <div class="about-body">
@@ -1254,19 +1262,29 @@ document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{do
 function toggleTheme(){
   const b=document.body;
   const btn=document.getElementById('theme-btn');
-  if(b.classList.contains('dark')){
+  const isDark=b.classList.contains('dark');
+  if(isDark){
     b.classList.replace('dark','light');
     btn.textContent='☾ Mörkt';
-    localStorage.setItem('volt-theme','light');
+    localStorage.setItem('grid-theme','light');
   } else {
     b.classList.replace('light','dark');
     btn.textContent='☀ Ljust';
-    localStorage.setItem('volt-theme','dark');
+    localStorage.setItem('grid-theme','dark');
   }
+  updateLogos();
 }
-// Restore saved preference
-const saved=localStorage.getItem('volt-theme');
-if(saved==='light'){document.body.classList.replace('dark','light');document.getElementById('theme-btn').textContent='☾ Mörkt';}
+function updateLogos(){
+  const isLight=document.body.classList.contains('light');
+  document.querySelectorAll('.logo-dark').forEach(el=>el.style.display=isLight?'none':'block');
+  document.querySelectorAll('.logo-light').forEach(el=>el.style.display=isLight?'block':'none');
+}
+const saved=localStorage.getItem('grid-theme');
+if(saved==='light'){
+  document.body.classList.replace('dark','light');
+  document.getElementById('theme-btn').textContent='☾ Mörkt';
+}
+document.addEventListener('DOMContentLoaded', updateLogos);
 </script>
 </body>
 </html>
