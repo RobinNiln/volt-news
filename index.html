@@ -130,6 +130,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);bord
 .upd-text strong{color:var(--v)}
 .mod-local{background:var(--surface);border:1px solid var(--border);margin:22px 0;overflow:hidden}
 .mod-local .mod-label{padding:8px 14px;margin:0;border-bottom:1px solid var(--border);display:block}
+.mod-local-header{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);background:rgba(245,197,0,.04)}
 .mod-local-intro{font-size:12px;color:var(--muted);padding:8px 14px;line-height:1.5;border-bottom:1px solid var(--border)}
 .srci{padding:8px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;transition:.15s;cursor:pointer}
 .srci:first-child{border-top:none}
@@ -208,6 +209,16 @@ body.light .abox,.body.light .dabox{border-color:var(--border)}
 body.light .ad{background:var(--surface)}
 body.light #theme-btn{border-color:var(--border);color:var(--text)}
 
+
+.mod-local-header{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);background:rgba(245,197,0,.06)}
+.mod-local-icon{font-size:22px;color:var(--v);line-height:1;flex-shrink:0;margin-top:2px}
+.mod-local-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);margin-bottom:3px}
+.mod-local-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.src-left{flex:1}
+.src-outlet{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+
+.mod-warn-icon{width:32px;height:32px;border-radius:50%;background:rgba(245,197,0,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--v)}
+.src-headline{font-size:13px;font-weight:500;color:var(--text);line-height:1.35;margin-bottom:4px}
 </style>
 </head>
 <body class="dark">
@@ -470,13 +481,20 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
     <p class="atext">Frågan är nu vad som händer härnäst. Flera partier i riksdagen har begärt en interpellation om primärvårdens bemanning. Socialminister Jakob Forssmed har ännu inte svarat på VOLT:s begäran om kommentar.</p>
 
     <div class="mod-local">
-      <div class="mod-label mod-label-muted">◎ Samma sak händer nära dig</div>
-      <div class="mod-local-intro">Artikeln bygger på rapportering från 14 av VOLT:s lokala redaktioner.</div>
-      <div class="srci"><div><div class="srcn">Norrländska Socialdemokraten</div><div class="srcl">◎ Luleå · 12 apr</div></div><span class="srclink">Läs →</span></div>
-      <div class="srci"><div><div class="srcn">Uppsala Nya Tidning</div><div class="srcl">◎ Uppsala · 13 apr</div></div><span class="srclink">Läs →</span></div>
-      <div class="srci"><div><div class="srcn">Östgöta Correspondenten</div><div class="srcl">◎ Linköping · 14 apr</div></div><span class="srclink">Läs →</span></div>
-      <div class="srci"><div><div class="srcn">Norrköpings Tidningar</div><div class="srcl">◎ Norrköping · 14 apr</div></div><span class="srclink">Läs →</span></div>
-      <div class="srci"><div><div class="srcn">Norran</div><div class="srcl">◎ Skellefteå · 15 apr</div></div><span class="srclink">Läs →</span></div>
+      <div class="mod-local-header">
+        <div class="mod-warn-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="8" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg>
+        </div>
+        <div>
+          <div class="mod-local-title">Oberoende källor — inte producerat av VOLT</div>
+          <div class="mod-local-sub">VOLT har identifierat mönstret och skrivit en nationell analys. Artiklarna nedan är originalrapporteringen från lokala medier.</div>
+        </div>
+      </div>
+      <div class="srci"><div class="src-left"><div class="src-headline">"Inga läkare vill flytta hit — vi har försökt i tre år"</div><div class="srcl">Norrländska Socialdemokraten · Luleå · 12 apr</div></div><span class="srclink">Läs ↗</span></div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Universitetssjukhuset varslar — och nu saknas också läkare i primärvården</div><div class="srcl">Uppsala Nya Tidning · Uppsala · 13 apr</div></div><span class="srclink">Läs ↗</span></div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Vårdcentralen i Vikingstad har stått utan fast läkare i åtta månader</div><div class="srcl">Östgöta Correspondenten · Linköping · 14 apr</div></div><span class="srclink">Läs ↗</span></div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Regionen erbjuder bonusar — men läkarna tackar ändå nej</div><div class="srcl">Norrköpings Tidningar · Norrköping · 14 apr</div></div><span class="srclink">Läs ↗</span></div>
+      <div class="srci"><div class="src-left"><div class="src-headline">Northvolt-krisen spiller över — nu flyr även sjukvårdspersonal från Skellefteå</div><div class="srcl">Norran · Skellefteå · 15 apr</div></div><span class="srclink">Läs ↗</span></div>
     </div>
 
     <div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Region Vård</div><div class="atag">Vi söker läkare</div></div></div></div>
