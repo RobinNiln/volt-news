@@ -1913,8 +1913,8 @@ function loadDrafts() {
         html += '<div><div style="font-family:monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:2px">⚡ AI-UTKAST · ' + d.sources.length + ' KÄLLOR · ' + d.keyword.toUpperCase() + '</div>';
         html += '<div style="font-size:15px;font-weight:600;color:var(--text)">' + d.article.title + '</div></div>';
         html += '<div style="display:flex;gap:6px;flex-shrink:0">';
-        html += '<button onclick="publishDraft('' + d.id + '')" style="background:var(--v);color:#000;border:none;padding:6px 14px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera</button>';
-        html += '<button onclick="rejectDraft('' + d.id + '')" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-family:monospace;font-size:9px;cursor:pointer;border-radius:2px;letter-spacing:1px">✕ Avvisa</button>';
+        html += '<button onclick="publishDraft(' + JSON.stringify(d.id) + ')" style="background:var(--v);color:#000;border:none;padding:6px 14px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera</button>';
+        html += '<button onclick="rejectDraft(' + JSON.stringify(d.id) + ')" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-family:monospace;font-size:9px;cursor:pointer;border-radius:2px;letter-spacing:1px">✕ Avvisa</button>';
         html += '</div></div>';
         html += '<div style="padding:12px 14px">';
         html += '<div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:8px">' + d.article.ingress + '</div>';
