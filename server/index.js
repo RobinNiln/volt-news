@@ -203,9 +203,7 @@ function log(msg) {
   console.log('[PIPELINE] ' + msg);
 }
 
-// Run every 15 min, first run after 10s
-setInterval(runPipeline, 15 * 60 * 1000);
-setTimeout(runPipeline, 10000);
+// Pipeline runs only on manual trigger via /api/pipeline/run
 
 // Routes
 app.get('/', (req, res) => res.json({ status: 'ok', sources: Object.keys(SOURCES).length }));
