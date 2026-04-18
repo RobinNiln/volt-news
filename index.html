@@ -1514,7 +1514,7 @@ body.light .logo-light{display:block}
     <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Railway backend-URL</div>
     <div style="display:flex;gap:8px">
       <input id="api-url" type="text" placeholder="https://ditt-projekt.railway.app" style="flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:'DM Mono',monospace;font-size:12px;border-radius:2px;outline:none">
-      <button onclick="connectBackend()" style="background:var(--v);color:#000;border:none;padding:8px 14px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Anslut</button>
+      <button onclick="connectBackend()" style="background:var(--v);color:#000;border:none;padding:8px 14px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Anslut</button>
     </div>
   </div>
 
@@ -1522,7 +1522,7 @@ body.light .logo-light{display:block}
   <div style="margin-bottom:24px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
       Live-flöde från källor
-      <button onclick="loadFeed()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">↻ Uppdatera</button>
+      <button onclick="loadFeed()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Uppdatera</button>
     </div>
     <div id="live-feed" style="border:1px solid var(--border)">
       <div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Anslut till backend för att se live-flödet</div>
@@ -1570,8 +1570,8 @@ body.light .logo-light{display:block}
     </div>
 
     <div style="display:flex;gap:10px">
-      <button onclick="publishArticle()" style="flex:1;background:var(--v);color:#000;border:none;padding:12px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera artikel</button>
-      <button onclick="clearForm()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:12px 16px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;border-radius:2px;text-transform:uppercase;letter-spacing:1px">Rensa</button>
+      <button onclick="publishArticle()" style="flex:1;background:var(--v);color:#000;border:none;padding:12px;font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera artikel</button>
+      <button onclick="clearForm()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:12px 16px;font-size:11px;cursor:pointer;border-radius:2px;text-transform:uppercase;letter-spacing:1px">Rensa</button>
     </div>
 
     <div id="publish-msg" style="margin-top:10px;font-family:'DM Mono',monospace;font-size:11px;display:none"></div>
@@ -1582,8 +1582,8 @@ body.light .logo-light{display:block}
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
       AI-pipeline
       <div style="display:flex;gap:8px">
-        <button onclick="runPipeline()" style="background:var(--v);color:#000;border:none;padding:4px 12px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">▶ Kör nu</button>
-        <button onclick="togglePipeline()" id="pipeline-toggle" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Pausa</button>
+        <button onclick="runPipeline()" style="background:var(--v);color:#000;border:none;padding:4px 12px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Kor nu</button>
+        <button onclick="togglePipeline()" id="pipeline-toggle" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Pausa</button>
       </div>
     </div>
     <div id="pipeline-status" style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:12px">
@@ -1599,7 +1599,7 @@ body.light .logo-light{display:block}
   <div style="margin-top:28px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
       AI-forslag
-      <button onclick="loadSuggestions()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">↻ Uppdatera</button>
+      <button onclick="loadSuggestions()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Uppdatera</button>
     </div>
     <div id="suggestions-container">
       <div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Inga utkast ännu — kör pipelinen för att generera</div>
