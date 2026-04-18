@@ -1958,12 +1958,14 @@ setInterval(() => {
   }
 }, 30000);
 
-// Load when connecting
-const origConnect = connectBackend;
-window.connectBackend = function() {
-  origConnect();
-  setTimeout(() => { loadPipelineStatus(); loadDrafts(); }, 1500);
-};
+// Hook into connect button
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.querySelector('[onclick="connectBackend()"]');
+  if (btn) btn.onclick = function() {
+    connectBackend();
+    setTimeout(() => { loadPipelineStatus(); loadDrafts(); }, 1500);
+  };
+});
 </script>
 </body>
 </html>
