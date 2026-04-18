@@ -1686,87 +1686,87 @@ function connectBackend() {
   if (!url) return;
   API_URL = url;
   localStorage.setItem('grid-api-url', url);
-  var status = document.getElementById('cms-status');
-  if (status) status.textContent = 'Ansluter...';
+  setStatus('Ansluter...');
   fetch(url + '/api/sources')
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      if (status) {
-        status.textContent = '● Ansluten — ' + data.length + ' källor';
-        status.style.color = 'var(--v)';
-      }
+      setStatus('Ansluten ' + data.length + ' kallor', 'var(--v)');
       loadFeed();
       loadPipelineStatus();
       loadDrafts();
     })
-    .catch(function() {
-      if (status) {
-        status.textContent = '✕ Kunde inte ansluta';
-        status.style.color = '#e8302a';
-      }
-    });
+    .catch(function() { setStatus('Kunde inte ansluta', '#e8302a'); });
+}
+
+function setStatus(text, color) {
+  var el = document.getElementById('cms-status');
+  if (!el) return;
+  el.textContent = text;
+  if (color) el.style.color = color;
 }
 
 function loadFeed() {
   if (!API_URL) return;
   var el = document.getElementById('live-feed');
   if (!el) return;
-  el.innerHTML = '<div style="padding:12px 14px;font-family:monospace;font-size:10px;color:var(--muted)">Hämtar flöde...</div>';
+  el.textContent = 'Hamtar flode...';
   fetch(API_URL + '/api/feed')
     .then(function(r) { return r.json(); })
     .then(function(items) {
-      if (!items.length) {
-        el.innerHTML = '<div style="padding:12px 14px;font-family:monospace;font-size:10px;color:var(--muted)">Inga artiklar</div>';
-        return;
-      }
-      var html = '';
+      el.innerHTML = '';
+      if (!items.length) { el.textContent = 'Inga artiklar'; return; }
       items.slice(0, 30).forEach(function(item) {
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:flex-start;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--border);gap:10px;cursor:pointer';
+        row.addEventListener('click', function() { if (item.link) window.open(item.link, '_blank'); });
+        var left = document.createElement('div');
+        left.style.flex = '1';
+        var meta = document.createElement('div');
+        meta.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:3px';
+        var badge = document.createElement('span');
+        badge.style.cssText = 'font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;color:#fff;font-family:monospace;background:' + (item.sourceColor || '#555');
+        badge.textContent = item.sourceCode || '';
+        var timeEl = document.createElement('span');
+        timeEl.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted)';
         var d = item.pubDate ? new Date(item.pubDate) : null;
-        var time = d ? d.toLocaleTimeString('sv-SE', {hour:'2-digit',minute:'2-digit'}) : '';
-        var color = item.sourceColor || '#555';
-        html += '<div style="display:flex;align-items:flex-start;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--border);gap:10px;cursor:pointer" onclick="window.open('' + item.link + '','_blank')">';
-        html += '<div style="flex:1">';
-        html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">';
-        html += '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;background:' + color + ';color:#fff;font-family:monospace">' + (item.sourceCode||'') + '</span>';
-        html += '<span style="font-family:monospace;font-size:9px;color:var(--muted)">' + time + '</span>';
-        html += '</div>';
-        html += '<div style="font-size:13px;font-weight:500;color:var(--text);line-height:1.3">' + (item.title||'') + '</div>';
-        html += '</div><span style="font-size:11px;color:var(--muted);flex-shrink:0">↗</span></div>';
+        timeEl.textContent = d ? d.toLocaleTimeString('sv-SE', {hour:'2-digit',minute:'2-digit'}) : '';
+        meta.appendChild(badge);
+        meta.appendChild(timeEl);
+        var titleEl = document.createElement('div');
+        titleEl.style.cssText = 'font-size:13px;font-weight:500;color:var(--text);line-height:1.3';
+        titleEl.textContent = item.title || '';
+        left.appendChild(meta);
+        left.appendChild(titleEl);
+        var arrow = document.createElement('span');
+        arrow.style.cssText = 'font-size:11px;color:var(--muted);flex-shrink:0';
+        arrow.textContent = 'oppna';
+        row.appendChild(left);
+        row.appendChild(arrow);
+        el.appendChild(row);
       });
-      el.innerHTML = html;
     })
-    .catch(function() {
-      el.innerHTML = '<div style="padding:12px 14px;font-family:monospace;font-size:10px;color:#e8302a">Kunde inte hämta flöde</div>';
-    });
+    .catch(function() { el.textContent = 'Fel vid hamtning'; });
 }
 
 function publishArticle() {
-  var title = document.getElementById('art-title').value.trim();
-  var ingress = document.getElementById('art-ingress').value.trim();
-  var body = document.getElementById('art-body').value.trim();
-  var cat = document.getElementById('art-cat').value.trim() || 'Nyheter';
-  var type = document.getElementById('art-type').value;
-  var quote = document.getElementById('art-quote').value.trim();
-  var quoteAttr = document.getElementById('art-quote-attr').value.trim();
-  if (!title || !ingress) { showMsg('Rubrik och ingress krävs', 'error'); return; }
-  var article = {
-    id: 'cms-' + Date.now(), title: title, ingress: ingress, body: body,
-    cat: cat, type: type, quote: quote, quoteAttr: quoteAttr,
-    pubDate: new Date().toISOString(), source: 'GRID', sourceCode: 'GRID', articleType: 'grid'
-  };
+  var title = (document.getElementById('art-title') || {}).value.trim();
+  var ingress = (document.getElementById('art-ingress') || {}).value.trim();
+  var body = (document.getElementById('art-body') || {}).value.trim();
+  var cat = ((document.getElementById('art-cat') || {}).value || '').trim() || 'Nyheter';
+  var type = (document.getElementById('art-type') || {}).value || 'journalist';
+  var quote = ((document.getElementById('art-quote') || {}).value || '').trim();
+  var quoteAttr = ((document.getElementById('art-quote-attr') || {}).value || '').trim();
+  if (!title || !ingress) { showMsg('Rubrik och ingress kravs', 'error'); return; }
+  var article = {id:'cms-'+Date.now(), title:title, ingress:ingress, body:body, cat:cat, type:type, quote:quote, quoteAttr:quoteAttr, pubDate:new Date().toISOString(), source:'GRID', articleType:'grid'};
   cmsArticles.unshift(article);
   localStorage.setItem('grid-cms-articles', JSON.stringify(cmsArticles));
   if (API_URL) {
-    fetch(API_URL + '/api/articles', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(article)
-    }).catch(function(){});
+    fetch(API_URL + '/api/articles', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(article)}).catch(function(){});
   }
   injectArticleIntoFeed(article);
   renderCmsArticles();
   clearForm();
-  showMsg('✓ Artikel publicerad', 'success');
+  showMsg('Artikel publicerad', 'success');
 }
 
 function injectArticleIntoFeed(article) {
@@ -1775,30 +1775,17 @@ function injectArticleIntoFeed(article) {
   var pg = document.createElement('div');
   pg.className = 'page';
   pg.id = pageId;
-  var typeLabel = article.type === 'ai'
-    ? '<span class="art-ab ai">⚡ AI-assisterad</span>'
-    : '<span class="art-ab hu">✦ Journalist</span>';
-  var quoteHtml = article.quote
-    ? '<blockquote class="art-quote">' + article.quote + '</blockquote><p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">' + (article.quoteAttr||'') + '</p>'
-    : '';
-  var bodyParas = article.body
-    ? article.body.split('\n').filter(Boolean).map(function(p){ return '<p class="atext">' + p + '</p>'; }).join('')
-    : '';
-  var timeStr = new Date(article.pubDate).toLocaleTimeString('sv-SE', {hour:'2-digit',minute:'2-digit'});
-  pg.innerHTML = '<div class="art-page"><div class="art-body" style="padding-top:24px">'
-    + '<div class="cat" style="margin-bottom:12px">' + article.cat + '</div>'
-    + '<h1 class="art-title">' + article.title + '</h1>'
-    + '<div class="art-byline">' + typeLabel + '<span class="art-time">' + timeStr + '</span></div>'
-    + '<p class="ingress">' + article.ingress + '</p>'
-    + bodyParas + quoteHtml
-    + '<div class="ad" style="margin:24px -14px;width:calc(100% + 28px)"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">GRID</div><div class="atag">Stöd oberoende journalistik</div></div></div></div>'
-    + '</div></div>';
+  var typeLabel = article.type === 'ai' ? '<span class="art-ab ai">AI-assisterad</span>' : '<span class="art-ab hu">Journalist</span>';
+  var quoteHtml = article.quote ? '<blockquote class="art-quote">' + article.quote + '</blockquote>' : '';
+  var bodyParas = article.body ? article.body.split('\n').filter(Boolean).map(function(p){ return '<p class="atext">' + p + '</p>'; }).join('') : '';
+  var timeStr = new Date(article.pubDate).toLocaleTimeString('sv-SE', {hour:'2-digit', minute:'2-digit'});
+  pg.innerHTML = '<div class="art-page"><div class="art-body" style="padding-top:24px"><div class="cat" style="margin-bottom:12px">' + article.cat + '</div><h1 class="art-title">' + article.title + '</h1><div class="art-byline">' + typeLabel + '<span class="art-time">' + timeStr + '</span></div><p class="ingress">' + article.ingress + '</p>' + bodyParas + quoteHtml + '</div></div>';
   document.body.insertBefore(pg, document.querySelector('nav'));
   var card = document.createElement('div');
   card.className = 'card-h';
-  card.setAttribute('onclick', 'showPage("' + pageId + '")');
-  var timeStr2 = new Date(article.pubDate).toLocaleTimeString('sv-SE', {hour:'2-digit',minute:'2-digit'});
-  card.innerHTML = '<div class="cb"><div class="ccat">' + article.cat + '</div><div class="ctitle">' + article.title + '</div><div class="cmeta"><span class="ctime">' + timeStr2 + '</span></div></div>';
+  var pid = pageId;
+  card.addEventListener('click', function(){ showPage(pid); });
+  card.innerHTML = '<div class="cb"><div class="ccat">' + article.cat + '</div><div class="ctitle">' + article.title + '</div><div class="cmeta"><span class="ctime">' + timeStr + '</span></div></div>';
   var feed = document.querySelector('.dm');
   var firstCard = feed ? feed.querySelector('.card-h') : null;
   if (firstCard) feed.insertBefore(card, firstCard);
@@ -1807,20 +1794,26 @@ function injectArticleIntoFeed(article) {
 function renderCmsArticles() {
   var el = document.getElementById('cms-articles');
   if (!el) return;
-  if (!cmsArticles.length) {
-    el.innerHTML = '<div style="padding:16px;text-align:center;font-family:monospace;font-size:11px;color:var(--muted)">Inga artiklar ännu</div>';
-    return;
-  }
-  var html = '';
+  el.innerHTML = '';
+  if (!cmsArticles.length) { el.textContent = 'Inga artiklar annu'; return; }
   cmsArticles.forEach(function(a) {
-    var time = new Date(a.pubDate).toLocaleString('sv-SE', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-    html += '<div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px">';
-    html += '<div><div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px">' + a.title + '</div>';
-    html += '<div style="font-family:monospace;font-size:9px;color:var(--muted)">' + a.cat + ' · ' + time + '</div></div>';
-    html += '<button onclick="deleteCmsArticle('' + a.id + '')" style="background:none;border:1px solid var(--border);color:var(--muted);padding:3px 8px;font-family:monospace;font-size:9px;cursor:pointer;letter-spacing:1px">✕</button>';
-    html += '</div>';
+    var row = document.createElement('div');
+    row.style.cssText = 'padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px';
+    var info = document.createElement('div');
+    var t = document.createElement('div');
+    t.style.cssText = 'font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px';
+    t.textContent = a.title;
+    var m = document.createElement('div');
+    m.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted)';
+    m.textContent = a.cat;
+    info.appendChild(t); info.appendChild(m);
+    var btn = document.createElement('button');
+    btn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:3px 8px;font-family:monospace;font-size:9px;cursor:pointer';
+    btn.textContent = 'X';
+    btn.addEventListener('click', function(){ deleteCmsArticle(a.id); });
+    row.appendChild(info); row.appendChild(btn);
+    el.appendChild(row);
   });
-  el.innerHTML = html;
 }
 
 function deleteCmsArticle(id) {
@@ -1845,7 +1838,6 @@ function showMsg(msg, type) {
   setTimeout(function(){ el.style.display = 'none'; }, 3000);
 }
 
-// ─── PIPELINE ───────────────────────────────────────────────
 function loadPipelineStatus() {
   if (!API_URL) return;
   fetch(API_URL + '/api/pipeline/status')
@@ -1854,41 +1846,50 @@ function loadPipelineStatus() {
       var el = document.getElementById('pipeline-status');
       var toggle = document.getElementById('pipeline-toggle');
       if (!el) return;
-      var lastRun = data.lastRun ? new Date(data.lastRun).toLocaleTimeString('sv-SE') : 'Ej körd';
-      el.innerHTML = '<div style="display:flex;gap:20px;flex-wrap:wrap">'
-        + '<div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px">STATUS</div>'
-        + '<div style="font-size:13px;font-weight:500;color:' + (data.enabled ? 'var(--v)' : 'var(--muted)') + '">● ' + (data.enabled ? 'Aktiv' : 'Pausad') + '</div></div>'
-        + '<div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px">SENAST KÖRD</div>'
-        + '<div style="font-size:13px;font-weight:500;color:var(--text)">' + lastRun + '</div></div>'
-        + '<div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px">VÄNTANDE UTKAST</div>'
-        + '<div style="font-size:13px;font-weight:500;color:var(--text)">' + data.drafts + '</div></div>'
-        + '</div>';
+      el.innerHTML = '';
+      el.style.cssText = 'display:flex;gap:20px;flex-wrap:wrap';
+      var items = [
+        {l:'STATUS', v:(data.enabled ? 'Aktiv' : 'Pausad'), c:(data.enabled ? 'var(--v)' : 'var(--muted)')},
+        {l:'SENAST KORD', v:(data.lastRun ? new Date(data.lastRun).toLocaleTimeString('sv-SE') : 'Ej kord')},
+        {l:'UTKAST', v:String(data.drafts)}
+      ];
+      items.forEach(function(s) {
+        var box = document.createElement('div');
+        var lbl = document.createElement('div');
+        lbl.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px';
+        lbl.textContent = s.l;
+        var val = document.createElement('div');
+        val.style.cssText = 'font-size:13px;font-weight:500;color:' + (s.c || 'var(--text)');
+        val.textContent = s.v;
+        box.appendChild(lbl); box.appendChild(val);
+        el.appendChild(box);
+      });
       if (toggle) toggle.textContent = data.enabled ? 'Pausa' : 'Aktivera';
       var logEl = document.getElementById('pipeline-log');
       if (logEl && data.log && data.log.length) {
-        logEl.innerHTML = data.log.map(function(l) {
-          var t = new Date(l.time).toLocaleTimeString('sv-SE');
-          return '<div style="font-family:monospace;font-size:10px;color:var(--muted);padding:2px 0;border-bottom:1px solid var(--border)">' + t + ' — ' + l.msg + '</div>';
-        }).join('');
+        logEl.innerHTML = '';
+        data.log.forEach(function(l) {
+          var line = document.createElement('div');
+          line.style.cssText = 'font-family:monospace;font-size:10px;color:var(--muted);padding:2px 0;border-bottom:1px solid var(--border)';
+          line.textContent = new Date(l.time).toLocaleTimeString('sv-SE') + ' - ' + l.msg;
+          logEl.appendChild(line);
+        });
       }
     }).catch(function(){});
 }
 
 function togglePipeline() {
   if (!API_URL) return;
-  fetch(API_URL + '/api/pipeline/toggle', {method:'POST'})
-    .then(function(r){ return r.json(); })
-    .then(function(){ loadPipelineStatus(); })
-    .catch(function(){});
+  fetch(API_URL + '/api/pipeline/toggle', {method:'POST'}).then(function(){ loadPipelineStatus(); }).catch(function(){});
 }
 
 function runPipeline() {
-  if (!API_URL) { showMsg('Anslut till backend först', 'error'); return; }
+  if (!API_URL) { showMsg('Anslut forst', 'error'); return; }
   fetch(API_URL + '/api/pipeline/run', {method:'POST'})
     .then(function(){
-      showMsg('Pipeline startad — vänta ~30 sekunder', 'success');
+      showMsg('Pipeline startad - vanta 30 sekunder', 'success');
       setTimeout(function(){ loadDrafts(); loadPipelineStatus(); }, 35000);
-    }).catch(function(){ showMsg('Kunde inte starta pipeline', 'error'); });
+    }).catch(function(){ showMsg('Fel', 'error'); });
 }
 
 function loadDrafts() {
@@ -1899,29 +1900,50 @@ function loadDrafts() {
       var el = document.getElementById('drafts-container');
       if (!el) return;
       var pending = drafts.filter(function(d){ return d.status === 'pending'; });
-      if (!pending.length) {
-        el.innerHTML = '<div style="padding:16px;text-align:center;font-family:monospace;font-size:11px;color:var(--muted)">Inga väntande utkast</div>';
-        return;
-      }
-      var html = '';
+      el.innerHTML = '';
+      if (!pending.length) { el.textContent = 'Inga vastande utkast'; return; }
       pending.forEach(function(d) {
-        var srcBadges = d.sources.slice(0,4).map(function(s){
-          return '<span style="background:' + s.sourceColor + ';color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;font-size:9px;font-family:monospace">' + s.sourceCode + '</span>';
-        }).join('');
-        html += '<div style="border:1px solid var(--border);border-radius:3px;margin-bottom:12px;overflow:hidden">';
-        html += '<div style="background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap">';
-        html += '<div><div style="font-family:monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:2px">⚡ AI-UTKAST · ' + d.sources.length + ' KÄLLOR · ' + d.keyword.toUpperCase() + '</div>';
-        html += '<div style="font-size:15px;font-weight:600;color:var(--text)">' + d.article.title + '</div></div>';
-        html += '<div style="display:flex;gap:6px;flex-shrink:0">';
-        html += '<button onclick="publishDraft(' + JSON.stringify(d.id) + ')" style="background:var(--v);color:#000;border:none;padding:6px 14px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera</button>';
-        html += '<button onclick="rejectDraft(' + JSON.stringify(d.id) + ')" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-family:monospace;font-size:9px;cursor:pointer;border-radius:2px;letter-spacing:1px">✕ Avvisa</button>';
-        html += '</div></div>';
-        html += '<div style="padding:12px 14px">';
-        html += '<div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:8px">' + d.article.ingress + '</div>';
-        html += '<div>' + srcBadges + '</div>';
-        html += '</div></div>';
+        var box = document.createElement('div');
+        box.style.cssText = 'border:1px solid var(--border);border-radius:3px;margin-bottom:12px;overflow:hidden';
+        var head = document.createElement('div');
+        head.style.cssText = 'background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap';
+        var info = document.createElement('div');
+        var tag = document.createElement('div');
+        tag.style.cssText = 'font-family:monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:2px';
+        tag.textContent = 'AI-UTKAST ' + d.sources.length + ' KALLOR - ' + (d.keyword || '').toUpperCase();
+        var ttl = document.createElement('div');
+        ttl.style.cssText = 'font-size:15px;font-weight:600;color:var(--text)';
+        ttl.textContent = d.article.title;
+        info.appendChild(tag); info.appendChild(ttl);
+        var btns = document.createElement('div');
+        btns.style.cssText = 'display:flex;gap:6px;flex-shrink:0';
+        var pubBtn = document.createElement('button');
+        pubBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:6px 14px;font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px';
+        pubBtn.textContent = 'Publicera';
+        var did = d.id;
+        pubBtn.addEventListener('click', function(){ publishDraft(did); });
+        var rejBtn = document.createElement('button');
+        rejBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-family:monospace;font-size:9px;cursor:pointer;border-radius:2px';
+        rejBtn.textContent = 'Avvisa';
+        rejBtn.addEventListener('click', function(){ rejectDraft(did); });
+        btns.appendChild(pubBtn); btns.appendChild(rejBtn);
+        head.appendChild(info); head.appendChild(btns);
+        var body = document.createElement('div');
+        body.style.padding = '12px 14px';
+        var ingress = document.createElement('div');
+        ingress.style.cssText = 'font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:8px';
+        ingress.textContent = d.article.ingress;
+        var srcs = document.createElement('div');
+        d.sources.slice(0,4).forEach(function(s) {
+          var badge = document.createElement('span');
+          badge.style.cssText = 'background:' + s.sourceColor + ';color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;font-size:9px;font-family:monospace';
+          badge.textContent = s.sourceCode;
+          srcs.appendChild(badge);
+        });
+        body.appendChild(ingress); body.appendChild(srcs);
+        box.appendChild(head); box.appendChild(body);
+        el.appendChild(box);
       });
-      el.innerHTML = html;
     }).catch(function(){});
 }
 
@@ -1930,10 +1952,10 @@ function publishDraft(id) {
   fetch(API_URL + '/api/drafts/' + id + '/publish', {method:'POST'})
     .then(function(r){ return r.json(); })
     .then(function(article) {
-      injectArticleIntoFeed(Object.assign({}, article, {type:'grid', articleType:'grid'}));
+      injectArticleIntoFeed(Object.assign({}, article, {type:'grid'}));
       loadDrafts();
-      showMsg('✓ Artikel publicerad i flödet', 'success');
-    }).catch(function(){ showMsg('Kunde inte publicera', 'error'); });
+      showMsg('Artikel publicerad', 'success');
+    }).catch(function(){ showMsg('Fel', 'error'); });
 }
 
 function rejectDraft(id) {
@@ -1944,11 +1966,8 @@ function rejectDraft(id) {
 }
 
 setInterval(function() {
-  var adminPage = document.getElementById('page-cms');
-  if (adminPage && adminPage.classList.contains('active')) {
-    loadPipelineStatus();
-    loadDrafts();
-  }
+  var p = document.getElementById('page-cms');
+  if (p && p.classList.contains('active')) { loadPipelineStatus(); loadDrafts(); }
 }, 30000);
 </script>
 </body>
