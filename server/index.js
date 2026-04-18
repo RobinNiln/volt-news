@@ -279,5 +279,31 @@ app.post('/api/pipeline/run', (req, res) => {
   runPipeline();
 });
 
+
+// GET /api/trends — top 5 trends from last 24h
+app.get('/api/trends', async (req, res) => {
+  try {
+    const cached = cache.get('trends');
+    if (cached) return res.json(cached);
+    const items = await fetchAllFeeds();
+    const groups = groupByTopic(items);
+    const trends = groups.slice(0, 5).map(g => {
+      const sources = [...new Map(g.items.map(i => [i.source, {name:i.source, code:i.sourceCode, color:i.sourceColor}])).values()];
+      return {
+        keyword: g.keyword,
+        articleCount: g.items.length,
+        sourceCount: new Set(g.items.map(i => i.source)).size,
+        sources: sources.slice(0, 6),
+        totalArticles: items.length,
+        headlines: g.items.slice(0, 3).map(i => ({ title: i.title, source: i.source }))
+      };
+    });
+    cache.set('trends', trends, 900); // 15 min cache
+    res.json(trends);
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('GRID backend pa port ' + PORT));
