@@ -1598,10 +1598,10 @@ body.light .logo-light{display:block}
   <!-- AI DRAFTS -->
   <div style="margin-top:28px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
-      AI-utkast
-      <button onclick="loadDrafts()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">↻ Uppdatera</button>
+      AI-forslag
+      <button onclick="loadSuggestions()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">↻ Uppdatera</button>
     </div>
-    <div id="drafts-container">
+    <div id="suggestions-container">
       <div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Inga utkast ännu — kör pipelinen för att generera</div>
     </div>
   </div>
@@ -1693,7 +1693,7 @@ function connectBackend() {
       setStatus('Ansluten ' + data.length + ' kallor', 'var(--v)');
       loadFeed();
       loadPipelineStatus();
-      loadDrafts();
+      loadSuggestions();
     })
     .catch(function() { setStatus('Kunde inte ansluta', '#e8302a'); });
 }
@@ -1709,7 +1709,7 @@ function loadFeed() {
   if (!API_URL) return;
   var el = document.getElementById('live-feed');
   if (!el) return;
-  el.textContent = 'Hamtar flode...';
+  el.textContent = 'Hamtar...';
   fetch(API_URL + '/api/feed')
     .then(function(r) { return r.json(); })
     .then(function(items) {
@@ -1745,7 +1745,155 @@ function loadFeed() {
         el.appendChild(row);
       });
     })
-    .catch(function() { el.textContent = 'Fel vid hamtning'; });
+    .catch(function() { el.textContent = 'Fel'; });
+}
+
+function loadSuggestions() {
+  if (!API_URL) return;
+  var el = document.getElementById('suggestions-container');
+  if (!el) return;
+  fetch(API_URL + '/api/suggestions')
+    .then(function(r) { return r.json(); })
+    .then(function(suggestions) {
+      el.innerHTML = '';
+      var pending = suggestions.filter(function(s) { return s.status === 'pending'; });
+      if (!pending.length) {
+        el.textContent = 'Inga forslag — kor pipelinen for att generera';
+        return;
+      }
+      pending.forEach(function(s) {
+        var box = document.createElement('div');
+        box.style.cssText = 'border:1px solid var(--border);border-radius:3px;margin-bottom:10px;overflow:hidden';
+
+        // Header
+        var head = document.createElement('div');
+        head.style.cssText = 'background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border)';
+        var catEl = document.createElement('div');
+        catEl.style.cssText = 'font-family:monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:4px';
+        catEl.textContent = s.category.toUpperCase() + ' — ' + s.sourceCount + ' kallor';
+        var titleEl = document.createElement('div');
+        titleEl.style.cssText = 'font-size:16px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:8px';
+        titleEl.textContent = s.title;
+        var ingress = document.createElement('div');
+        ingress.style.cssText = 'font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:8px';
+        ingress.textContent = s.ingress;
+
+        // Source badges
+        var srcRow = document.createElement('div');
+        srcRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px';
+        s.sources.slice(0,5).forEach(function(src) {
+          var b = document.createElement('span');
+          b.style.cssText = 'background:' + src.color + ';color:#fff;padding:1px 6px;border-radius:2px;font-size:9px;font-family:monospace;cursor:pointer';
+          b.textContent = src.code;
+          b.title = src.title || '';
+          srcRow.appendChild(b);
+        });
+
+        // Action buttons
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex;gap:8px';
+        var pubBtn = document.createElement('button');
+        pubBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:7px 16px;font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px;letter-spacing:.5px';
+        pubBtn.textContent = 'Publicera';
+        var sid = s.id;
+        pubBtn.addEventListener('click', function() { publishSuggestion(sid, s); });
+        var dimBtn = document.createElement('button');
+        dimBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:7px 12px;font-family:monospace;font-size:9px;cursor:pointer;border-radius:2px';
+        dimBtn.textContent = 'Avfarda';
+        dimBtn.addEventListener('click', function() { dismissSuggestion(sid); });
+        btnRow.appendChild(pubBtn);
+        btnRow.appendChild(dimBtn);
+
+        head.appendChild(catEl);
+        head.appendChild(titleEl);
+        head.appendChild(ingress);
+        head.appendChild(srcRow);
+        head.appendChild(btnRow);
+        box.appendChild(head);
+        el.appendChild(box);
+      });
+    })
+    .catch(function() { el.textContent = 'Kunde inte hamta forslag'; });
+}
+
+function publishSuggestion(id, s) {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/suggestions/' + id + '/publish', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({})
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(article) {
+      injectArticleIntoFeed(Object.assign({}, article, {type:'ai', cat: s.category}));
+      loadSuggestions();
+      showMsg('Artikel publicerad i flodet', 'success');
+    })
+    .catch(function() { showMsg('Fel', 'error'); });
+}
+
+function dismissSuggestion(id) {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/suggestions/' + id + '/dismiss', {method:'POST'})
+    .then(function() { loadSuggestions(); })
+    .catch(function(){});
+}
+
+function runPipeline() {
+  if (!API_URL) { showMsg('Anslut forst', 'error'); return; }
+  var el = document.getElementById('suggestions-container');
+  if (el) el.textContent = 'Genererar forslag — vantar pa Claude...';
+  fetch(API_URL + '/api/pipeline/run', {method:'POST'})
+    .then(function() {
+      showMsg('Pipeline startad — vantar 40 sekunder', 'success');
+      setTimeout(function() { loadSuggestions(); loadPipelineStatus(); }, 42000);
+    })
+    .catch(function() { showMsg('Fel', 'error'); });
+}
+
+function loadPipelineStatus() {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/pipeline/status')
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var el = document.getElementById('pipeline-status');
+      var toggle = document.getElementById('pipeline-toggle');
+      if (!el) return;
+      el.innerHTML = '';
+      el.style.cssText = 'display:flex;gap:20px;flex-wrap:wrap';
+      var stats = [
+        {l:'STATUS', v:(data.running ? 'Kor...' : data.enabled ? 'Aktiv' : 'Pausad'), c:(data.running ? '#f5a623' : data.enabled ? 'var(--v)' : 'var(--muted)')},
+        {l:'SENAST KORD', v:(data.lastRun ? new Date(data.lastRun).toLocaleTimeString('sv-SE') : 'Aldrig')},
+        {l:'FORSLAG', v:String(data.suggestions)}
+      ];
+      stats.forEach(function(s) {
+        var box = document.createElement('div');
+        var lbl = document.createElement('div');
+        lbl.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px';
+        lbl.textContent = s.l;
+        var val = document.createElement('div');
+        val.style.cssText = 'font-size:13px;font-weight:500;color:' + (s.c || 'var(--text)');
+        val.textContent = s.v;
+        box.appendChild(lbl); box.appendChild(val);
+        el.appendChild(box);
+      });
+      if (toggle) toggle.textContent = data.enabled ? 'Pausa' : 'Aktivera';
+      var logEl = document.getElementById('pipeline-log');
+      if (logEl && data.log && data.log.length) {
+        logEl.innerHTML = '';
+        data.log.forEach(function(l) {
+          var line = document.createElement('div');
+          line.style.cssText = 'font-family:monospace;font-size:10px;color:var(--muted);padding:2px 0;border-bottom:1px solid var(--border)';
+          line.textContent = new Date(l.time).toLocaleTimeString('sv-SE') + ' - ' + l.msg;
+          logEl.appendChild(line);
+        });
+      }
+    }).catch(function(){});
+}
+
+function togglePipeline() {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/pipeline/toggle', {method:'POST'}).then(function(){ loadPipelineStatus(); }).catch(function(){});
 }
 
 function publishArticle() {
@@ -1779,13 +1927,13 @@ function injectArticleIntoFeed(article) {
   var quoteHtml = article.quote ? '<blockquote class="art-quote">' + article.quote + '</blockquote>' : '';
   var bodyParas = article.body ? article.body.split('\n').filter(Boolean).map(function(p){ return '<p class="atext">' + p + '</p>'; }).join('') : '';
   var timeStr = new Date(article.pubDate).toLocaleTimeString('sv-SE', {hour:'2-digit', minute:'2-digit'});
-  pg.innerHTML = '<div class="art-page"><div class="art-body" style="padding-top:24px"><div class="cat" style="margin-bottom:12px">' + article.cat + '</div><h1 class="art-title">' + article.title + '</h1><div class="art-byline">' + typeLabel + '<span class="art-time">' + timeStr + '</span></div><p class="ingress">' + article.ingress + '</p>' + bodyParas + quoteHtml + '</div></div>';
+  pg.innerHTML = '<div class="art-page"><div class="art-body" style="padding-top:24px"><div class="cat" style="margin-bottom:12px">' + (article.cat||'') + '</div><h1 class="art-title">' + article.title + '</h1><div class="art-byline">' + typeLabel + '<span class="art-time">' + timeStr + '</span></div><p class="ingress">' + article.ingress + '</p>' + bodyParas + quoteHtml + '</div></div>';
   document.body.insertBefore(pg, document.querySelector('nav'));
   var card = document.createElement('div');
   card.className = 'card-h';
   var pid = pageId;
   card.addEventListener('click', function(){ showPage(pid); });
-  card.innerHTML = '<div class="cb"><div class="ccat">' + article.cat + '</div><div class="ctitle">' + article.title + '</div><div class="cmeta"><span class="ctime">' + timeStr + '</span></div></div>';
+  card.innerHTML = '<div class="cb"><div class="ccat">' + (article.cat||'') + '</div><div class="ctitle">' + article.title + '</div><div class="cmeta"><span class="ctime">' + timeStr + '</span></div></div>';
   var feed = document.querySelector('.dm');
   var firstCard = feed ? feed.querySelector('.card-h') : null;
   if (firstCard) feed.insertBefore(card, firstCard);
@@ -1795,7 +1943,7 @@ function renderCmsArticles() {
   var el = document.getElementById('cms-articles');
   if (!el) return;
   el.innerHTML = '';
-  if (!cmsArticles.length) { el.textContent = 'Inga artiklar annu'; return; }
+  if (!cmsArticles.length) { el.textContent = 'Inga manuella artiklar'; return; }
   cmsArticles.forEach(function(a) {
     var row = document.createElement('div');
     row.style.cssText = 'padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px';
@@ -1835,139 +1983,12 @@ function showMsg(msg, type) {
   el.textContent = msg;
   el.style.color = type === 'error' ? '#e8302a' : 'var(--v)';
   el.style.display = 'block';
-  setTimeout(function(){ el.style.display = 'none'; }, 3000);
-}
-
-function loadPipelineStatus() {
-  if (!API_URL) return;
-  fetch(API_URL + '/api/pipeline/status')
-    .then(function(r){ return r.json(); })
-    .then(function(data) {
-      var el = document.getElementById('pipeline-status');
-      var toggle = document.getElementById('pipeline-toggle');
-      if (!el) return;
-      el.innerHTML = '';
-      el.style.cssText = 'display:flex;gap:20px;flex-wrap:wrap';
-      var items = [
-        {l:'STATUS', v:(data.enabled ? 'Aktiv' : 'Pausad'), c:(data.enabled ? 'var(--v)' : 'var(--muted)')},
-        {l:'SENAST KORD', v:(data.lastRun ? new Date(data.lastRun).toLocaleTimeString('sv-SE') : 'Ej kord')},
-        {l:'UTKAST', v:String(data.drafts)}
-      ];
-      items.forEach(function(s) {
-        var box = document.createElement('div');
-        var lbl = document.createElement('div');
-        lbl.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px';
-        lbl.textContent = s.l;
-        var val = document.createElement('div');
-        val.style.cssText = 'font-size:13px;font-weight:500;color:' + (s.c || 'var(--text)');
-        val.textContent = s.v;
-        box.appendChild(lbl); box.appendChild(val);
-        el.appendChild(box);
-      });
-      if (toggle) toggle.textContent = data.enabled ? 'Pausa' : 'Aktivera';
-      var logEl = document.getElementById('pipeline-log');
-      if (logEl && data.log && data.log.length) {
-        logEl.innerHTML = '';
-        data.log.forEach(function(l) {
-          var line = document.createElement('div');
-          line.style.cssText = 'font-family:monospace;font-size:10px;color:var(--muted);padding:2px 0;border-bottom:1px solid var(--border)';
-          line.textContent = new Date(l.time).toLocaleTimeString('sv-SE') + ' - ' + l.msg;
-          logEl.appendChild(line);
-        });
-      }
-    }).catch(function(){});
-}
-
-function togglePipeline() {
-  if (!API_URL) return;
-  fetch(API_URL + '/api/pipeline/toggle', {method:'POST'}).then(function(){ loadPipelineStatus(); }).catch(function(){});
-}
-
-function runPipeline() {
-  if (!API_URL) { showMsg('Anslut forst', 'error'); return; }
-  fetch(API_URL + '/api/pipeline/run', {method:'POST'})
-    .then(function(){
-      showMsg('Pipeline startad - vanta 30 sekunder', 'success');
-      setTimeout(function(){ loadDrafts(); loadPipelineStatus(); }, 35000);
-    }).catch(function(){ showMsg('Fel', 'error'); });
-}
-
-function loadDrafts() {
-  if (!API_URL) return;
-  fetch(API_URL + '/api/drafts')
-    .then(function(r){ return r.json(); })
-    .then(function(drafts) {
-      var el = document.getElementById('drafts-container');
-      if (!el) return;
-      var pending = drafts.filter(function(d){ return d.status === 'pending'; });
-      el.innerHTML = '';
-      if (!pending.length) { el.textContent = 'Inga vastande utkast'; return; }
-      pending.forEach(function(d) {
-        var box = document.createElement('div');
-        box.style.cssText = 'border:1px solid var(--border);border-radius:3px;margin-bottom:12px;overflow:hidden';
-        var head = document.createElement('div');
-        head.style.cssText = 'background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap';
-        var info = document.createElement('div');
-        var tag = document.createElement('div');
-        tag.style.cssText = 'font-family:monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:2px';
-        tag.textContent = 'AI-UTKAST ' + d.sources.length + ' KALLOR - ' + (d.keyword || '').toUpperCase();
-        var ttl = document.createElement('div');
-        ttl.style.cssText = 'font-size:15px;font-weight:600;color:var(--text)';
-        ttl.textContent = d.article.title;
-        info.appendChild(tag); info.appendChild(ttl);
-        var btns = document.createElement('div');
-        btns.style.cssText = 'display:flex;gap:6px;flex-shrink:0';
-        var pubBtn = document.createElement('button');
-        pubBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:6px 14px;font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px';
-        pubBtn.textContent = 'Publicera';
-        var did = d.id;
-        pubBtn.addEventListener('click', function(){ publishDraft(did); });
-        var rejBtn = document.createElement('button');
-        rejBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-family:monospace;font-size:9px;cursor:pointer;border-radius:2px';
-        rejBtn.textContent = 'Avvisa';
-        rejBtn.addEventListener('click', function(){ rejectDraft(did); });
-        btns.appendChild(pubBtn); btns.appendChild(rejBtn);
-        head.appendChild(info); head.appendChild(btns);
-        var body = document.createElement('div');
-        body.style.padding = '12px 14px';
-        var ingress = document.createElement('div');
-        ingress.style.cssText = 'font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:8px';
-        ingress.textContent = d.article.ingress;
-        var srcs = document.createElement('div');
-        d.sources.slice(0,4).forEach(function(s) {
-          var badge = document.createElement('span');
-          badge.style.cssText = 'background:' + s.sourceColor + ';color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;font-size:9px;font-family:monospace';
-          badge.textContent = s.sourceCode;
-          srcs.appendChild(badge);
-        });
-        body.appendChild(ingress); body.appendChild(srcs);
-        box.appendChild(head); box.appendChild(body);
-        el.appendChild(box);
-      });
-    }).catch(function(){});
-}
-
-function publishDraft(id) {
-  if (!API_URL) return;
-  fetch(API_URL + '/api/drafts/' + id + '/publish', {method:'POST'})
-    .then(function(r){ return r.json(); })
-    .then(function(article) {
-      injectArticleIntoFeed(Object.assign({}, article, {type:'grid'}));
-      loadDrafts();
-      showMsg('Artikel publicerad', 'success');
-    }).catch(function(){ showMsg('Fel', 'error'); });
-}
-
-function rejectDraft(id) {
-  if (!API_URL) return;
-  fetch(API_URL + '/api/drafts/' + id + '/reject', {method:'POST'})
-    .then(function(){ loadDrafts(); showMsg('Utkast avvisat', 'success'); })
-    .catch(function(){});
+  setTimeout(function(){ el.style.display = 'none'; }, 4000);
 }
 
 setInterval(function() {
   var p = document.getElementById('page-cms');
-  if (p && p.classList.contains('active')) { loadPipelineStatus(); loadDrafts(); }
+  if (p && p.classList.contains('active')) { loadPipelineStatus(); }
 }, 30000);
 </script>
 </body>
