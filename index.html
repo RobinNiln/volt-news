@@ -10,7 +10,7 @@
 body.dark{--bg:#0D0D0D;--surface:#161616;--card:#1A1A1A;--text:#F0F0F0;--mid:#AAAAAA;--muted:#666;--border:#2A2A2A}
 body.light{--bg:#FFFFFF;--surface:#F5F5F3;--card:#EDEDE9;--text:#0D0D0D;--mid:#444444;--muted:#999999;--border:#E0E0E0}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:16px;overflow-x:hidden;padding-bottom:58px}
+body{background:var(--bg);color:var(--text);font-family:sans-serif;font-size:16px;overflow-x:hidden;padding-bottom:58px}
 
 /* HEADER */
 header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:2px solid var(--v);transition:background .2s}
@@ -19,15 +19,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);bord
 body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 
 }
-.live{display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px}
+.live{display:flex;align-items:center;gap:5px;font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px}
 .ldot{width:5px;height:5px;background:var(--red);border-radius:50%;animation:p 1.5s infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* TICKER */
 .ticker{margin-top:48px;background:var(--surface);height:26px;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--border);position:relative;z-index:10}
-.tlabel{background:var(--v);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;padding:0 10px;height:100%;display:flex;align-items:center;flex-shrink:0;font-weight:700;text-transform:uppercase}
+.tlabel{background:var(--v);color:#000;font-family:sans-serif;font-size:10px;letter-spacing:2px;padding:0 10px;height:100%;display:flex;align-items:center;flex-shrink:0;font-weight:700;text-transform:uppercase}
 .ttrack{display:flex;animation:tick 40s linear infinite;white-space:nowrap}
-.ttrack span{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);padding:0 20px}
+.ttrack span{font-family:monospace;font-size:10px;color:var(--muted);padding:0 20px}
 .ttrack span::before{content:'—';margin-right:20px;color:var(--v);opacity:.6;font-size:8px}
 @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
@@ -37,7 +37,7 @@ body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 
 /* CAT LABEL */
-.cat{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#000;background:var(--v);display:inline-block;padding:2px 7px;margin-bottom:8px}
+.cat{font-family:sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#000;background:var(--v);display:inline-block;padding:2px 7px;margin-bottom:8px}
 .cat.red{background:var(--red);color:#fff}
 .cat.white{background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15)}
 
@@ -45,17 +45,17 @@ body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 .hero{cursor:pointer;position:relative;overflow:hidden}
 .hero img{width:100%;height:65vw;max-height:520px;object-fit:cover;display:block;filter:brightness(.55)}
 .hero-content{position:absolute;bottom:0;left:0;right:0;padding:16px}
-.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(26px,6vw,48px);font-weight:700;line-height:1.02;color:#fff;letter-spacing:.2px;margin-bottom:10px}
+.hero-title{font-family:sans-serif;font-size:clamp(26px,6vw,48px);font-weight:700;line-height:1.02;color:#fff;letter-spacing:.2px;margin-bottom:10px}
 .hero-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.ab{display:inline-flex;align-items:center;gap:3px;font-family:'DM Mono',monospace;font-size:9px;padding:2px 6px;letter-spacing:.5px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.55)}
+.ab{display:inline-flex;align-items:center;gap:3px;font-family:monospace;font-size:9px;padding:2px 6px;letter-spacing:.5px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.55)}
 .ab.ai{border-color:rgba(245,197,0,.4);color:var(--v)}
-.time{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4)}
-.loc{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4)}
+.time{font-family:monospace;font-size:10px;color:rgba(255,255,255,.4)}
+.loc{font-family:monospace;font-size:10px;color:rgba(255,255,255,.4)}
 .loc::before{content:'◎ '}
 
 /* FEED STRIP */
 .feed-section{border-bottom:1px solid var(--border)}
-.feed-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:12px 14px 6px;border-top:1px solid var(--border)}
+.feed-label{font-family:sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:12px 14px 6px;border-top:1px solid var(--border)}
 
 /* CARD — dark */
 .card{cursor:pointer;overflow:hidden;transition:.2s}
@@ -63,11 +63,11 @@ body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 .card img{width:100%;display:block;object-fit:cover;filter:brightness(.8);transition:.2s}
 .card:hover img{filter:brightness(.95)}
 .cb{padding:10px 14px 14px}
-.ctitle{font-family:'Barlow Condensed',sans-serif;font-size:clamp(22px,3.5vw,30px);font-weight:600;line-height:1.05;letter-spacing:.1px;color:var(--text);margin-bottom:6px}
+.ctitle{font-family:sans-serif;font-size:clamp(22px,3.5vw,30px);font-weight:600;line-height:1.05;letter-spacing:.1px;color:var(--text);margin-bottom:6px}
 .cdesc{font-size:13px;color:var(--mid);line-height:1.5;margin-bottom:8px}
 .cmeta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.ctime{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
-.cloc{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
+.ctime{font-family:monospace;font-size:9px;color:var(--muted)}
+.cloc{font-family:monospace;font-size:9px;color:var(--muted)}
 .cloc::before{content:'◎ ';color:var(--v)}
 
 /* 2-col grid */
@@ -87,42 +87,42 @@ body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 .trends{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 0;overflow-x:auto;scrollbar-width:none}
 .trends::-webkit-scrollbar{display:none}
 .ti{display:flex;gap:6px;padding:0 14px;width:max-content}
-.chip{background:transparent;border:1px solid var(--border);border-radius:2px;padding:8px 14px;min-height:36px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:.15s;color:var(--mid);display:flex;align-items:center;gap:5px}
+.chip{background:transparent;border:1px solid var(--border);border-radius:2px;padding:8px 14px;min-height:36px;font-family:sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:.15s;color:var(--mid);display:flex;align-items:center;gap:5px}
 .chip:hover,.chip.on{background:var(--v);color:#000;border-color:var(--v)}
-.chip .cn{font-family:'DM Mono',monospace;font-size:9px;opacity:.6}
+.chip .cn{font-family:monospace;font-size:9px;opacity:.6}
 
 /* AD */
 .ad{background:var(--surface);display:flex;flex-direction:column;align-items:center;padding:10px;gap:4px;border-bottom:1px solid var(--border)}
-.alabel{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.alabel{font-family:monospace;font-size:8px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
 .abox{width:320px;height:100px;background:linear-gradient(135deg,#1a1a2e,#0a1020);border-radius:2px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
-.abrand{font-family:'Barlow Condensed',sans-serif;font-size:22px;color:#fff;letter-spacing:3px;font-weight:700;text-align:center;text-transform:uppercase}
+.abrand{font-family:sans-serif;font-size:22px;color:#fff;letter-spacing:3px;font-weight:700;text-align:center;text-transform:uppercase}
 .atag{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:2px}
 
 /* ARTICLE PAGE */
 .art-page{max-width:720px;margin:0 auto}
 .art-page>img{width:100%;height:56vw;max-height:460px;object-fit:cover;display:block;filter:brightness(.7)}
 .art-body{padding:20px 14px}
-.art-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,6vw,48px);font-weight:700;line-height:1.02;letter-spacing:.2px;color:var(--text);margin-bottom:12px}
+.art-title{font-family:sans-serif;font-size:clamp(28px,6vw,48px);font-weight:700;line-height:1.02;letter-spacing:.2px;color:var(--text);margin-bottom:12px}
 .art-byline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--border);margin-bottom:18px}
-.art-ab{display:inline-flex;align-items:center;gap:3px;font-family:'DM Mono',monospace;font-size:9px;padding:2px 6px;letter-spacing:.5px}
+.art-ab{display:inline-flex;align-items:center;gap:3px;font-family:monospace;font-size:9px;padding:2px 6px;letter-spacing:.5px}
 .art-ab.ai{background:rgba(245,197,0,.12);color:var(--v);border:1px solid rgba(245,197,0,.3)}
 .art-ab.hu{background:rgba(255,255,255,.06);color:var(--mid);border:1px solid var(--border)}
-.art-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.art-time{font-family:monospace;font-size:10px;color:var(--muted)}
 .ingress{font-size:17px;font-weight:500;line-height:1.6;margin-bottom:18px;color:var(--text);padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .atext{font-size:15px;line-height:1.8;color:var(--mid);margin-bottom:16px}
 .atext strong{color:var(--text)}
 .art-quote{font-size:19px;font-weight:500;line-height:1.45;color:var(--text);border-left:3px solid var(--v);padding:12px 16px;margin:22px 0;font-style:italic}
 
 /* AI MODULES */
-.mod-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:var(--v)}
+.mod-label{font-family:monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:var(--v)}
 .mod-label-muted{color:var(--muted)}
 .mod-context{background:var(--surface);border-left:3px solid var(--v);padding:14px 16px;margin:22px 0}
-.mod-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;color:var(--text)}
+.mod-title{font-family:sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;color:var(--text)}
 .mod-text{font-size:13px;line-height:1.65;color:var(--mid)}
 .mod-updates{border:1px solid var(--border);margin:22px 0;overflow:hidden}
 .mod-updates .mod-label{padding:8px 14px;margin:0;border-bottom:1px solid var(--border);display:block}
 .upd-item{display:flex;gap:12px;padding:10px 14px;border-top:1px solid var(--border);align-items:flex-start}
-.upd-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);flex-shrink:0;padding-top:2px;width:34px}
+.upd-time{font-family:monospace;font-size:9px;color:var(--muted);flex-shrink:0;padding-top:2px;width:34px}
 .upd-text{font-size:13px;line-height:1.5;color:var(--mid)}
 .upd-text strong{color:var(--v)}
 .mod-local{background:var(--surface);border:1px solid var(--border);margin:22px 0;overflow:hidden}
@@ -133,19 +133,19 @@ body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 .srci:first-child{border-top:none}
 .srci:hover{background:var(--card)}
 .srcn{font-size:13px;font-weight:500;color:var(--text);margin-bottom:1px}
-.srcl{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
-.srclink{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--v);color:#000;padding:4px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.srcl{font-family:monospace;font-size:9px;color:var(--muted)}
+.srclink{font-family:sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--v);color:#000;padding:4px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0}
 
 /* LOCAL */
 .lpage{padding:16px}
-.lpage h2{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:4px}
+.lpage h2{font-family:sans-serif;font-size:30px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:4px}
 .lpage>p{font-size:13px;color:var(--muted);margin-bottom:16px}
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
 .ccrd{background:var(--bg);padding:14px;cursor:pointer;transition:.15s;position:relative}
 .ccrd:hover{background:var(--card)}
 .ccrd.hot::after{content:'●';position:absolute;top:10px;right:10px;color:var(--red);font-size:7px;animation:p 1.5s infinite}
-.cname{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);margin-bottom:2px}
-.ccnt{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
+.cname{font-family:sans-serif;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);margin-bottom:2px}
+.ccnt{font-family:monospace;font-size:9px;color:var(--muted)}
 .cbar{margin-top:8px;height:1px;background:var(--border)}
 .cbar div{height:100%;background:var(--v)}
 
@@ -153,22 +153,22 @@ body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 .apage{max-width:680px;margin:0 auto}
 .about-hero{background:var(--surface);padding:40px 20px;border-bottom:2px solid var(--v)}
 .about-hero .alogo img{height:40px;width:auto;margin-bottom:10px}
-.about-tag{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.about-tag{font-family:monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
 .about-body{padding:24px 16px}
 .ablk{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--border)}
 .ablk:last-child{border-bottom:none}
-.ablk h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--v);margin-bottom:8px}
+.ablk h3{font-family:sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--v);margin-bottom:8px}
 .ablk p{font-size:14px;line-height:1.75;color:var(--mid)}
 .aibox{background:var(--surface);border-left:3px solid var(--v);padding:14px 16px;margin:16px 0}
-.aiboxtitle{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--v);margin-bottom:12px}
+.aiboxtitle{font-family:sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--v);margin-bottom:12px}
 .ail{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
 .ail:last-child{margin-bottom:0}
-.ail strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text);margin-bottom:2px}
+.ail strong{display:block;font-family:sans-serif;font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text);margin-bottom:2px}
 .ail p{font-size:13px;color:var(--mid);margin:0;line-height:1.5}
 
 /* BOTTOM NAV */
 nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface);border-top:2px solid var(--v);display:flex;height:56px}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;border:none;background:none;color:var(--muted);font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.5px;text-transform:uppercase;transition:.15s;border-right:1px solid var(--border)}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;border:none;background:none;color:var(--muted);font-size:9px;font-family:monospace;letter-spacing:.5px;text-transform:uppercase;transition:.15s;border-right:1px solid var(--border)}
 .ni:last-child{border-right:none}
 .ni.on{color:var(--v)}
 .ni span:first-child{font-size:16px}
@@ -207,7 +207,7 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
 
 .mod-local-header{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);background:rgba(245,197,0,.06)}
 .mod-local-icon{font-size:22px;color:var(--v);line-height:1;flex-shrink:0;margin-top:2px}
-.mod-local-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);margin-bottom:3px}
+.mod-local-title{font-family:sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);margin-bottom:3px}
 .mod-local-sub{font-size:11px;color:var(--muted);line-height:1.5}
 .src-left{flex:1}
 .src-outlet{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
@@ -222,10 +222,10 @@ body.light #theme-btn{border-color:var(--border);color:var(--text)}
 .video-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .video-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.1) 50%,transparent 100%)}
 .video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:44px;height:44px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.6);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:4px}
-.video-duration{position:absolute;bottom:8px;right:8px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.8);background:rgba(0,0,0,.5);padding:1px 5px;border-radius:2px}
+.video-duration{position:absolute;bottom:8px;right:8px;font-family:monospace;font-size:10px;color:rgba(255,255,255,.8);background:rgba(0,0,0,.5);padding:1px 5px;border-radius:2px}
 .video-caption{position:absolute;bottom:0;left:0;right:0;padding:6px 8px 8px;font-size:10px;font-weight:600;color:#fff;line-height:1.3}
 .video-meta{flex:1;padding-top:4px}
-.video-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--v);letter-spacing:.5px;margin-bottom:6px}
+.video-tag{font-family:monospace;font-size:9px;color:var(--v);letter-spacing:.5px;margin-bottom:6px}
 .video-desc{font-size:13px;color:var(--mid);line-height:1.5}
 
 .mod-updates .mod-label{background:var(--surface);padding:8px 14px;margin:0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
@@ -237,31 +237,31 @@ body.light .logo-dark{display:none}
 body.light .logo-light{display:block}
 
 .kronika-header{background:var(--surface);border-bottom:3px solid var(--v);padding:16px 14px}
-.kronika-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--v);margin-bottom:12px}
+.kronika-label{font-family:sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--v);margin-bottom:12px}
 .kronika-author{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.kronika-avatar{width:40px;height:40px;border-radius:50%;background:var(--v);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kronika-avatar{width:40px;height:40px;border-radius:50%;background:var(--v);color:#000;font-family:sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .kronika-name{font-size:14px;font-weight:600;color:var(--text)}
 .kronika-role{font-size:11px;color:var(--muted);margin-top:1px}
-.kronika-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.5px}
+.kronika-date{font-family:monospace;font-size:10px;color:var(--muted);letter-spacing:.5px}
 .kronika-footer{border-top:1px solid var(--border);padding-top:16px;margin-top:24px}
 
 .card.kronika-card{border-left:3px solid var(--v)}
 .kronika-card .cb{padding:12px 14px}
 .kronika-card .kronika-byline{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.kronika-card .kronika-mini-avatar{width:28px;height:28px;border-radius:50%;background:var(--v);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kronika-card .kronika-mini-avatar{width:28px;height:28px;border-radius:50%;background:var(--v);color:#000;font-family:sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .kronika-card .kronika-byline-text{font-size:11px;color:var(--muted)}
 .kronika-card .kronika-byline-text strong{color:var(--text);font-size:12px;display:block}
 
 .mod-related{margin:24px 0;border:1px solid var(--border)}
 .mod-related-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border)}
-.mod-related-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
-.mod-related-more{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;cursor:pointer;text-transform:uppercase}
+.mod-related-label{font-family:sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
+.mod-related-more{font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;cursor:pointer;text-transform:uppercase}
 .mod-related-item{display:flex;gap:12px;padding:12px 14px;border-top:1px solid var(--border);cursor:pointer;transition:.15s}
 .mod-related-item:hover{background:var(--card)}
 .mod-related-item img{width:72px;height:72px;object-fit:cover;flex-shrink:0;filter:brightness(.8)}
 .mod-related-body{flex:1}
-.mod-related-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
-.mod-related-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;line-height:1.15;color:var(--text);margin-bottom:6px}
+.mod-related-cat{font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.mod-related-title{font-family:sans-serif;font-size:16px;font-weight:600;line-height:1.15;color:var(--text);margin-bottom:6px}
 .mod-related-meta{display:flex;align-items:center;gap:6px}
 
 
@@ -272,9 +272,9 @@ body.light .logo-light{display:block}
 .sidebar-news-item{padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
 .sidebar-news-item:hover .sidebar-news-title{color:var(--v)}
 .sidebar-news-item:last-child{border-bottom:none}
-.sidebar-news-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
-.sidebar-news-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;line-height:1.2;color:var(--text);margin-bottom:4px}
-.sidebar-news-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
+.sidebar-news-cat{font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.sidebar-news-title{font-family:sans-serif;font-size:15px;font-weight:600;line-height:1.2;color:var(--text);margin-bottom:4px}
+.sidebar-news-time{font-family:monospace;font-size:9px;color:var(--muted)}
 
 .dl{max-width:1200px;margin:0 auto}
 .dsr{display:none}
@@ -289,14 +289,14 @@ body.light .logo-light{display:block}
 
 .mod-media{border:1px solid var(--border);margin:24px 0;overflow:hidden}
 .mod-media-head{background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.mod-media-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.mod-media-badge{font-size:9px;color:var(--muted);background:var(--card);border-radius:3px;padding:2px 7px;font-family:'DM Mono',monospace;letter-spacing:.5px;font-weight:400;text-transform:none}
-.mod-media-sub{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;white-space:nowrap}
+.mod-media-title{font-family:sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mod-media-badge{font-size:9px;color:var(--muted);background:var(--card);border-radius:3px;padding:2px 7px;font-family:monospace;letter-spacing:.5px;font-weight:400;text-transform:none}
+.mod-media-sub{font-size:10px;color:var(--muted);font-family:monospace;letter-spacing:.5px;white-space:nowrap}
 .mod-media-item{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);gap:12px;cursor:pointer;transition:.15s}
 .mod-media-item:hover{background:var(--card)}
 .mod-media-left{flex:1}
 .mod-media-source{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.mm-logo{font-size:10px;font-weight:700;padding:1px 6px;border-radius:2px;letter-spacing:.3px;font-family:'DM Mono',monospace}
+.mm-logo{font-size:10px;font-weight:700;padding:1px 6px;border-radius:2px;letter-spacing:.3px;font-family:monospace}
 .mm-logo.ab{background:#e8001a;color:#fff}
 .mm-logo.ex{background:#006AA7;color:#fff}
 .mm-logo.dn{background:#1a1a1a;color:#fff}
@@ -304,14 +304,14 @@ body.light .logo-light{display:block}
 .mm-logo.sy{background:#D92B3A;color:#fff}
 .mm-logo.gp{background:#005B99;color:#fff}
 .mm-logo.ba{background:#2B6E3A;color:#fff}
-.mod-media-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.mod-media-time{font-family:monospace;font-size:10px;color:var(--muted)}
 .mod-media-headline{font-size:14px;font-weight:500;color:var(--text);line-height:1.3}
 .mod-media-arrow{font-size:12px;color:var(--muted);flex-shrink:0;padding-top:2px}
-.mod-media-footer{padding:8px 14px;border-top:1px solid var(--border);background:var(--surface);font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.3px}
+.mod-media-footer{padding:8px 14px;border-top:1px solid var(--border);background:var(--surface);font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.3px}
 
 .mm-logo.grid{background:var(--v);color:#000}
 
-.admin-desktop-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s}
+.admin-desktop-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s}
 .admin-desktop-btn:hover{color:var(--v);border-color:var(--v)}
 @media(min-width:520px){#admin-btn{display:block!important}}
 </style>
@@ -329,7 +329,7 @@ body.light .logo-light{display:block}
     </nav>
     <div class="live"><div class="ldot"></div>LIVE</div>
     <button onclick="showPage('cms')" style="display:none" id="admin-btn" class="admin-desktop-btn">✎ Admin</button>
-    <button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s">☀ Ljust</button>
+    <button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s">☀ Ljust</button>
   </div>
 </header>
 
@@ -465,7 +465,7 @@ body.light .logo-light{display:block}
     <div class="cb">
       <div style="display:flex;gap:5px;margin-bottom:4px;align-items:center">
         <div class="cat red" style="font-size:9px;padding:1px 5px;margin-bottom:0">Politik</div>
-        <span style="font-family:'DM Mono',monospace;font-size:8px;color:var(--v);letter-spacing:.5px">⚡ AI · 7 riksmedier</span>
+        <span style="font-family:monospace;font-size:8px;color:var(--v);letter-spacing:.5px">⚡ AI · 7 riksmedier</span>
       </div>
       <div class="ctitle">Regeringskrisen eskalerar — SD och M kan inte enas om budgeten</div>
       <div class="cmeta"><span class="ctime">11:30</span></div>
@@ -602,7 +602,7 @@ body.light .logo-light{display:block}
     <div class="mod-context">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
         <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
       </div>
       <div class="mod-title">Varför är det brist på läkare i Sverige?</div>
       <p class="mod-text">Sverige utbildar färre läkare per capita än de flesta jämförbara länder. Samtidigt har antalet listade patienter per läkare ökat med 18 procent sedan 2015. Landsbygdskommuner konkurrerar om samma begränsade pool av nyutexaminerade — och förlorar ofta mot storstädernas löner och karriärmöjligheter.</p>
@@ -667,7 +667,7 @@ body.light .logo-light{display:block}
     <div class="mod-context">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
         <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
       </div>
       <div class="mod-title">Vad hände med Northvolt?</div>
       <p class="mod-text">Northvolt ansökte om konkurs i november 2024 efter att ha misslyckats med att nå produktionsmålen för sina batterier. Bolaget hade tagit in över 15 miljarder dollar i kapital men brottades med kvalitetsproblem och förseningar. Fabriken i Skellefteå sysselsatte som mest 3 500 personer.</p>
@@ -785,7 +785,7 @@ body.light .logo-light{display:block}
     <div class="mod-context">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
         <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
       </div>
       <div class="mod-title">Vad är ett nederbördsunderskott?</div>
       <p class="mod-text">Ett nederbördsunderskott uppstår när ett område under en längre period får mindre regn eller snö än det historiska genomsnittet. När underskottet varar under månader påverkar det grundvattennivåer, jordbruk och ekosystem. Sverige har haft tre av de fem torraste vårarna sedan 2018.</p>
@@ -1145,7 +1145,7 @@ body.light .logo-light{display:block}
     <div class="mod-context">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
         <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
       </div>
       <div class="mod-title">Varför är elpriserna olika i Sverige?</div>
       <p class="mod-text">Sverige är uppdelat i fyra elpriszoner — SE1 i norr till SE4 i söder. Prisskillnaden beror på att elnätet inte kan transportera all el som produceras i norr ner till sydligare regioner. Resultatet är att norr har överskott och låga priser medan söder har underskott och höga priser.</p>
@@ -1302,7 +1302,7 @@ body.light .logo-light{display:block}
 <div class="page" id="page-local">
 <div class="lpage">
   <h2>Lokala källor</h2>
-  <p style="font-size:12px;color:var(--muted);margin-bottom:4px;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase">Senaste dygnet</p>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:4px;font-family:monospace;letter-spacing:1px;text-transform:uppercase">Senaste dygnet</p>
   <p style="font-size:14px;color:var(--mid);margin-bottom:16px;line-height:1.6">GRID bevakar <strong style="color:var(--text)">17 lokala redaktioner</strong> i realtid och lyfter automatiskt det viktigaste till nationell nivå. Nedan ser du aktiviteten de senaste 24 timmarna.</p>
   <div class="cgrid">
     <div class="ccrd hot"><div class="cname">Luleå</div><div class="ccnt">12 artiklar idag</div><div class="cbar"><div style="width:90%"></div></div></div>
@@ -1465,7 +1465,7 @@ body.light .logo-light{display:block}
     <div class="mod-context">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
         <div class="mod-label" style="margin-bottom:0">⚡ Bakgrund</div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;background:var(--v);border-radius:50%;display:inline-block"></span>Sammanfattningen är producerad av AI</div>
       </div>
       <div class="mod-title">Vad är Tidösamarbetet?</div>
       <p class="mod-text">Tidöavtalet är det samarbetsavtal som slöts 2022 mellan Moderaterna, Sverigedemokraterna, Kristdemokraterna och Liberalerna som grund för Kristersson-regeringen. Avtalet reglerar 64 politikområden och är förutsättningen för att regeringen ska kunna styra med riksdagsmajoritet. Tidigare kriser har lösts internt — men aldrig offentliggjorts i denna skala.</p>
@@ -1505,41 +1505,41 @@ body.light .logo-light{display:block}
 <div style="max-width:720px;margin:0 auto;padding:16px">
 
   <div style="border-top:2px solid var(--v);padding-top:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)">GRID Admin</div>
-    <div id="cms-status" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px">Ej ansluten</div>
+    <div style="font-family:sans-serif;font-size:24px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)">GRID Admin</div>
+    <div id="cms-status" style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px">Ej ansluten</div>
   </div>
 
   <!-- SERVER URL -->
   <div style="margin-bottom:20px;background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px">
-    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Railway backend-URL</div>
+    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Railway backend-URL</div>
     <div style="display:flex;gap:8px">
-      <input id="api-url" type="text" placeholder="https://ditt-projekt.railway.app" style="flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:'DM Mono',monospace;font-size:12px;border-radius:2px;outline:none">
+      <input id="api-url" type="text" placeholder="https://ditt-projekt.railway.app" style="flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:monospace;font-size:12px;border-radius:2px;outline:none">
       <button onclick="connectBackend()" style="background:var(--v);color:#000;border:none;padding:8px 14px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Anslut</button>
     </div>
   </div>
 
   <!-- LIVE FEED -->
   <div style="margin-bottom:24px">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-family:sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
       Live-flöde från källor
       <button onclick="loadFeed()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Uppdatera</button>
     </div>
     <div id="live-feed" style="border:1px solid var(--border)">
-      <div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Anslut till backend för att se live-flödet</div>
+      <div style="padding:16px;text-align:center;font-family:monospace;font-size:11px;color:var(--muted)">Anslut till backend för att se live-flödet</div>
     </div>
   </div>
 
   <!-- NEW ARTICLE FORM -->
   <div>
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:16px">Ny artikel</div>
+    <div style="font-family:sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:16px">Ny artikel</div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
       <div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Kategori</div>
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Kategori</div>
         <input id="art-cat" type="text" placeholder="t.ex. Samhälle" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none">
       </div>
       <div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Typ</div>
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Typ</div>
         <select id="art-type" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none">
           <option value="journalist">✦ Journalist</option>
           <option value="ai">⚡ AI-assisterad</option>
@@ -1549,22 +1549,22 @@ body.light .logo-light{display:block}
     </div>
 
     <div style="margin-bottom:10px">
-      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Rubrik</div>
+      <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Rubrik</div>
       <input id="art-title" type="text" placeholder="Artikelrubrik" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:14px;font-weight:600;border-radius:2px;outline:none">
     </div>
 
     <div style="margin-bottom:10px">
-      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Ingress</div>
+      <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Ingress</div>
       <textarea id="art-ingress" rows="3" placeholder="Kort sammanfattning..." style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical"></textarea>
     </div>
 
     <div style="margin-bottom:10px">
-      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Brödtext</div>
+      <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Brödtext</div>
       <textarea id="art-body" rows="8" placeholder="Artikeltext..." style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical;line-height:1.6"></textarea>
     </div>
 
     <div style="margin-bottom:16px">
-      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Citat (valfritt)</div>
+      <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Citat (valfritt)</div>
       <input id="art-quote" type="text" placeholder='"Citattext här"' style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;margin-bottom:6px">
       <input id="art-quote-attr" type="text" placeholder="Namn, titel" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none">
     </div>
@@ -1574,12 +1574,12 @@ body.light .logo-light{display:block}
       <button onclick="clearForm()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:12px 16px;font-size:11px;cursor:pointer;border-radius:2px;text-transform:uppercase;letter-spacing:1px">Rensa</button>
     </div>
 
-    <div id="publish-msg" style="margin-top:10px;font-family:'DM Mono',monospace;font-size:11px;display:none"></div>
+    <div id="publish-msg" style="margin-top:10px;font-family:monospace;font-size:11px;display:none"></div>
   </div>
 
   <!-- PIPELINE STATUS -->
   <div style="margin-top:28px">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-family:sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
       AI-pipeline
       <div style="display:flex;gap:8px">
         <button onclick="runPipeline()" style="background:var(--v);color:#000;border:none;padding:4px 12px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Kor nu</button>
@@ -1587,30 +1587,30 @@ body.light .logo-light{display:block}
       </div>
     </div>
     <div id="pipeline-status" style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:12px">
-      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">Anslut till backend för pipeline-status</div>
+      <div style="font-family:monospace;font-size:10px;color:var(--muted)">Anslut till backend för pipeline-status</div>
     </div>
-    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Logg</div>
+    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Logg</div>
     <div id="pipeline-log" style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:10px 14px;max-height:160px;overflow-y:auto">
-      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">—</div>
+      <div style="font-family:monospace;font-size:10px;color:var(--muted)">—</div>
     </div>
   </div>
 
   <!-- AI DRAFTS -->
   <div style="margin-top:28px">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-family:sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
       AI-forslag
       <button onclick="loadSuggestions()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Uppdatera</button>
     </div>
     <div id="suggestions-container">
-      <div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Inga utkast ännu — kör pipelinen för att generera</div>
+      <div style="padding:16px;text-align:center;font-family:monospace;font-size:11px;color:var(--muted)">Inga utkast ännu — kör pipelinen för att generera</div>
     </div>
   </div>
 
   <!-- PUBLISHED ARTICLES -->
   <div style="margin-top:28px">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px">Publicerade artiklar</div>
+    <div style="font-family:sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px">Publicerade artiklar</div>
     <div id="cms-articles">
-      <div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Inga artiklar ännu</div>
+      <div style="padding:16px;text-align:center;font-family:monospace;font-size:11px;color:var(--muted)">Inga artiklar ännu</div>
     </div>
   </div>
 </div>
@@ -1693,6 +1693,7 @@ function connectBackend() {
       setStatus('Ansluten ' + data.length + ' kallor', 'var(--v)');
       loadFeed();
       loadPipelineStatus();
+      loadTrends();
       loadSuggestions();
     })
     .catch(function() { setStatus('Kunde inte ansluta', '#e8302a'); });
@@ -1984,6 +1985,86 @@ function showMsg(msg, type) {
   el.style.color = type === 'error' ? '#e8302a' : 'var(--v)';
   el.style.display = 'block';
   setTimeout(function(){ el.style.display = 'none'; }, 4000);
+}
+
+
+function loadTrends() {
+  if (!API_URL) return;
+  var el = document.getElementById('trends-container');
+  var meta = document.getElementById('trends-meta');
+  if (!el) return;
+  el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted)">Hamtar trender...</div>';
+  fetch(API_URL + '/api/trends')
+    .then(function(r) { return r.json(); })
+    .then(function(trends) {
+      el.innerHTML = '';
+      if (!trends.length) {
+        el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted)">Inga trender hittade — kor pipelinen</div>';
+        return;
+      }
+      if (meta) {
+        var total = trends[0] ? trends[0].totalArticles : 0;
+        meta.textContent = trends.length + ' trender · ' + total + ' artiklar senaste 6 timmarna';
+      }
+      var maxCount = trends[0] ? trends[0].articleCount : 1;
+      trends.forEach(function(t, i) {
+        var isLast = i === trends.length - 1;
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:flex-start;gap:14px;padding:14px 16px' + (isLast ? '' : ';border-bottom:1px solid var(--border)');
+
+        var num = document.createElement('div');
+        num.style.cssText = 'font-size:26px;font-weight:700;flex-shrink:0;line-height:1;width:24px;color:' + (i === 0 ? 'var(--v)' : 'var(--muted)');
+        num.textContent = i + 1;
+
+        var info = document.createElement('div');
+        info.style.flex = '1';
+
+        var titleRow = document.createElement('div');
+        titleRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap';
+        var kw = document.createElement('div');
+        kw.style.cssText = 'font-size:16px;font-weight:600;color:var(--text);text-transform:capitalize';
+        kw.textContent = t.keyword;
+        var badge = document.createElement('div');
+        badge.style.cssText = 'font-size:10px;color:var(--muted);background:var(--card);padding:1px 8px;border-radius:10px;font-family:monospace';
+        badge.textContent = t.articleCount + ' artiklar · ' + t.sourceCount + ' kallor';
+        titleRow.appendChild(kw);
+        titleRow.appendChild(badge);
+
+        var desc = document.createElement('div');
+        desc.style.cssText = 'font-size:12px;color:var(--mid);line-height:1.55;margin-bottom:8px';
+        // Show top 2 headlines as context
+        if (t.headlines && t.headlines.length) {
+          desc.textContent = t.headlines.slice(0,2).map(function(h){ return h.source + ': "' + h.title.slice(0,60) + (h.title.length > 60 ? '...' : '') + '"'; }).join(' · ');
+        }
+
+        var srcRow = document.createElement('div');
+        srcRow.style.cssText = 'display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px';
+        t.sources.slice(0,6).forEach(function(s) {
+          var b = document.createElement('span');
+          b.style.cssText = 'background:' + (s.color || '#555') + ';color:#fff;padding:1px 6px;border-radius:2px;font-size:9px;font-family:monospace';
+          b.textContent = s.code;
+          srcRow.appendChild(b);
+        });
+
+        var barWrap = document.createElement('div');
+        barWrap.style.cssText = 'height:2px;background:var(--border);border-radius:1px;overflow:hidden';
+        var fill = document.createElement('div');
+        var pct = Math.round((t.articleCount / maxCount) * 100);
+        fill.style.cssText = 'height:100%;background:var(--v);width:' + pct + '%;border-radius:1px';
+        barWrap.appendChild(fill);
+
+        info.appendChild(titleRow);
+        info.appendChild(desc);
+        info.appendChild(srcRow);
+        info.appendChild(barWrap);
+        row.appendChild(num);
+        row.appendChild(info);
+        el.appendChild(row);
+      });
+    })
+    .catch(function() {
+      el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:#e8302a">Kunde inte hamta trender</div>';
+    });
 }
 
 setInterval(function() {
