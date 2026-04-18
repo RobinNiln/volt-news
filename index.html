@@ -1577,6 +1577,35 @@ body.light .logo-light{display:block}
     <div id="publish-msg" style="margin-top:10px;font-family:'DM Mono',monospace;font-size:11px;display:none"></div>
   </div>
 
+  <!-- PIPELINE STATUS -->
+  <div style="margin-top:28px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+      AI-pipeline
+      <div style="display:flex;gap:8px">
+        <button onclick="runPipeline()" style="background:var(--v);color:#000;border:none;padding:4px 12px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">▶ Kör nu</button>
+        <button onclick="togglePipeline()" id="pipeline-toggle" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Pausa</button>
+      </div>
+    </div>
+    <div id="pipeline-status" style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:12px">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">Anslut till backend för pipeline-status</div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Logg</div>
+    <div id="pipeline-log" style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:10px 14px;max-height:160px;overflow-y:auto">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">—</div>
+    </div>
+  </div>
+
+  <!-- AI DRAFTS -->
+  <div style="margin-top:28px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+      AI-utkast
+      <button onclick="loadDrafts()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">↻ Uppdatera</button>
+    </div>
+    <div id="drafts-container">
+      <div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Inga utkast ännu — kör pipelinen för att generera</div>
+    </div>
+  </div>
+
   <!-- PUBLISHED ARTICLES -->
   <div style="margin-top:28px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px">Publicerade artiklar</div>
@@ -1820,6 +1849,121 @@ function showMsg(msg, type) {
 window.addEventListener('DOMContentLoaded', () => {
   cmsArticles.forEach(a => injectArticleIntoFeed(a));
 });
+</script>
+
+<script>
+function loadPipelineStatus() {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/pipeline/status')
+    .then(r => r.json())
+    .then(data => {
+      const el = document.getElementById('pipeline-status');
+      const toggle = document.getElementById('pipeline-toggle');
+      if (!el) return;
+      const lastRun = data.lastRun ? new Date(data.lastRun).toLocaleTimeString('sv-SE') : 'Ej körd';
+      el.innerHTML = `
+        <div style="display:flex;gap:20px;flex-wrap:wrap">
+          <div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px">STATUS</div>
+          <div style="font-size:13px;font-weight:500;color:${data.enabled ? 'var(--v)' : 'var(--muted)'}">● ${data.enabled ? 'Aktiv' : 'Pausad'}</div></div>
+          <div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px">SENAST KÖRD</div>
+          <div style="font-size:13px;font-weight:500;color:var(--text)">${lastRun}</div></div>
+          <div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:2px">VÄNTANDE UTKAST</div>
+          <div style="font-size:13px;font-weight:500;color:var(--text)">${data.drafts}</div></div>
+        </div>`;
+      if (toggle) toggle.textContent = data.enabled ? 'Pausa' : 'Aktivera';
+
+      const logEl = document.getElementById('pipeline-log');
+      if (logEl && data.log && data.log.length) {
+        logEl.innerHTML = data.log.map(l => {
+          const t = new Date(l.time).toLocaleTimeString('sv-SE');
+          return `<div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);padding:2px 0;border-bottom:1px solid var(--border)">${t} — ${l.msg}</div>`;
+        }).join('');
+      }
+    }).catch(() => {});
+}
+
+function togglePipeline() {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/pipeline/toggle', { method: 'POST' })
+    .then(r => r.json())
+    .then(() => loadPipelineStatus())
+    .catch(() => {});
+}
+
+function runPipeline() {
+  if (!API_URL) { showMsg('Anslut till backend först', 'error'); return; }
+  fetch(API_URL + '/api/pipeline/run', { method: 'POST' })
+    .then(() => {
+      showMsg('Pipeline startad — vänta ~30 sekunder', 'success');
+      setTimeout(() => { loadDrafts(); loadPipelineStatus(); }, 35000);
+    }).catch(() => showMsg('Kunde inte starta pipeline', 'error'));
+}
+
+function loadDrafts() {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/drafts')
+    .then(r => r.json())
+    .then(drafts => {
+      const el = document.getElementById('drafts-container');
+      if (!el) return;
+      const pending = drafts.filter(d => d.status === 'pending');
+      if (!pending.length) {
+        el.innerHTML = '<div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Inga väntande utkast</div>';
+        return;
+      }
+      el.innerHTML = pending.map(d => `
+        <div style="border:1px solid var(--border);border-radius:3px;margin-bottom:12px;overflow:hidden">
+          <div style="background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <div>
+              <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:2px">⚡ AI-UTKAST · ${d.sources.length} KÄLLOR · NYCKELORD: ${d.keyword.toUpperCase()}</div>
+              <div style="font-size:15px;font-weight:600;color:var(--text)">${d.article.title}</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0">
+              <button onclick="publishDraft('${d.id}')" style="background:var(--v);color:#000;border:none;padding:6px 14px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera</button>
+              <button onclick="rejectDraft('${d.id}')" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;border-radius:2px;letter-spacing:1px">✕ Avvisa</button>
+            </div>
+          </div>
+          <div style="padding:12px 14px">
+            <div style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:10px"><strong style="color:var(--text)">Ingress:</strong> ${d.article.ingress}</div>
+            <div style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${d.sources.slice(0,4).map(s => `<span style="background:${s.sourceColor};color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;font-size:9px">${s.sourceCode}</span>`).join('')}</div>
+          </div>
+        </div>`).join('');
+    }).catch(() => {});
+}
+
+function publishDraft(id) {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/drafts/' + id + '/publish', { method: 'POST' })
+    .then(r => r.json())
+    .then(article => {
+      injectArticleIntoFeed({ ...article, type: 'grid', articleType: 'grid' });
+      loadDrafts();
+      showMsg('✓ Artikel publicerad i flödet', 'success');
+    }).catch(() => showMsg('Kunde inte publicera', 'error'));
+}
+
+function rejectDraft(id) {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/drafts/' + id + '/reject', { method: 'POST' })
+    .then(() => { loadDrafts(); showMsg('Utkast avvisat', 'success'); })
+    .catch(() => {});
+}
+
+// Poll pipeline status every 30s when on admin page
+setInterval(() => {
+  const adminPage = document.getElementById('page-cms');
+  if (adminPage && adminPage.classList.contains('active')) {
+    loadPipelineStatus();
+    loadDrafts();
+  }
+}, 30000);
+
+// Load when connecting
+const origConnect = connectBackend;
+window.connectBackend = function() {
+  origConnect();
+  setTimeout(() => { loadPipelineStatus(); loadDrafts(); }, 1500);
+};
 </script>
 </body>
 </html>
