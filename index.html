@@ -2021,9 +2021,11 @@ function loadTrends() {
   var el = document.getElementById('trends-container');
   var meta = document.getElementById('trends-meta');
   if (!el) return;
-  el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted)">Hamtar trender...</div>';
-  fetch(API_URL + '/api/trends')
-    .then(function(r) { return r.json(); })
+  el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted)">Hamtar trender — Claude analyserar rubriker, kan ta 10-15 sekunder...</div>';
+  var controller = new AbortController();
+  var timeout = setTimeout(function() { controller.abort(); }, 30000);
+  fetch(API_URL + '/api/trends', { signal: controller.signal })
+    .then(function(r) { clearTimeout(timeout); return r.json(); })
     .then(function(trends) {
       el.innerHTML = '';
       if (!trends.length) {
@@ -2090,8 +2092,10 @@ function loadTrends() {
         el.appendChild(row);
       });
     })
-    .catch(function() {
-      el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:#e8302a">Kunde inte hamta trender</div>';
+    .catch(function(err) {
+      clearTimeout(timeout);
+      var msg = err.name === 'AbortError' ? 'Timeout — Claude tog for lang tid. Prova igen.' : 'Kunde inte hamta trender: ' + err.message;
+      el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:#e8302a">' + msg + '</div>';
     });
 }
 
