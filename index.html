@@ -1595,7 +1595,24 @@ body.light .logo-light{display:block}
     </div>
   </div>
 
-  <!-- AI DRAFTS -->
+    <!-- TRENDS -->
+  <div style="margin-top:28px">
+    <div style="border-top:2px solid var(--v);padding-top:14px;margin-bottom:14px;display:flex;align-items:flex-end;justify-content:space-between">
+      <div>
+        <div style="font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)">Hetaste trenderna just nu</div>
+        <div id="trends-meta" style="font-family:monospace;font-size:9px;color:var(--muted);margin-top:3px">Anslut och klicka Uppdatera</div>
+      </div>
+      <button onclick="loadTrends()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:9px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Uppdatera</button>
+    </div>
+    <div id="trends-container" style="border:1px solid var(--border);border-radius:3px;overflow:hidden">
+      <div style="padding:14px;text-align:center;font-family:monospace;font-size:11px;color:var(--muted)">Anslut till backend och klicka Uppdatera</div>
+    </div>
+    <div style="margin-top:10px;text-align:right">
+      <button onclick="runPipeline()" style="background:var(--v);color:#000;border:none;padding:8px 16px;font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px;letter-spacing:.5px">Generera artikelforslag fran trender</button>
+    </div>
+  </div>
+
+<!-- AI DRAFTS -->
   <div style="margin-top:28px">
     <div style="font-family:sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
       AI-forslag
@@ -1695,6 +1712,7 @@ function connectBackend() {
       loadPipelineStatus();
       loadTrends();
       loadSuggestions();
+      loadPublishedArticles();
     })
     .catch(function() { setStatus('Kunde inte ansluta', '#e8302a'); });
 }
@@ -1898,14 +1916,24 @@ function togglePipeline() {
 }
 
 function publishArticle() {
-  var title = (document.getElementById('art-title') || {}).value.trim();
-  var ingress = (document.getElementById('art-ingress') || {}).value.trim();
-  var body = (document.getElementById('art-body') || {}).value.trim();
-  var cat = ((document.getElementById('art-cat') || {}).value || '').trim() || 'Nyheter';
-  var type = (document.getElementById('art-type') || {}).value || 'journalist';
-  var quote = ((document.getElementById('art-quote') || {}).value || '').trim();
-  var quoteAttr = ((document.getElementById('art-quote-attr') || {}).value || '').trim();
-  if (!title || !ingress) { showMsg('Rubrik och ingress kravs', 'error'); return; }
+  var titleEl = document.getElementById('art-title');
+  var ingressEl = document.getElementById('art-ingress');
+  var title = titleEl ? titleEl.value.trim() : '';
+  var ingress = ingressEl ? ingressEl.value.trim() : '';
+  var bodyEl = document.getElementById('art-body');
+  var catEl = document.getElementById('art-cat');
+  var typeEl = document.getElementById('art-type');
+  var quoteEl = document.getElementById('art-quote');
+  var quoteAttrEl = document.getElementById('art-quote-attr');
+  var body = bodyEl ? bodyEl.value.trim() : '';
+  var cat = catEl ? catEl.value.trim() || 'Nyheter' : 'Nyheter';
+  var type = typeEl ? typeEl.value : 'journalist';
+  var quote = quoteEl ? quoteEl.value.trim() : '';
+  var quoteAttr = quoteAttrEl ? quoteAttrEl.value.trim() : '';
+  if (!title || !ingress) {
+    alert('Rubrik och ingress kravs');
+    return;
+  }
   var article = {id:'cms-'+Date.now(), title:title, ingress:ingress, body:body, cat:cat, type:type, quote:quote, quoteAttr:quoteAttr, pubDate:new Date().toISOString(), source:'GRID', articleType:'grid'};
   cmsArticles.unshift(article);
   localStorage.setItem('grid-cms-articles', JSON.stringify(cmsArticles));
@@ -2065,6 +2093,29 @@ function loadTrends() {
     .catch(function() {
       el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:#e8302a">Kunde inte hamta trender</div>';
     });
+}
+
+
+function loadPublishedArticles() {
+  if (!API_URL) return;
+  fetch(API_URL + '/api/articles')
+    .then(function(r) { return r.json(); })
+    .then(function(articles) {
+      articles.forEach(function(a) {
+        injectArticleIntoFeed({
+          id: a.id,
+          title: a.title,
+          ingress: a.ingress,
+          body: a.body,
+          cat: a.cat,
+          type: a.type || 'journalist',
+          quote: a.quote,
+          quoteAttr: a.quoteAttr || a.quote_attr,
+          pubDate: a.pubDate || a.pub_date,
+          articleType: 'grid'
+        });
+      });
+    }).catch(function(){});
 }
 
 setInterval(function() {
