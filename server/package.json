@@ -8,6 +8,7 @@
     "cors": "^2.8.5",
     "node-fetch": "^2.7.0",
     "rss-parser": "^3.13.0",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "better-sqlite3": "^9.4.3"
   }
 }
