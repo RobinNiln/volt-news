@@ -337,7 +337,7 @@ app.post('/api/pipeline/run', (req, res) => {
 });
 
 
-// GET /api/trends — top 5 trends with AI-generated titles
+// GET /api/trends — top 5 unique trends with AI headlines
 app.get('/api/trends', async (req, res) => {
   try {
     const cached = cache.get('trends');
@@ -347,46 +347,46 @@ app.get('/api/trends', async (req, res) => {
     const groups = groupByTopic(items);
     if (!groups.length) return res.json([]);
 
+    const top5 = groups.slice(0, 5);
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    let trends;
+    let headlines = {};
 
     if (apiKey) {
-      // Generate readable trend titles via Claude
-      const summaries = groups.slice(0, 5).map((g, i) =>
-        (i+1) + '. Nyckelord: ' + g.keyword + '\n' +
-        g.items.slice(0,4).map(a => '- ' + a.source + ': "' + a.title + '"').join('\n')
-      ).join('\n\n');
+      try {
+        const summaries = top5.map((g, i) =>
+          (i+1) + '. Nyckelord: ' + g.keyword + '\n' +
+          g.items.slice(0, 4).map(a => '- ' + a.source + ': "' + a.title + '"').join('\n')
+        ).join('\n\n');
 
-      const prompt = 'Du ar redaktionschef pa GRID, en svensk nyhetssajt. Nedan ar 5 amnesgrupper som svenska medier skriver om just nu.\n\n' + summaries + '\n\nSkriv en kort, tydlig redaktionell rubrik for varje trend (max 8 ord). Rubriken ska ge redaktoren en snabb bild av vad som hander — konkret, inte generell.\n\nSvara ENDAST med giltig JSON:\n{"trends": [{"keyword": "...", "headline": "..."}]}';
+        const prompt = 'Du ar redaktionschef pa GRID, en svensk nyhetssajt. Nedan ar 5 amnesgrupper som svenska medier skriver om just nu.\n\n' + summaries + '\n\nSkriv en kort redaktionell mening (max 8 ord) for varje trend som beskriver VAD som hander — specifikt och konkret. Exempel: "Tre bolag buddar pa Northvolts fabrik i Skellefte" eller "Riksbanken signalerar rantesenkning till sommaren".\n\nSvara ENDAST med JSON: {"trends": [{"keyword": "...", "headline": "..."}]}';
 
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 500, messages: [{ role: 'user', content: prompt }] })
-      });
-      const data = await response.json();
-      const parsed = JSON.parse(data.content[0].text.trim().replace(/```json|```/g, '').trim());
-      const headlines = {};
-      parsed.trends.forEach(t => { headlines[t.keyword] = t.headline; });
-
-      trends = groups.slice(0, 5).map(g => {
-        const sources = [...new Map(g.items.map(i => [i.source, {name:i.source, code:i.sourceCode, color:i.sourceColor}])).values()];
-        return {
-          keyword: g.keyword,
-          headline: headlines[g.keyword] || g.keyword,
-          articleCount: g.items.length,
-          sourceCount: new Set(g.items.map(i => i.source)).size,
-          sources: sources.slice(0, 6),
-          totalArticles: items.length,
-          headlines: g.items.slice(0, 3).map(i => ({ title: i.title, source: i.source }))
-        };
-      });
-    } else {
-      trends = groups.slice(0, 5).map(g => {
-        const sources = [...new Map(g.items.map(i => [i.source, {name:i.source, code:i.sourceCode, color:i.sourceColor}])).values()];
-        return { keyword: g.keyword, headline: g.keyword, articleCount: g.items.length, sourceCount: new Set(g.items.map(i => i.source)).size, sources: sources.slice(0, 6), totalArticles: items.length, headlines: g.items.slice(0, 3).map(i => ({ title: i.title, source: i.source })) };
-      });
+        const r = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+          body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 400, messages: [{ role: 'user', content: prompt }] })
+        });
+        const d = await r.json();
+        const parsed = JSON.parse(d.content[0].text.trim().replace(/```json|```/g, '').trim());
+        parsed.trends.forEach(t => { headlines[t.keyword] = t.headline; });
+      } catch(e) {
+        log('Trend headline generation failed: ' + e.message);
+      }
     }
+
+    const trends = top5.map(g => {
+      const sources = [...new Map(g.items.map(i => [i.source, { name: i.source, code: i.sourceCode, color: i.sourceColor }])).values()];
+      // Fallback headline: use most common meaningful words from titles
+      const fallback = g.items.slice(0, 2).map(i => i.title).join(' — ').slice(0, 60);
+      return {
+        keyword: g.keyword,
+        headline: headlines[g.keyword] || fallback,
+        articleCount: g.items.length,
+        sourceCount: new Set(g.items.map(i => i.source)).size,
+        sources: sources.slice(0, 6),
+        totalArticles: items.length,
+        headlines: g.items.slice(0, 3).map(i => ({ title: i.title, source: i.source }))
+      };
+    });
 
     cache.set('trends', trends, 900);
     res.json(trends);
