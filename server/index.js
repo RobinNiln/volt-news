@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const Parser = require('rss-parser');
 const NodeCache = require('node-cache');
+const Database = require('better-sqlite3');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const parser = new Parser({ timeout: 10000 });
@@ -9,6 +12,40 @@ const cache = new NodeCache({ stdTTL: 300 });
 
 app.use(cors());
 app.use(express.json());
+
+// SQLite setup — persistent storage on Railway Volume
+const DB_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH || '/data';
+if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
+const db = new Database(path.join(DB_DIR, 'grid.db'));
+
+// Create tables
+db.exec(`
+  CREATE TABLE IF NOT EXISTS articles (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    ingress TEXT,
+    body TEXT,
+    cat TEXT,
+    type TEXT DEFAULT 'journalist',
+    quote TEXT,
+    quote_attr TEXT,
+    sources TEXT,
+    pub_date TEXT,
+    ai_generated INTEGER DEFAULT 0
+  );
+  CREATE TABLE IF NOT EXISTS suggestions (
+    id TEXT PRIMARY KEY,
+    keyword TEXT,
+    article TEXT,
+    sources TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at TEXT
+  );
+`);
+
+const insertArticle = db.prepare(`INSERT OR REPLACE INTO articles (id, title, ingress, body, cat, type, quote, quote_attr, sources, pub_date, ai_generated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+const insertSuggestion = db.prepare(`INSERT OR REPLACE INTO suggestions (id, keyword, article, sources, status, created_at) VALUES (?, ?, ?, ?, ?, ?)`);
+const updateSuggestionStatus = db.prepare(`UPDATE suggestions SET status = ? WHERE id = ?`);
 
 const SOURCES = {
   aftonbladet: { name: 'Aftonbladet',  code: 'AB',  color: '#e8001a', url: 'https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/' },
@@ -26,7 +63,6 @@ const SOURCES = {
   helagotland: { name: 'Hela Gotland', code: 'HG',  color: '#666', url: 'https://www.helagotland.se/rss/' },
 };
 
-const articles = [];
 let suggestions = [];
 let pipelineLog = [];
 let pipelineEnabled = true;
@@ -231,20 +267,11 @@ app.post('/api/suggestions/:id/publish', (req, res) => {
   const s = suggestions.find(s => s.id === req.params.id);
   if (!s) return res.status(404).json({ error: 'Not found' });
   s.status = 'published';
-  const article = {
-    id: 'art-' + Date.now(),
-    title: s.title,
-    ingress: s.ingress,
-    cat: s.category,
-    body: req.body.body || '',
-    quote: req.body.quote || '',
-    quoteAttr: req.body.quoteAttr || '',
-    sources: s.sources,
-    pubDate: new Date().toISOString(),
-    type: 'ai',
-    aiGenerated: true
-  };
-  articles.unshift(article);
+  updateSuggestionStatus.run('published', s.id);
+  const id = 'art-' + Date.now();
+  const pubDate = new Date().toISOString();
+  const article = { id, title: s.title, ingress: s.ingress, cat: s.category, body: '', quote: '', quoteAttr: '', sources: s.sources, pubDate, type: 'ai', aiGenerated: true };
+  insertArticle.run(id, s.title, s.ingress, '', s.category, 'ai', '', '', JSON.stringify(s.sources), pubDate, 1);
   res.json(article);
 });
 
@@ -255,11 +282,23 @@ app.post('/api/suggestions/:id/dismiss', (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/api/articles', (req, res) => res.json(articles));
+app.get('/api/articles', (req, res) => {
+  const rows = db.prepare('SELECT * FROM articles ORDER BY pub_date DESC LIMIT 100').all();
+  res.json(rows.map(r => ({
+    ...r,
+    pubDate: r.pub_date,
+    quoteAttr: r.quote_attr,
+    aiGenerated: !!r.ai_generated,
+    sources: r.sources ? JSON.parse(r.sources) : []
+  })));
+});
+
 app.post('/api/articles', (req, res) => {
-  const article = { id: 'art-' + Date.now(), ...req.body, pubDate: new Date().toISOString(), type: 'grid' };
-  articles.unshift(article);
-  res.json(article);
+  const a = req.body;
+  const id = a.id || 'art-' + Date.now();
+  const pubDate = new Date().toISOString();
+  insertArticle.run(id, a.title||'', a.ingress||'', a.body||'', a.cat||'Nyheter', a.type||'journalist', a.quote||'', a.quoteAttr||'', JSON.stringify(a.sources||[]), pubDate, a.aiGenerated ? 1 : 0);
+  res.json({ id, ...a, pubDate });
 });
 
 app.get('/api/pipeline/status', (req, res) => {
