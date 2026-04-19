@@ -1574,7 +1574,7 @@ body.light .logo-light{display:block}
       <button onclick="clearForm()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:12px 16px;font-size:11px;cursor:pointer;border-radius:2px;text-transform:uppercase;letter-spacing:1px">Rensa</button>
     </div>
 
-    <div id="publish-msg" style="margin-top:10px;font-family:monospace;font-size:11px;display:none"></div>
+    <div id="publish-msg" style="margin-top:10px;font-family:monospace;font-size:13px;padding:8px 12px;border-radius:2px;display:none"></div>
   </div>
 
   <!-- PIPELINE STATUS -->
@@ -1836,19 +1836,24 @@ function loadSuggestions() {
 }
 
 function publishSuggestion(id, s) {
-  if (!API_URL) return;
+  if (!API_URL) { showMsg('Anslut till backend forst', 'error'); return; }
+  showMsg('Publicerar...', 'success');
   fetch(API_URL + '/api/suggestions/' + id + '/publish', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({})
   })
-    .then(function(r) { return r.json(); })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(function(article) {
-      injectArticleIntoFeed(Object.assign({}, article, {type:'ai', cat: s.category}));
+      var cat = (s && s.category) ? s.category : (article.cat || 'Nyheter');
+      injectArticleIntoFeed(Object.assign({}, article, {type:'ai', cat: cat}));
       loadSuggestions();
       showMsg('Artikel publicerad i flodet', 'success');
     })
-    .catch(function() { showMsg('Fel', 'error'); });
+    .catch(function(err) { showMsg('Fel: ' + err.message, 'error'); });
 }
 
 function dismissSuggestion(id) {
@@ -1931,7 +1936,9 @@ function publishArticle() {
   var quote = quoteEl ? quoteEl.value.trim() : '';
   var quoteAttr = quoteAttrEl ? quoteAttrEl.value.trim() : '';
   if (!title || !ingress) {
-    alert('Rubrik och ingress kravs');
+    showMsg('Rubrik och ingress kravs', 'error');
+    var pmsg = document.getElementById('publish-msg');
+    if (pmsg) { pmsg.style.display = 'block'; pmsg.scrollIntoView({behavior:'smooth'}); }
     return;
   }
   var article = {id:'cms-'+Date.now(), title:title, ingress:ingress, body:body, cat:cat, type:type, quote:quote, quoteAttr:quoteAttr, pubDate:new Date().toISOString(), source:'GRID', articleType:'grid'};
