@@ -100,53 +100,61 @@ async function fetchAllFeeds() {
 }
 
 function groupByTopic(items) {
-  const stopwords = new Set(['också','eller','sedan','skulle','vilken','vilket','vilka','dessa','deras','hans','hennes','vara','varit','detta','något','några','varje','olika','många','andra','även','under','efter','bland','ingen','inget','inga','mellan','genom','kring','utan','varför','fastän','medan','tills','ändå','annars','troligen','antagligen','förmodligen','möjligen','kanske','knappt','nästan','ungefär','åtminstone','minst','mest','väldigt','mycket','lite','ganska','och','att','det','som','en','ett','på','av','för','med','är','har','den','de','inte','till','om','men','vi','kan','sig','var','han','hon','alla','när','bli','ska','sin','från','efter','hade','även','under','ut','in','upp','ner','nu','här','där','då','vad','vem','hur','just','bara','redan','ännu','igen','alltid','aldrig','ofta','ibland','fort','hem','bort','dit','hit','upp','ned','fram','bak','fel','nya','nya','nya','säger','enligt','uppger','bekräftar','meddelar','rapporterar','skriver','berättar']);
+  // Not used when Claude identifies trends — kept as fallback
+  return [];
+}
 
-  const groups = {};
+async function identifyTrendsWithClaude(items) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+
+  // Send top 60 recent headlines to Claude
   const cutoff = Date.now() - 6 * 60 * 60 * 1000;
+  const recent = items
+    .filter(i => new Date(i.pubDate) > cutoff)
+    .slice(0, 60);
 
-  items.filter(i => new Date(i.pubDate) > cutoff).forEach(item => {
-    const words = (item.title + ' ' + item.description)
-      .toLowerCase()
-      .replace(/[^a-zåäö\s]/g, ' ')
-      .split(/\s+/)
-      .filter(w => w.length > 5 && !stopwords.has(w));
-    const unique = [...new Set(words)];
-    unique.forEach(word => {
-      if (!groups[word]) groups[word] = [];
-      if (!groups[word].find(i => i.id === item.id)) groups[word].push(item);
-    });
+  const lines = recent.map(i => i.sourceCode + ': ' + i.title).join('\n');
+
+  const prompt = `Du ar redaktionschef pa GRID, en svensk nyhetssajt. Nedan ar de senaste rubrikerna fran svenska medier.
+
+${lines}
+
+Identifiera de 5 viktigaste nyhetsamnesena som flera medier bevakar just nu. Ignorera generella ord som "trump", "usa", "svensk" om de inte ar det specifika amnet. Fokusera pa konkreta handelser.
+
+For varje amne:
+- Skriv en tydlig redaktionell rubrik (max 10 ord) som beskriver VAD som hander
+- Lista vilka kallor som bevakar det
+- Uppskatta antal artiklar
+
+Svara ENDAST med JSON:
+{"trends": [{"headline": "...", "category": "...", "sources": ["AB","EX"], "articleCount": 5}]}`;
+
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] })
   });
+  const d = await r.json();
+  const text = d.content[0].text.trim().replace(/\`\`\`json|\`\`\`/g, '').trim();
+  const parsed = JSON.parse(text);
 
-  // Score and sort groups
-  const scored = Object.entries(groups)
-    .filter(([, items]) => {
-      const sources = new Set(items.map(i => i.source));
-      return items.length >= 3 && sources.size >= 2;
-    })
-    .map(([keyword, items]) => ({
-      keyword,
-      items: items.slice(0, 8),
-      score: items.length * new Set(items.map(i => i.source)).size
-    }))
-    .sort((a, b) => b.score - a.score);
+  const sourceMap = {};
+  Object.entries(SOURCES).forEach(([, s]) => { sourceMap[s.code] = s; });
 
-  // Deduplicate — remove groups that share >50% articles with a higher-ranked group
-  const selected = [];
-  const usedIds = new Set();
-
-  for (const group of scored) {
-    const ids = new Set(group.items.map(i => i.id));
-    const overlap = [...ids].filter(id => usedIds.has(id)).length;
-    const overlapRatio = overlap / ids.size;
-    if (overlapRatio < 0.5) {
-      selected.push(group);
-      ids.forEach(id => usedIds.add(id));
-    }
-    if (selected.length >= 10) break;
-  }
-
-  return selected;
+  return parsed.trends.map(t => ({
+    keyword: t.headline,
+    headline: t.headline,
+    category: t.category || '',
+    articleCount: t.articleCount || 0,
+    sourceCount: t.sources.length,
+    sources: t.sources.map(code => sourceMap[code] || { name: code, code, color: '#555' }),
+    totalArticles: recent.length,
+    headlines: recent
+      .filter(i => t.sources.includes(i.sourceCode))
+      .slice(0, 3)
+      .map(i => ({ title: i.title, source: i.source }))
+  }));
 }
 
 async function generateSuggestions(groups) {
@@ -228,26 +236,45 @@ async function runPipeline() {
   if (!pipelineEnabled || isRunning) return;
   isRunning = true;
   log('Pipeline startar...');
-
   try {
     const items = await fetchAllFeeds();
     log('Hamtade ' + items.length + ' artiklar fran ' + Object.keys(SOURCES).length + ' kallor');
 
-    const groups = groupByTopic(items);
-    log('Hittade ' + groups.length + ' trender');
+    // Use Claude to identify trends first
+    let groups = [];
+    try {
+      const trends = await identifyTrendsWithClaude(items);
+      if (trends && trends.length) {
+        // Convert trends to groups format
+        groups = trends.map(t => ({
+          keyword: t.headline,
+          items: t.headlines.map(h => ({
+            id: h.title,
+            title: h.title,
+            description: '',
+            source: h.source,
+            sourceCode: (Object.values(SOURCES).find(s => s.name === h.source) || {}).code || '',
+            sourceColor: (Object.values(SOURCES).find(s => s.name === h.source) || {}).color || '#555',
+            link: '',
+            pubDate: new Date().toISOString()
+          }))
+        }));
+        log('Identifierade ' + groups.length + ' trender via Claude');
+      }
+    } catch(e) {
+      log('Trend-identifiering misslyckades: ' + e.message);
+    }
 
     if (!groups.length) { log('Inga trender denna korning'); isRunning = false; return; }
 
     log('Genererar ' + Math.min(groups.length, 8) + ' forslag via Claude...');
     const newSuggestions = await generateSuggestions(groups);
-
     suggestions = newSuggestions;
     cache.del('feed');
     log('Klar — ' + newSuggestions.length + ' forslag genererade');
   } catch(e) {
     log('Fel: ' + e.message);
   }
-
   lastRun = new Date().toISOString();
   isRunning = false;
 }
@@ -337,56 +364,31 @@ app.post('/api/pipeline/run', (req, res) => {
 });
 
 
-// GET /api/trends — top 5 unique trends with AI headlines
+// GET /api/trends — Claude identifies real trends from headlines
 app.get('/api/trends', async (req, res) => {
   try {
     const cached = cache.get('trends');
     if (cached) return res.json(cached);
 
     const items = await fetchAllFeeds();
-    const groups = groupByTopic(items);
-    if (!groups.length) return res.json([]);
+    if (!items.length) return res.json([]);
 
-    const top5 = groups.slice(0, 5);
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    let headlines = {};
-
-    if (apiKey) {
-      try {
-        const summaries = top5.map((g, i) =>
-          (i+1) + '. Nyckelord: ' + g.keyword + '\n' +
-          g.items.slice(0, 4).map(a => '- ' + a.source + ': "' + a.title + '"').join('\n')
-        ).join('\n\n');
-
-        const prompt = 'Du ar redaktionschef pa GRID, en svensk nyhetssajt. Nedan ar 5 amnesgrupper som svenska medier skriver om just nu.\n\n' + summaries + '\n\nSkriv en kort redaktionell mening (max 8 ord) for varje trend som beskriver VAD som hander — specifikt och konkret. Exempel: "Tre bolag buddar pa Northvolts fabrik i Skellefte" eller "Riksbanken signalerar rantesenkning till sommaren".\n\nSvara ENDAST med JSON: {"trends": [{"keyword": "...", "headline": "..."}]}';
-
-        const r = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-          body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 400, messages: [{ role: 'user', content: prompt }] })
-        });
-        const d = await r.json();
-        const parsed = JSON.parse(d.content[0].text.trim().replace(/```json|```/g, '').trim());
-        parsed.trends.forEach(t => { headlines[t.keyword] = t.headline; });
-      } catch(e) {
-        log('Trend headline generation failed: ' + e.message);
-      }
+    // Try Claude-based trend identification
+    let trends = null;
+    try {
+      trends = await identifyTrendsWithClaude(items);
+    } catch(e) {
+      log('Claude trend identification failed: ' + e.message);
     }
 
-    const trends = top5.map(g => {
-      const sources = [...new Map(g.items.map(i => [i.source, { name: i.source, code: i.sourceCode, color: i.sourceColor }])).values()];
-      // Fallback headline: use most common meaningful words from titles
-      const fallback = g.items.slice(0, 2).map(i => i.title).join(' — ').slice(0, 60);
-      return {
-        keyword: g.keyword,
-        headline: headlines[g.keyword] || fallback,
-        articleCount: g.items.length,
-        sourceCount: new Set(g.items.map(i => i.source)).size,
-        sources: sources.slice(0, 6),
-        totalArticles: items.length,
-        headlines: g.items.slice(0, 3).map(i => ({ title: i.title, source: i.source }))
-      };
-    });
+    // Fallback: simple word-frequency if Claude fails
+    if (!trends) {
+      trends = [{
+        keyword: 'Kunde inte identifiera trender',
+        headline: 'Kunde inte identifiera trender — prova igen',
+        articleCount: 0, sourceCount: 0, sources: [], totalArticles: items.length, headlines: []
+      }];
+    }
 
     cache.set('trends', trends, 900);
     res.json(trends);
