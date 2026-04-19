@@ -100,10 +100,10 @@ async function fetchAllFeeds() {
 }
 
 function groupByTopic(items) {
-  const stopwords = new Set(['också','eller','sedan','skulle','vilken','vilket','vilka','dessa','deras','hans','hennes','vara','varit','detta','detta','något','några','varje','olika','många','andra','detta','även','under','efter','innan','bland','along','about','sedan','under','bland','ingen','inget','inga','mellan','genom','bland','varje','kring','längs','förbi','medan','alltså','därför','eftersom','trots','enligt','kring','utan','istället','snarare','sålunda','dessutom','emellertid','däremot','liksom','varför','huruvida','hurdan','vardan','ifall','såvida','oaktat','fastän','ehuru','lika','såsom','sådant','sådana','medan','tills','alltsedan','ändå','ändock','annars','annars','troligen','troligtvis','antagligen','förmodligen','möjligen','kanske','knappt','nästan','ungefär','cirka','åtminstone','minst','mest','väldigt','mycket','lite','ganska','rätt','ganska','och','att','det','som','en','ett','på','av','för','med','är','har','den','de','inte','till','om','men','vi','kan','sig','var','han','hon','alla','när','bli','ska','sin','från','efter','hade','även','under','ut','in','upp','ner','nu','här','där','då','vad','vem','hur','men','dock','men','just','bara','redan','ännu','igen','alltid','aldrig','ofta','ibland','sällan','snart','strax','länge','fort','fort','hem','bort','dit','hit','dit','upp','ned','fram','bak','fel']);
+  const stopwords = new Set(['också','eller','sedan','skulle','vilken','vilket','vilka','dessa','deras','hans','hennes','vara','varit','detta','något','några','varje','olika','många','andra','även','under','efter','bland','ingen','inget','inga','mellan','genom','kring','utan','varför','fastän','medan','tills','ändå','annars','troligen','antagligen','förmodligen','möjligen','kanske','knappt','nästan','ungefär','åtminstone','minst','mest','väldigt','mycket','lite','ganska','och','att','det','som','en','ett','på','av','för','med','är','har','den','de','inte','till','om','men','vi','kan','sig','var','han','hon','alla','när','bli','ska','sin','från','efter','hade','även','under','ut','in','upp','ner','nu','här','där','då','vad','vem','hur','just','bara','redan','ännu','igen','alltid','aldrig','ofta','ibland','fort','hem','bort','dit','hit','upp','ned','fram','bak','fel','nya','nya','nya','säger','enligt','uppger','bekräftar','meddelar','rapporterar','skriver','berättar']);
 
   const groups = {};
-  const cutoff = Date.now() - 6 * 60 * 60 * 1000; // last 6 hours
+  const cutoff = Date.now() - 6 * 60 * 60 * 1000;
 
   items.filter(i => new Date(i.pubDate) > cutoff).forEach(item => {
     const words = (item.title + ' ' + item.description)
@@ -111,7 +111,6 @@ function groupByTopic(items) {
       .replace(/[^a-zåäö\s]/g, ' ')
       .split(/\s+/)
       .filter(w => w.length > 5 && !stopwords.has(w));
-
     const unique = [...new Set(words)];
     unique.forEach(word => {
       if (!groups[word]) groups[word] = [];
@@ -119,14 +118,35 @@ function groupByTopic(items) {
     });
   });
 
-  return Object.entries(groups)
+  // Score and sort groups
+  const scored = Object.entries(groups)
     .filter(([, items]) => {
       const sources = new Set(items.map(i => i.source));
       return items.length >= 3 && sources.size >= 2;
     })
-    .sort((a, b) => b[1].length - a[1].length)
-    .slice(0, 10)
-    .map(([keyword, items]) => ({ keyword, items: items.slice(0, 8) }));
+    .map(([keyword, items]) => ({
+      keyword,
+      items: items.slice(0, 8),
+      score: items.length * new Set(items.map(i => i.source)).size
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  // Deduplicate — remove groups that share >50% articles with a higher-ranked group
+  const selected = [];
+  const usedIds = new Set();
+
+  for (const group of scored) {
+    const ids = new Set(group.items.map(i => i.id));
+    const overlap = [...ids].filter(id => usedIds.has(id)).length;
+    const overlapRatio = overlap / ids.size;
+    if (overlapRatio < 0.5) {
+      selected.push(group);
+      ids.forEach(id => usedIds.add(id));
+    }
+    if (selected.length >= 10) break;
+  }
+
+  return selected;
 }
 
 async function generateSuggestions(groups) {
@@ -317,25 +337,58 @@ app.post('/api/pipeline/run', (req, res) => {
 });
 
 
-// GET /api/trends — top 5 trends from last 24h
+// GET /api/trends — top 5 trends with AI-generated titles
 app.get('/api/trends', async (req, res) => {
   try {
     const cached = cache.get('trends');
     if (cached) return res.json(cached);
+
     const items = await fetchAllFeeds();
     const groups = groupByTopic(items);
-    const trends = groups.slice(0, 5).map(g => {
-      const sources = [...new Map(g.items.map(i => [i.source, {name:i.source, code:i.sourceCode, color:i.sourceColor}])).values()];
-      return {
-        keyword: g.keyword,
-        articleCount: g.items.length,
-        sourceCount: new Set(g.items.map(i => i.source)).size,
-        sources: sources.slice(0, 6),
-        totalArticles: items.length,
-        headlines: g.items.slice(0, 3).map(i => ({ title: i.title, source: i.source }))
-      };
-    });
-    cache.set('trends', trends, 900); // 15 min cache
+    if (!groups.length) return res.json([]);
+
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    let trends;
+
+    if (apiKey) {
+      // Generate readable trend titles via Claude
+      const summaries = groups.slice(0, 5).map((g, i) =>
+        (i+1) + '. Nyckelord: ' + g.keyword + '\n' +
+        g.items.slice(0,4).map(a => '- ' + a.source + ': "' + a.title + '"').join('\n')
+      ).join('\n\n');
+
+      const prompt = 'Du ar redaktionschef pa GRID, en svensk nyhetssajt. Nedan ar 5 amnesgrupper som svenska medier skriver om just nu.\n\n' + summaries + '\n\nSkriv en kort, tydlig redaktionell rubrik for varje trend (max 8 ord). Rubriken ska ge redaktoren en snabb bild av vad som hander — konkret, inte generell.\n\nSvara ENDAST med giltig JSON:\n{"trends": [{"keyword": "...", "headline": "..."}]}';
+
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 500, messages: [{ role: 'user', content: prompt }] })
+      });
+      const data = await response.json();
+      const parsed = JSON.parse(data.content[0].text.trim().replace(/```json|```/g, '').trim());
+      const headlines = {};
+      parsed.trends.forEach(t => { headlines[t.keyword] = t.headline; });
+
+      trends = groups.slice(0, 5).map(g => {
+        const sources = [...new Map(g.items.map(i => [i.source, {name:i.source, code:i.sourceCode, color:i.sourceColor}])).values()];
+        return {
+          keyword: g.keyword,
+          headline: headlines[g.keyword] || g.keyword,
+          articleCount: g.items.length,
+          sourceCount: new Set(g.items.map(i => i.source)).size,
+          sources: sources.slice(0, 6),
+          totalArticles: items.length,
+          headlines: g.items.slice(0, 3).map(i => ({ title: i.title, source: i.source }))
+        };
+      });
+    } else {
+      trends = groups.slice(0, 5).map(g => {
+        const sources = [...new Map(g.items.map(i => [i.source, {name:i.source, code:i.sourceCode, color:i.sourceColor}])).values()];
+        return { keyword: g.keyword, headline: g.keyword, articleCount: g.items.length, sourceCount: new Set(g.items.map(i => i.source)).size, sources: sources.slice(0, 6), totalArticles: items.length, headlines: g.items.slice(0, 3).map(i => ({ title: i.title, source: i.source })) };
+      });
+    }
+
+    cache.set('trends', trends, 900);
     res.json(trends);
   } catch(e) {
     res.status(500).json({ error: e.message });
