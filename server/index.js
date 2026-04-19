@@ -53,7 +53,7 @@ const SOURCES = {
   dn:          { name: 'DN',           code: 'DN',  color: '#1a1a1a', url: 'https://www.dn.se/rss/' },
   svd:         { name: 'SvD',          code: 'SvD', color: '#002E6E', url: 'https://www.svd.se/feed/articles.rss' },
   sydsvenskan: { name: 'Sydsvenskan',  code: 'SDS', color: '#D92B3A', url: 'https://www.sydsvenskan.se/rss.xml' },
-  gp:          { name: 'GP',           code: 'GP',  color: '#005B99', url: 'https://www.gp.se/feed/articles.rss' },
+  svt:         { name: 'SVT Nyheter',  code: 'SVT', color: '#1A5276', url: 'https://www.svt.se/nyheter/rss.xml' },
   barometern:  { name: 'Barometern',   code: 'BAR', color: '#2B6E3A', url: 'https://www.barometern.se/rss/' },
   norran:      { name: 'Norran',       code: 'NOR', color: '#666', url: 'https://www.norran.se/rss/' },
   nsd:         { name: 'NSD',          code: 'NSD', color: '#666', url: 'https://www.nsd.se/rss/' },
