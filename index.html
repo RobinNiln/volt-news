@@ -2050,8 +2050,8 @@ function loadTrends() {
         var titleRow = document.createElement('div');
         titleRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap';
         var kw = document.createElement('div');
-        kw.style.cssText = 'font-size:16px;font-weight:600;color:var(--text);text-transform:capitalize';
-        kw.textContent = t.keyword;
+        kw.style.cssText = 'font-size:15px;font-weight:600;color:var(--text);line-height:1.2';
+        kw.textContent = t.headline || t.keyword;
         var badge = document.createElement('div');
         badge.style.cssText = 'font-size:10px;color:var(--muted);background:var(--card);padding:1px 8px;border-radius:10px;font-family:monospace';
         badge.textContent = t.articleCount + ' artiklar · ' + t.sourceCount + ' kallor';
