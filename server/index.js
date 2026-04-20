@@ -116,19 +116,7 @@ async function identifyTrendsWithClaude(items) {
 
   const lines = recent.map(i => i.sourceCode + ': ' + i.title).join('\n');
 
-  const prompt = `Du ar redaktionschef pa GRID, en svensk nyhetssajt. Nedan ar de senaste rubrikerna fran svenska medier.
-
-${lines}
-
-Identifiera de 5 viktigaste nyhetsamnesena som flera medier bevakar just nu. Ignorera generella ord som "trump", "usa", "svensk" om de inte ar det specifika amnet. Fokusera pa konkreta handelser.
-
-For varje amne:
-- Skriv en tydlig redaktionell rubrik (max 10 ord) som beskriver VAD som hander
-- Lista vilka kallor som bevakar det
-- Uppskatta antal artiklar
-
-Svara ENDAST med JSON:
-{"trends": [{"headline": "...", "category": "...", "sources": ["AB","EX"], "articleCount": 5}]}`;
+  const prompt = 'Du ar redaktionschef pa GRID, en svensk nyhetssajt. Nedan ar de senaste rubrikerna fran svenska medier.\n\n' + lines + '\n\nIdentifiera de 5 viktigaste VERKLIGA nyhetsamnesena just nu. STRIKTA REGLER:\n1. ALDRIG generella ord som amne — varje trend maste vara en specifik nyhandelse\n2. Gruppera relaterade artiklar till ETT amne (Iran+USA+fartyg = ett amne)\n3. Skriv rubriken som en konkret mening: VAD hander, VEM, VAR\n4. Lagg till explanation: 2 meningar som forklarar handelsen och varfor den ar viktig\n5. Ignorera debatt och opinion\n\nBra rubrik: "Trump beordrar militarangrepp mot iranskt fartyg"\nDalig rubrik: "amerikanska" eller "skriver" eller "kronor"\n\nSvara ENDAST med JSON: {"trends": [{"headline": "...", "explanation": "...", "category": "...", "sources": ["AB","EX"], "articleCount": 5}]}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -145,6 +133,7 @@ Svara ENDAST med JSON:
   return parsed.trends.map(t => ({
     keyword: t.headline,
     headline: t.headline,
+    explanation: t.explanation || '',
     category: t.category || '',
     articleCount: t.articleCount || 0,
     sourceCount: t.sources.length,
@@ -166,30 +155,7 @@ async function generateSuggestions(groups) {
     return (i + 1) + '. AMNE: ' + g.keyword + ' (' + g.items.length + ' kallor)\n' + titles;
   }).join('\n\n');
 
-  const prompt = `Du ar journalist pa GRID, en svensk nationell nyhetssajt som bevakar Sverige lokalt och nationellt.
-
-Nedan ar 8 amnesgrupper baserade pa vad svenska medier skriver om just nu. Varje grupp representerar ett potentiellt nationellt nyhetsamnne.
-
-${groupSummaries}
-
-Skriv 8 SEPARATA artikelforslag — ett per amnesgrupp. Varje forslag ska innehalla:
-- En stark rubrik (max 12 ord)
-- En ingress pa 2-3 meningar som satter scenen och lockar lasaren
-- Kategorin (Politik/Ekonomi/Samhalle/Industri/Klimat/Sport/Naringsliv/Kultur)
-
-Svara ENDAST med giltig JSON, ingen annan text:
-{
-  "suggestions": [
-    {
-      "title": "...",
-      "ingress": "...",
-      "category": "...",
-      "keyword": "...",
-      "sourceCount": 0,
-      "sources": [{"name": "...", "code": "...", "color": "..."}]
-    }
-  ]
-}`;
+  const prompt = 'Du ar journalist pa GRID, en svensk nyhetssajt. Baserat pa foljande artiklar fran svenska medier, skriv ett artikelforslag.\n\nKALLOR:\n' + sourceList + '\n\nSkriv ett riktigt artikelforslag med rubrik och ingress. Svara ENDAST med JSON:\n{"title": "Rubrik (max 12 ord, konkret och tydlig)", "category": "En av: Politik/Ekonomi/Samhalle/Industri/Klimat/Sport/Naringsliv/Kultur", "ingress": "2-3 meningar som satter scenen, berättar vad som hant och varfor det ar viktigt", "body": ["Stycke 1 (3-4 meningar)", "Stycke 2 (2-3 meningar)"], "quote": "Fiktivt men trovärdigt citat", "quoteAttr": "Namn, titel"}';
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
