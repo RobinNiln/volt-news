@@ -275,8 +275,10 @@ app.post('/api/suggestions/:id/publish', (req, res) => {
   const pubDate = new Date().toISOString();
   const art = s.article || {};
   const srcs = s.sourceItems || s.sources || [];
-  insertArticle({ id, title: art.title||'', ingress: art.ingress||'', body: art.body||'', cat: art.category||'Nyheter', type:'ai', quote: art.quote||'', quoteAttr: art.quoteAttr||'', sources: srcs, pubDate, aiGenerated: true });
-  res.json({ id, title: art.title, ingress: art.ingress, body: art.body, cat: art.category, quote: art.quote, quoteAttr: art.quoteAttr, sources: srcs, pubDate, type: 'ai', aiGenerated: true });
+  const bodyStr = Array.isArray(art.body) ? art.body.join('\n\n') : (art.body || '');
+  const artData = { id, title: art.title||'', ingress: art.ingress||'', body: bodyStr, cat: art.category||'Nyheter', type:'ai', quote: art.quote||'', quoteAttr: art.quoteAttr||'', sources: srcs, pubDate, aiGenerated: true, featured: false };
+  insertArticle(artData);
+  res.json(artData);
 });
 
 app.post('/api/suggestions/:id/dismiss', (req, res) => {
@@ -299,8 +301,11 @@ app.post('/api/articles', (req, res) => {
 });
 
 app.patch('/api/articles/:id', (req, res) => {
-  const { title, ingress, body, cat, type } = req.body;
-  updateArticleById(req.params.id, { title, ingress, body, cat, type });
+  const updates = {};
+  ['title','ingress','body','cat','type','featured'].forEach(k => {
+    if (req.body[k] !== undefined) updates[k] = req.body[k];
+  });
+  updateArticleById(req.params.id, updates);
   res.json({ ok: true });
 });
 
