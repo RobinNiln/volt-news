@@ -1775,6 +1775,7 @@ window.addEventListener('DOMContentLoaded', function() {
         loadSuggestions();
         loadLiveList();
         loadStats();
+        loadAndInjectPublished();
       })
       .catch(function(e){ setStatus('Misslyckades: ' + e.message, '#e8302a'); });
   });
@@ -2049,6 +2050,25 @@ function renderArticlesTab(arts) {
     dateSpan.textContent = d.toLocaleDateString('sv-SE') + ' ' + d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'});
     m.appendChild(catBadge); m.appendChild(typeBadge); m.appendChild(dateSpan);
     info.appendChild(t); info.appendChild(m);
+    var featBtn = document.createElement('button');
+    var isFeatured = a.featured;
+    featBtn.style.cssText = 'background:' + (isFeatured ? 'var(--v)' : 'none') + ';border:1px solid var(--border);color:' + (isFeatured ? '#000' : 'var(--muted)') + ';padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px;white-space:nowrap;font-weight:' + (isFeatured ? '700' : '400');
+    featBtn.textContent = isFeatured ? 'TOP' : 'Toppa';
+    featBtn.title = 'Visa som hero-artikel hogst upp pa sajten';
+    featBtn.addEventListener('click', function() {
+      var newVal = !a.featured;
+      if (GRID_API) {
+        fetch(GRID_API + '/api/articles/' + a.id, {
+          method:'PATCH', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({featured: newVal})
+        }).then(function(){
+          a.featured = newVal;
+          allArticles = allArticles.map(function(x){ return x.id === a.id ? Object.assign({}, x, {featured: newVal}) : x; });
+          renderArticlesTab(allArticles);
+          if (newVal) setFeaturedHero(a);
+        }).catch(function(){});
+      }
+    });
     var editBtn = document.createElement('button');
     editBtn.style.cssText = 'background:none;border:0.5px solid var(--border);color:var(--muted);padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px;white-space:nowrap';
     editBtn.textContent = 'Redigera';
@@ -2062,7 +2082,7 @@ function renderArticlesTab(arts) {
       allArticles = allArticles.filter(function(x){ return x.id !== aid; });
       renderArticlesTab(allArticles);
     });
-    row.appendChild(toggle); row.appendChild(info); row.appendChild(editBtn); row.appendChild(delBtn);
+    row.appendChild(toggle); row.appendChild(info); row.appendChild(featBtn); row.appendChild(editBtn); row.appendChild(delBtn);
     el.appendChild(row);
   });
 }
@@ -2192,6 +2212,36 @@ function injectFeed(article) {
     else feed.appendChild(card);
   }
 }
+function setFeaturedHero(article) {
+  var hero = document.querySelector('.hero');
+  if (!hero) return;
+  var heroTitle = hero.querySelector('.hero-title, h1, .art-title');
+  var heroIngress = hero.querySelector('.hero-ingress, .ingress');
+  var heroCat = hero.querySelector('.hero-cat, .cat');
+  if (heroTitle) heroTitle.textContent = article.title;
+  if (heroIngress) heroIngress.textContent = article.ingress;
+  if (heroCat) heroCat.textContent = article.cat || 'Nyheter';
+  hero.style.cursor = 'pointer';
+  var pid = 'page-art-' + article.id;
+  hero.onclick = function(){ showPage(pid); };
+}
+
+function loadAndInjectPublished() {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/articles')
+    .then(function(r){ return r.json(); })
+    .then(function(arts){
+      arts.forEach(function(a){
+        injectFeed(Object.assign({}, a, {
+          cat: a.cat || 'Nyheter',
+          pubDate: a.pubDate || a.pub_date || new Date().toISOString()
+        }));
+      });
+      var featured = arts.find(function(a){ return a.featured; });
+      if (featured) setFeaturedHero(featured);
+    }).catch(function(){});
+}
+
 
 </script>
 </body>
