@@ -295,6 +295,18 @@ app.post('/api/suggestions/:id/dismiss', (req, res) => {
   res.json({ ok: true });
 });
 
+
+app.patch('/api/articles/:id', (req, res) => {
+  try {
+    const { title, ingress, body, cat, type } = req.body;
+    db.prepare('UPDATE articles SET title=?, ingress=?, body=?, cat=?, type=? WHERE id=?')
+      .run(title||'', ingress||'', body||'', cat||'', type||'journalist', req.params.id);
+    res.json({ ok: true });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/api/articles', (req, res) => {
   const rows = db.prepare('SELECT * FROM articles ORDER BY pub_date DESC LIMIT 100').all();
   res.json(rows.map(r => ({
