@@ -108,23 +108,38 @@ async function identifyTrendsWithClaude(items) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return null;
 
-  // Send top 60 recent headlines to Claude
   const cutoff = Date.now() - 6 * 60 * 60 * 1000;
   const recent = items
     .filter(i => new Date(i.pubDate) > cutoff)
-    .slice(0, 60);
+    .slice(0, 80);
+
+  if (!recent.length) return null;
 
   const lines = recent.map(i => i.sourceCode + ': ' + i.title).join('\n');
 
-  const prompt = 'Du ar redaktionschef pa GRID, en svensk nyhetssajt. Nedan ar de senaste rubrikerna fran svenska medier.\n\n' + lines + '\n\nIdentifiera de 5 viktigaste VERKLIGA nyhetsamnesena just nu. STRIKTA REGLER:\n1. ALDRIG generella ord som amne — varje trend maste vara en specifik nyhandelse\n2. Gruppera relaterade artiklar till ETT amne (Iran+USA+fartyg = ett amne)\n3. Skriv rubriken som en konkret mening: VAD hander, VEM, VAR\n4. Lagg till explanation: 2 meningar som forklarar handelsen och varfor den ar viktig\n5. Ignorera debatt och opinion\n\nBra rubrik: "Trump beordrar militarangrepp mot iranskt fartyg"\nDalig rubrik: "amerikanska" eller "skriver" eller "kronor"\n\nSvara ENDAST med JSON: {"trends": [{"headline": "...", "explanation": "...", "category": "...", "sources": ["AB","EX"], "articleCount": 5}]}';
+  const prompt = `Du ar redaktionschef pa en svensk nyhetssajt. Nedan ar ${recent.length} rubriker fran svenska nyhetsmedier de senaste 6 timmarna.
+
+${lines}
+
+Identifiera de 5 viktigaste UNIKA nyhetsamnesena. Regler:
+- Varje amne ska vara en specifik verklig handelseinte ett generellt ord
+- Gruppera ALLA relaterade rubriker till ETT amne (tex alla om Iran/USA = ett amne)
+- Skriv headline som en konkret nyhetsmening (max 10 ord): vad hander vem var
+- Skriv explanation: 2 korta meningar om vad som pagar och varfor det ar viktigt
+- Ignorera opinion debatt och kronikaartiklar
+
+Svara ENDAST med detta JSON-format:
+{"trends": [{"headline": "konkret rubrik", "explanation": "Mening 1. Mening 2.", "category": "Politik", "sources": ["AB", "EX"], "articleCount": 7}]}`;
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] })
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1200, messages: [{ role: 'user', content: prompt }] })
   });
+
+  if (!r.ok) throw new Error('API ' + r.status);
   const d = await r.json();
-  const text = d.content[0].text.trim().replace(/\`\`\`json|\`\`\`/g, '').trim();
+  const text = d.content[0].text.trim().replace(/```json|```/g, '').trim();
   const parsed = JSON.parse(text);
 
   const sourceMap = {};
@@ -136,11 +151,11 @@ async function identifyTrendsWithClaude(items) {
     explanation: t.explanation || '',
     category: t.category || '',
     articleCount: t.articleCount || 0,
-    sourceCount: t.sources.length,
-    sources: t.sources.map(code => sourceMap[code] || { name: code, code, color: '#555' }),
+    sourceCount: (t.sources || []).length,
+    sources: (t.sources || []).map(code => sourceMap[code] || { name: code, code, color: '#555' }),
     totalArticles: recent.length,
     headlines: recent
-      .filter(i => t.sources.includes(i.sourceCode))
+      .filter(i => (t.sources || []).includes(i.sourceCode))
       .slice(0, 3)
       .map(i => ({ title: i.title, source: i.source }))
   }));
@@ -150,52 +165,60 @@ async function generateSuggestions(groups) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY saknas');
 
-  const groupSummaries = groups.slice(0, 8).map((g, i) => {
-    const titles = g.items.map(item => item.source + ': "' + item.title + '"').join('\n');
-    return (i + 1) + '. AMNE: ' + g.keyword + ' (' + g.items.length + ' kallor)\n' + titles;
-  }).join('\n\n');
+  // Generate one suggestion per group, in parallel batches of 4
+  const results = [];
+  for (let i = 0; i < Math.min(groups.length, 8); i++) {
+    const g = groups[i];
+    const titles = g.items.slice(0, 6).map(item => '- ' + item.source + ': "' + item.title + '"').join('\n');
 
-  const prompt = 'Du ar journalist pa GRID, en svensk nyhetssajt. Baserat pa foljande artiklar fran svenska medier, skriv ett artikelforslag.\n\nKALLOR:\n' + sourceList + '\n\nSkriv ett riktigt artikelforslag med rubrik och ingress. Svara ENDAST med JSON:\n{"title": "Rubrik (max 12 ord, konkret och tydlig)", "category": "En av: Politik/Ekonomi/Samhalle/Industri/Klimat/Sport/Naringsliv/Kultur", "ingress": "2-3 meningar som satter scenen, berättar vad som hant och varfor det ar viktigt", "body": ["Stycke 1 (3-4 meningar)", "Stycke 2 (2-3 meningar)"], "quote": "Fiktivt men trovärdigt citat", "quoteAttr": "Namn, titel"}';
+    const prompt = `Du ar journalist pa GRID, en svensk nyhetssajt. Foljande svenska medier rapporterar om samma amne:
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 3000,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
+${titles}
 
-  if (!response.ok) throw new Error('API fel: ' + response.status);
-  const data = await response.json();
-  const text = data.content[0].text.trim().replace(/```json|```/g, '').trim();
-  const parsed = JSON.parse(text);
+Skriv ett artikelforslag baserat pa dessa kallor. Svara ENDAST med JSON:
+{
+  "title": "Konkret rubrik max 12 ord",
+  "category": "En av: Politik Ekonomi Samhalle Industri Klimat Sport Naringsliv Kultur",
+  "ingress": "2-3 meningar som berättar vad som hant varfor det ar viktigt och vad som kan handa harehef",
+  "body": ["Forsta stycket 3-4 meningar med mer detaljer", "Andra stycket 2-3 meningar med kontext eller bakgrund"]
+}`;
 
-  return parsed.suggestions.map((s, i) => {
-    const group = groups[i] || groups[0];
-    return {
-      id: 'sug-' + Date.now() + '-' + i,
-      title: s.title,
-      ingress: s.ingress,
-      category: s.category,
-      keyword: s.keyword || group.keyword,
-      sourceCount: group.items.length,
-      sources: group.items.slice(0, 5).map(item => ({
-        name: item.source,
-        code: item.sourceCode,
-        color: item.sourceColor,
-        title: item.title,
-        link: item.link
-      })),
-      createdAt: new Date().toISOString(),
-      status: 'pending'
-    };
-  });
+    try {
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 800, messages: [{ role: 'user', content: prompt }] })
+      });
+      if (!r.ok) { log('Suggestion API error: ' + r.status); continue; }
+      const d = await r.json();
+      const text = d.content[0].text.trim().replace(/```json|```/g, '').trim();
+      const art = JSON.parse(text);
+
+      results.push({
+        id: 'sug-' + Date.now() + '-' + i,
+        article: {
+          title: art.title || '',
+          ingress: art.ingress || '',
+          category: art.category || 'Nyheter',
+          body: Array.isArray(art.body) ? art.body.join('\n\n') : (art.body || '')
+        },
+        keyword: g.keyword,
+        sourceCount: g.items.length,
+        sources: g.items.slice(0, 5).map(item => ({
+          name: item.source,
+          code: item.sourceCode,
+          color: item.sourceColor,
+          title: item.title,
+          link: item.link
+        })),
+        createdAt: new Date().toISOString(),
+        status: 'pending'
+      });
+    } catch(e) {
+      log('Suggestion ' + i + ' failed: ' + e.message);
+    }
+  }
+  return results;
 }
 
 async function runPipeline() {
@@ -283,8 +306,13 @@ app.post('/api/suggestions/:id/publish', (req, res) => {
   updateSuggestionStatus.run('published', s.id);
   const id = 'art-' + Date.now();
   const pubDate = new Date().toISOString();
-  const article = { id, title: s.title, ingress: s.ingress, cat: s.category, body: '', quote: '', quoteAttr: '', sources: s.sources, pubDate, type: 'ai', aiGenerated: true };
-  insertArticle.run(id, s.title, s.ingress, '', s.category, 'ai', '', '', JSON.stringify(s.sources), pubDate, 1);
+  const art = s.article || {};
+  const title = art.title || s.title || '';
+  const ingress = art.ingress || s.ingress || '';
+  const cat = art.category || s.category || 'Nyheter';
+  const body = art.body || '';
+  const article = { id, title, ingress, cat, body, sources: s.sources, pubDate, type: 'ai', aiGenerated: true };
+  insertArticle.run(id, title, ingress, body, cat, 'ai', '', '', JSON.stringify(s.sources), pubDate, 1);
   res.json(article);
 });
 
