@@ -44,19 +44,34 @@ function updateArticleById(id, updates) {
 }
 
 const SOURCES = {
-  aftonbladet: { name:'Aftonbladet', code:'AB',  color:'#e8001a', url:'https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/' },
-  expressen:   { name:'Expressen',   code:'EX',  color:'#006AA7', url:'https://feeds.expressen.se/nyheter/' },
-  dn:          { name:'DN',          code:'DN',  color:'#1a1a1a', url:'https://www.dn.se/rss/' },
-  svd:         { name:'SvD',         code:'SvD', color:'#002E6E', url:'https://www.svd.se/feed/articles.rss' },
-  sydsvenskan: { name:'Sydsvenskan', code:'SDS', color:'#D92B3A', url:'https://www.sydsvenskan.se/rss.xml' },
-  barometern:  { name:'Barometern',  code:'BAR', color:'#2B6E3A', url:'https://www.barometern.se/rss/' },
-  svt:         { name:'SVT Nyheter', code:'SVT', color:'#1A5276', url:'https://www.svt.se/nyheter/rss.xml' },
-  norran:      { name:'Norran',      code:'NOR', color:'#555',    url:'https://www.norran.se/rss/' },
-  nsd:         { name:'NSD',         code:'NSD', color:'#555',    url:'https://www.nsd.se/rss/' },
-  unt:         { name:'UNT',         code:'UNT', color:'#555',    url:'https://www.unt.se/rss/' },
-  nt:          { name:'NT',          code:'NT',  color:'#555',    url:'https://www.nt.se/rss/' },
-  corren:      { name:'Corren',      code:'COR', color:'#555',    url:'https://www.corren.se/rss/' },
-  helagotland: { name:'Hela Gotland',code:'HG',  color:'#555',    url:'https://www.helagotland.se/rss/' },
+  // Riksmedier
+  aftonbladet: { name:'Aftonbladet',          code:'AB',  color:'#e8001a', url:'https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/' },
+  expressen:   { name:'Expressen',            code:'EX',  color:'#006AA7', url:'https://feeds.expressen.se/nyheter/' },
+  dn:          { name:'DN',                   code:'DN',  color:'#1a1a1a', url:'https://www.dn.se/rss/' },
+  svd:         { name:'SvD',                  code:'SvD', color:'#002E6E', url:'https://www.svd.se/feed/articles.rss' },
+  sydsvenskan: { name:'Sydsvenskan',           code:'SDS', color:'#D92B3A', url:'https://www.sydsvenskan.se/rss.xml' },
+  barometern:  { name:'Barometern',            code:'BAR', color:'#2B6E3A', url:'https://www.barometern.se/rss/' },
+  svt:         { name:'SVT Nyheter',           code:'SVT', color:'#1A5276', url:'https://www.svt.se/nyheter/rss.xml' },
+  // NTM-titlar
+  corren:      { name:'Corren',               code:'COR', color:'#C0392B', url:'https://www.corren.se/rss/' },
+  nt:          { name:'NT',                   code:'NT',  color:'#C0392B', url:'https://www.nt.se/rss/' },
+  enkoping:    { name:'Enköpings-Posten',      code:'EP',  color:'#C0392B', url:'https://www.enköpingsposten.se/rss/' },
+  eskilstuna:  { name:'Eskilstuna-Kuriren',    code:'EK',  color:'#C0392B', url:'https://www.eskilstuna-kuriren.se/rss/' },
+  helagotland: { name:'Hela Gotland',          code:'HG',  color:'#C0392B', url:'https://www.helagotland.se/rss/' },
+  gotlandsallehanda: { name:'Gotlands Allehanda', code:'GA', color:'#C0392B', url:'https://www.gotlandsallehanda.se/rss/' },
+  gt:          { name:'GT',                   code:'GT',  color:'#C0392B', url:'https://www.gt.se/rss/' },
+  katrineholms:{ name:'Katrineholms-Kuriren',  code:'KK',  color:'#C0392B', url:'https://www.katrineholms-kuriren.se/rss/' },
+  kuriren:     { name:'Kuriren',              code:'KUR', color:'#C0392B', url:'https://www.kuriren.nu/rss/' },
+  mvt:         { name:'MVT',                  code:'MVT', color:'#C0392B', url:'https://www.mvt.se/rss/' },
+  norrbotten:  { name:'Norrbottens-Kuriren',   code:'NK',  color:'#C0392B', url:'https://www.nk.se/rss/' },
+  norran:      { name:'Norran',               code:'NOR', color:'#C0392B', url:'https://www.norran.se/rss/' },
+  nsd:         { name:'NSD',                  code:'NSD', color:'#C0392B', url:'https://www.nsd.se/rss/' },
+  pitea:       { name:'Piteå-Tidningen',       code:'PT',  color:'#C0392B', url:'https://www.pitea-tidningen.se/rss/' },
+  sn:          { name:'SN',                   code:'SN',  color:'#C0392B', url:'https://www.sn.se/rss/' },
+  strengnas:   { name:'Strengnäs Tidning',     code:'ST',  color:'#C0392B', url:'https://www.strengnas-tidning.se/rss/' },
+  unt:         { name:'UNT',                  code:'UNT', color:'#C0392B', url:'https://www.unt.se/rss/' },
+  vimmerby:    { name:'Vimmerby Tidning',      code:'VIM', color:'#C0392B', url:'https://www.vimmerbytidning.se/rss/' },
+  vasterviks:  { name:'Västerviks Tidningen',  code:'VT',  color:'#C0392B', url:'https://www.vt.se/rss/' },
 };
 
 let suggestions = [];
