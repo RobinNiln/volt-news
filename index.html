@@ -1502,87 +1502,159 @@ body.light .logo-light{display:block}
 </div>
 </div>
 <div class="page" id="page-cms">
-<div style="max-width:720px;margin:0 auto;padding:16px 14px 80px">
+<div style="max-width:960px;margin:0 auto;padding:16px 14px 80px">
 
-  <div style="border-top:2px solid var(--v);padding-top:14px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
-    <div style="font-size:18px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)">GRID Admin</div>
-    <div id="cms-status" style="font-family:monospace;font-size:10px;color:var(--muted)">Ej ansluten</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:2px solid var(--v);margin-bottom:16px">
+    <div style="font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text)">GRID Redaktion</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div id="cms-status" style="font-family:monospace;font-size:10px;color:var(--muted);background:var(--surface);padding:3px 10px;border-radius:10px">Ej ansluten</div>
+      <div style="display:flex;gap:4px">
+        <button id="tab-pipeline" style="background:var(--v);color:#000;border:none;padding:5px 14px;font-size:11px;font-weight:700;cursor:pointer;border-radius:10px">Pipeline</button>
+        <button id="tab-articles" style="background:none;border:1px solid var(--border);color:var(--muted);padding:5px 14px;font-size:11px;cursor:pointer;border-radius:10px">Artiklar</button>
+      </div>
+    </div>
   </div>
 
-  <div id="msg-box" style="display:none;padding:8px 12px;border-radius:2px;margin-bottom:14px;font-family:monospace;font-size:12px"></div>
+  <div id="msg-box" style="display:none;padding:8px 12px;border-radius:3px;margin-bottom:14px;font-family:monospace;font-size:12px"></div>
 
-  <div style="margin-bottom:20px;border:1px solid var(--border);border-radius:3px;padding:14px">
-    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Railway URL</div>
+  <div style="margin-bottom:16px;border:1px solid var(--border);border-radius:3px;padding:12px 14px">
+    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Railway URL</div>
     <div style="display:flex;gap:8px">
-      <input id="api-url" type="text" placeholder="https://volt-news-production.up.railway.app" style="flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:monospace;font-size:12px;border-radius:2px;outline:none">
-      <button id="btn-connect" style="background:var(--v);color:#000;border:none;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;border-radius:2px">Anslut</button>
+      <input id="api-url" type="text" placeholder="https://volt-news-production.up.railway.app" style="flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-family:monospace;font-size:12px;border-radius:2px;outline:none">
+      <button id="btn-connect" style="background:var(--v);color:#000;border:none;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;border-radius:2px">Anslut</button>
     </div>
   </div>
 
-  <div style="margin-bottom:24px">
-    <div style="border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+  <!-- PIPELINE TAB -->
+  <div id="view-pipeline">
+
+    <div id="stats-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">
+      <div style="background:var(--surface);border-radius:3px;padding:10px 12px"><div id="stat-articles" style="font-size:20px;font-weight:700;color:var(--text)">—</div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">ARTIKLAR 6H</div></div>
+      <div style="background:var(--surface);border-radius:3px;padding:10px 12px"><div id="stat-trends" style="font-size:20px;font-weight:700;color:var(--v)">—</div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">TRENDER</div></div>
+      <div style="background:var(--surface);border-radius:3px;padding:10px 12px"><div id="stat-suggestions" style="font-size:20px;font-weight:700;color:var(--text)">—</div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">FORSLAG</div></div>
+      <div style="background:var(--surface);border-radius:3px;padding:10px 12px"><div id="stat-published" style="font-size:20px;font-weight:700;color:var(--text)">—</div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">PUBLICERADE</div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
       <div>
-        <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">Hetaste trenderna</div>
-        <div id="trends-meta" style="font-family:monospace;font-size:9px;color:var(--muted);margin-top:2px">Anslut och klicka Uppdatera</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;border-top:2px solid var(--v);padding-top:10px;margin-bottom:12px">
+          <div>
+            <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">Trender just nu</div>
+            <div id="trends-meta" style="font-family:monospace;font-size:9px;color:var(--muted);margin-top:2px">Klicka Uppdatera</div>
+          </div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <span style="background:var(--v);color:#000;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px">AI</span>
+            <button id="btn-trends" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px">Uppdatera</button>
+          </div>
+        </div>
+        <div id="trends-list" style="border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:10px">
+          <div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Anslut och klicka Uppdatera</div>
+        </div>
+        <div style="border-top:2px solid var(--v);padding-top:10px;margin-bottom:10px;margin-top:16px">
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin-bottom:10px">Publicerade artiklar</div>
+        </div>
+        <div id="live-list" style="border:1px solid var(--border);border-radius:3px;overflow:hidden">
+          <div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Anslut for att se</div>
+        </div>
       </div>
-      <button id="btn-trends" style="background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;font-size:11px;cursor:pointer;border-radius:2px">Uppdatera</button>
-    </div>
-    <div id="trends-list" style="border:1px solid var(--border);border-radius:3px;overflow:hidden">
-      <div style="padding:14px;font-family:monospace;font-size:11px;color:var(--muted);text-align:center">Anslut till backend</div>
-    </div>
-    <div style="margin-top:10px;text-align:right">
-      <button id="btn-gen" style="background:var(--v);color:#000;border:none;padding:9px 18px;font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px">Generera artikelforslag</button>
-    </div>
-  </div>
 
-  <div style="margin-bottom:24px">
-    <div style="border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
-      <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">AI-forslag</div>
-      <button id="btn-suggestions" style="background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;font-size:11px;cursor:pointer;border-radius:2px">Uppdatera</button>
-    </div>
-    <div id="suggestions-list">
-      <div style="padding:14px;font-family:monospace;font-size:11px;color:var(--muted);text-align:center">Anslut och generera forslag</div>
-    </div>
-  </div>
-
-  <div style="margin-bottom:24px">
-    <div style="border-top:2px solid var(--v);padding-top:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
-      <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">Publicerade artiklar</div>
-      <button id="btn-published" style="background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;font-size:11px;cursor:pointer;border-radius:2px">Uppdatera</button>
-    </div>
-    <div id="published-list">
-      <div style="padding:14px;font-family:monospace;font-size:11px;color:var(--muted);text-align:center">Anslut for att se publicerade artiklar</div>
-    </div>
-  </div>
-
-  <div>
-    <div style="border-top:2px solid var(--v);padding-top:12px;margin-bottom:14px;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">Ny artikel</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
       <div>
-        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Kategori</div>
-        <input id="art-cat" type="text" placeholder="t.ex. Samhalle" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;border-top:2px solid var(--v);padding-top:10px;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">AI-forslag</div>
+          <div style="display:flex;gap:5px">
+            <button id="btn-suggestions" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px">Uppdatera</button>
+          </div>
+        </div>
+        <div id="suggestions-list">
+          <div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Anslut och generera forslag</div>
+        </div>
+        <button id="btn-gen" style="width:100%;background:var(--v);color:#000;border:none;padding:10px;font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-top:12px">Kor pipeline och generera forslag</button>
       </div>
-      <div>
-        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Typ</div>
-        <select id="art-type" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none">
-          <option value="journalist">Journalist</option>
-          <option value="ai">AI-assisterad</option>
-        </select>
-      </div>
+
     </div>
-    <div style="margin-bottom:10px">
+
+  </div>
+
+  <!-- ARTICLES TAB -->
+  <div id="view-articles" style="display:none">
+
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+      <input id="art-search" type="text" placeholder="Sök artiklar..." style="flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:12px;border-radius:2px;outline:none">
+      <button data-filter="all" class="art-filter active-filter" style="background:var(--v);color:#000;border:none;padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px;font-weight:700">Alla</button>
+      <button data-filter="live" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">Live</button>
+      <button data-filter="off" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">Avpublicerade</button>
+      <button data-filter="ai" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">AI</button>
+      <button data-filter="journalist" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">Journalist</button>
+    </div>
+
+    <div id="articles-list">
+      <div style="padding:20px;text-align:center;font-family:monospace;font-size:10px;color:var(--muted)">Anslut och byt till Artiklar-fliken</div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div id="edit-modal" style="display:none;margin-top:16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-size:14px;font-weight:700;color:var(--text)">Redigera artikel</div>
+        <button id="btn-edit-close" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1">×</button>
+      </div>
+      <input type="hidden" id="edit-id">
       <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Rubrik</div>
-      <input id="art-title" type="text" placeholder="Artikelrubrik" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:15px;font-weight:600;border-radius:2px;outline:none">
-    </div>
-    <div style="margin-bottom:10px">
+      <input id="edit-title" type="text" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:14px;font-weight:600;border-radius:2px;outline:none;margin-bottom:10px">
       <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Ingress</div>
-      <textarea id="art-ingress" rows="3" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical"></textarea>
-    </div>
-    <div style="margin-bottom:14px">
+      <textarea id="edit-ingress" rows="3" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical;margin-bottom:10px;line-height:1.6"></textarea>
       <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Brodtext</div>
-      <textarea id="art-body" rows="6" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical;line-height:1.6"></textarea>
+      <textarea id="edit-body" rows="5" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical;margin-bottom:10px;line-height:1.6"></textarea>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div>
+          <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Kategori</div>
+          <input id="edit-cat" type="text" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:13px;border-radius:2px;outline:none">
+        </div>
+        <div>
+          <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Typ</div>
+          <select id="edit-type" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:13px;border-radius:2px;outline:none">
+            <option value="journalist">Journalist</option>
+            <option value="ai">AI-assisterad</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button id="btn-edit-cancel" style="background:none;border:1px solid var(--border);color:var(--muted);padding:8px 16px;font-size:12px;cursor:pointer;border-radius:2px">Avbryt</button>
+        <button id="btn-edit-save" style="background:var(--v);color:#000;border:none;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;border-radius:2px">Spara andringar</button>
+      </div>
     </div>
-    <button id="btn-publish-article" style="width:100%;background:var(--v);color:#000;border:none;padding:12px;font-size:14px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera artikel</button>
+
+    <!-- NEW ARTICLE FORM -->
+    <div style="border-top:2px solid var(--v);padding-top:12px;margin-top:20px">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin-bottom:12px">Ny artikel</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Kategori</div>
+          <input id="art-cat" type="text" placeholder="t.ex. Samhalle" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:13px;border-radius:2px;outline:none">
+        </div>
+        <div>
+          <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Typ</div>
+          <select id="art-type" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:13px;border-radius:2px;outline:none">
+            <option value="journalist">Journalist</option>
+            <option value="ai">AI-assisterad</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Rubrik</div>
+        <input id="art-title" type="text" placeholder="Artikelrubrik" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:15px;font-weight:600;border-radius:2px;outline:none">
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Ingress</div>
+        <textarea id="art-ingress" rows="3" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical"></textarea>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Brodtext</div>
+        <textarea id="art-body" rows="5" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical;line-height:1.6"></textarea>
+      </div>
+      <button id="btn-publish-article" style="width:100%;background:var(--v);color:#000;border:none;padding:12px;font-size:14px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera artikel</button>
+    </div>
+
   </div>
 
 </div>
@@ -1643,6 +1715,9 @@ document.addEventListener('DOMContentLoaded', updateLogos);
 
 <script>
 var GRID_API = localStorage.getItem('grid-api') || '';
+var allArticles = [];
+var currentFilter = 'all';
+var offlineIds = JSON.parse(localStorage.getItem('grid-offline-ids') || '[]');
 
 function gid(id){ return document.getElementById(id); }
 
@@ -1663,18 +1738,31 @@ function setStatus(text, color) {
   if (el) { el.textContent = text; el.style.color = color || ''; }
 }
 
-function addListener(id, fn) {
-  var el = gid(id);
-  if (el) el.addEventListener('click', fn);
+function switchTab(tab) {
+  var pipeline = gid('view-pipeline');
+  var articles = gid('view-articles');
+  var tbP = gid('tab-pipeline');
+  var tbA = gid('tab-articles');
+  if (tab === 'pipeline') {
+    pipeline.style.display = 'block';
+    articles.style.display = 'none';
+    tbP.style.background = 'var(--v)'; tbP.style.color = '#000'; tbP.style.border = 'none';
+    tbA.style.background = 'none'; tbA.style.color = 'var(--muted)'; tbA.style.border = '1px solid var(--border)';
+  } else {
+    pipeline.style.display = 'none';
+    articles.style.display = 'block';
+    tbA.style.background = 'var(--v)'; tbA.style.color = '#000'; tbA.style.border = 'none';
+    tbP.style.background = 'none'; tbP.style.color = 'var(--muted)'; tbP.style.border = '1px solid var(--border)';
+    loadArticlesTab();
+  }
 }
 
 window.addEventListener('DOMContentLoaded', function() {
   var urlInput = gid('api-url');
   if (urlInput && GRID_API) urlInput.value = GRID_API;
 
-  addListener('btn-connect', function() {
-    var input = gid('api-url');
-    var url = input ? input.value.trim().replace(/\/$/, '') : '';
+  gid('btn-connect') && gid('btn-connect').addEventListener('click', function() {
+    var url = (gid('api-url').value || '').trim().replace(/\/$/, '');
     if (!url) { showMsg('Ange URL', false); return; }
     GRID_API = url;
     localStorage.setItem('grid-api', url);
@@ -1685,58 +1773,96 @@ window.addEventListener('DOMContentLoaded', function() {
         setStatus('Ansluten ' + d.length + ' kallor', 'var(--v)');
         loadTrends();
         loadSuggestions();
-        loadPublished();
+        loadLiveList();
+        loadStats();
       })
-      .catch(function(e){ setStatus('Anslutning misslyckades: ' + e.message, '#e8302a'); });
+      .catch(function(e){ setStatus('Misslyckades: ' + e.message, '#e8302a'); });
   });
 
-  addListener('btn-trends', loadTrends);
-  addListener('btn-suggestions', loadSuggestions);
-  addListener('btn-published', loadPublished);
-
-  addListener('btn-gen', function() {
+  gid('tab-pipeline') && gid('tab-pipeline').addEventListener('click', function(){ switchTab('pipeline'); });
+  gid('tab-articles') && gid('tab-articles').addEventListener('click', function(){ switchTab('articles'); });
+  gid('btn-trends') && gid('btn-trends').addEventListener('click', loadTrends);
+  gid('btn-suggestions') && gid('btn-suggestions').addEventListener('click', loadSuggestions);
+  gid('btn-gen') && gid('btn-gen').addEventListener('click', function() {
     if (!GRID_API) { showMsg('Anslut forst', false); return; }
-    showMsg('Genererar forslag — Claude analyserar trender, vanta 40 sek...', true);
+    showMsg('Pipeline startad — Claude analyserar trender, vanta 40 sek...', true);
     fetch(GRID_API + '/api/pipeline/run', {method:'POST'})
-      .then(function(){ setTimeout(function(){ loadSuggestions(); loadTrends(); }, 42000); })
+      .then(function(){ setTimeout(function(){ loadSuggestions(); loadTrends(); loadStats(); }, 42000); })
       .catch(function(e){ showMsg('Fel: ' + e.message, false); });
   });
+  gid('btn-publish-article') && gid('btn-publish-article').addEventListener('click', publishManual);
+  gid('btn-edit-close') && gid('btn-edit-close').addEventListener('click', closeEdit);
+  gid('btn-edit-cancel') && gid('btn-edit-cancel').addEventListener('click', closeEdit);
+  gid('btn-edit-save') && gid('btn-edit-save').addEventListener('click', saveEdit);
 
-  addListener('btn-publish-article', publishManual);
+  gid('art-search') && gid('art-search').addEventListener('input', function() {
+    renderArticlesTab(allArticles);
+  });
+
+  document.querySelectorAll('.art-filter').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      currentFilter = btn.getAttribute('data-filter');
+      document.querySelectorAll('.art-filter').forEach(function(b) {
+        b.style.background = 'none'; b.style.color = 'var(--muted)'; b.style.border = '1px solid var(--border)'; b.style.fontWeight = '';
+      });
+      btn.style.background = 'var(--v)'; btn.style.color = '#000'; btn.style.border = 'none'; btn.style.fontWeight = '700';
+      renderArticlesTab(allArticles);
+    });
+  });
 });
+
+function loadStats() {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/pipeline/status')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (gid('stat-suggestions')) gid('stat-suggestions').textContent = d.suggestions || 0;
+    }).catch(function(){});
+  fetch(GRID_API + '/api/articles')
+    .then(function(r){ return r.json(); })
+    .then(function(arts){
+      if (gid('stat-published')) gid('stat-published').textContent = arts.length;
+    }).catch(function(){});
+  fetch(GRID_API + '/api/trends')
+    .then(function(r){ return r.json(); })
+    .then(function(trends){
+      if (gid('stat-trends')) gid('stat-trends').textContent = trends.length;
+      if (gid('stat-articles') && trends[0]) gid('stat-articles').textContent = trends[0].totalArticles || '—';
+    }).catch(function(){});
+}
 
 function loadTrends() {
   if (!GRID_API) { showMsg('Anslut forst', false); return; }
   var el = gid('trends-list');
   if (!el) return;
-  el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:11px;color:var(--muted)">Hamtar — Claude analyserar rubriker, tar 10-15 sek...</div>';
+  el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:var(--muted)">Claude analyserar — tar 10-15 sek...</div>';
   fetch(GRID_API + '/api/trends')
     .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
     .then(function(trends){
       el.innerHTML = '';
       var metaEl = gid('trends-meta');
-      if (metaEl && trends.length) metaEl.textContent = trends.length + ' trender identifierade';
-      if (!trends.length) {
-        el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:11px;color:var(--muted);text-align:center">Inga trender — klicka Generera</div>';
-        return;
-      }
+      if (metaEl) metaEl.textContent = trends.length + ' unika trender identifierade';
+      if (!trends.length) { el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Inga trender</div>'; return; }
       var max = trends[0].articleCount || 1;
       trends.forEach(function(t, i) {
         var row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:flex-start;gap:12px;padding:12px 14px' + (i < trends.length-1 ? ';border-bottom:1px solid var(--border)' : '');
+        row.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:10px 12px' + (i < trends.length-1 ? ';border-bottom:1px solid var(--border)' : '');
         var num = document.createElement('div');
-        num.style.cssText = 'font-size:22px;font-weight:700;color:' + (i===0?'var(--v)':'var(--muted)') + ';flex-shrink:0;width:22px;line-height:1';
+        num.style.cssText = 'font-size:20px;font-weight:700;color:' + (i===0?'var(--v)':'var(--muted)') + ';flex-shrink:0;width:20px;line-height:1';
         num.textContent = i+1;
         var info = document.createElement('div');
         info.style.flex = '1';
         var hl = document.createElement('div');
-        hl.style.cssText = 'font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.3';
+        hl.style.cssText = 'font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.3';
         hl.textContent = t.headline || t.keyword;
+        var expl = document.createElement('div');
+        expl.style.cssText = 'font-size:11px;color:var(--mid);line-height:1.45;margin-bottom:5px';
+        expl.textContent = t.explanation || '';
         var sub = document.createElement('div');
-        sub.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted);margin-bottom:6px';
+        sub.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted);margin-bottom:5px';
         sub.textContent = (t.articleCount||0) + ' artiklar · ' + (t.sourceCount||0) + ' kallor' + (t.category ? ' · ' + t.category : '');
         var srcs = document.createElement('div');
-        srcs.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px';
+        srcs.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;margin-bottom:5px';
         (t.sources||[]).slice(0,6).forEach(function(s){
           var b = document.createElement('span');
           b.style.cssText = 'background:' + (s.color||'#555') + ';color:#fff;padding:1px 5px;border-radius:2px;font-size:9px;font-family:monospace';
@@ -1748,14 +1874,14 @@ function loadTrends() {
         var fill = document.createElement('div');
         fill.style.cssText = 'height:100%;background:var(--v);width:' + Math.round((t.articleCount||0)/max*100) + '%';
         bar.appendChild(fill);
-        info.appendChild(hl); info.appendChild(sub); info.appendChild(srcs); info.appendChild(bar);
+        info.appendChild(hl);
+        if (t.explanation) info.appendChild(expl);
+        info.appendChild(sub); info.appendChild(srcs); info.appendChild(bar);
         row.appendChild(num); row.appendChild(info);
         el.appendChild(row);
       });
     })
-    .catch(function(e){
-      el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:11px;color:#e8302a">Fel: ' + e.message + '</div>';
-    });
+    .catch(function(e){ el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:#e8302a">Fel: ' + e.message + '</div>'; });
 }
 
 function loadSuggestions() {
@@ -1767,126 +1893,216 @@ function loadSuggestions() {
     .then(function(list){
       el.innerHTML = '';
       var pending = list.filter(function(s){ return s.status === 'pending'; });
+      if (gid('stat-suggestions')) gid('stat-suggestions').textContent = pending.length;
       if (!pending.length) {
-        el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:11px;color:var(--muted);text-align:center">Inga forslag — klicka Generera artikelforslag ovan</div>';
+        el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Inga forslag — klicka Kor pipeline</div>';
         return;
       }
       pending.forEach(function(s) {
         var art = s.article || {};
         var box = document.createElement('div');
-        box.style.cssText = 'border:1px solid var(--border);border-radius:3px;margin-bottom:10px;overflow:hidden';
-        var head = document.createElement('div');
-        head.style.cssText = 'padding:12px 14px';
+        box.style.cssText = 'border:1px solid var(--border);border-left:3px solid var(--border);border-radius:0 3px 3px 0;margin-bottom:10px;padding:12px;overflow:hidden';
         var cat = document.createElement('div');
-        cat.style.cssText = 'font-family:monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:5px';
+        cat.style.cssText = 'font-family:monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:4px';
         cat.textContent = (art.category||'NYHETER').toUpperCase() + ' — ' + (s.sources||[]).length + ' kallor';
         var title = document.createElement('div');
-        title.style.cssText = 'font-size:16px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:6px';
-        title.textContent = art.title || '';
+        title.style.cssText = 'font-size:14px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:5px';
+        title.textContent = art.title || s.keyword || '(Rubrik saknas)';
         var ingress = document.createElement('div');
-        ingress.style.cssText = 'font-size:13px;color:var(--mid);line-height:1.55;margin-bottom:10px';
-        ingress.textContent = art.ingress || '';
+        ingress.style.cssText = 'font-size:12px;color:var(--mid);line-height:1.5;margin-bottom:10px';
+        ingress.textContent = art.ingress || '(Ingen ingress)';
         var srcRow = document.createElement('div');
-        srcRow.style.cssText = 'display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px';
+        srcRow.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px';
         (s.sources||[]).slice(0,5).forEach(function(src){
           var b = document.createElement('span');
-          b.style.cssText = 'background:' + (src.sourceColor||src.color||'#555') + ';color:#fff;padding:1px 6px;border-radius:2px;font-size:9px;font-family:monospace';
+          b.style.cssText = 'background:' + (src.sourceColor||src.color||'#555') + ';color:#fff;padding:1px 5px;border-radius:2px;font-size:9px;font-family:monospace';
           b.textContent = src.sourceCode||src.code||src.name||'';
           srcRow.appendChild(b);
         });
         var btnRow = document.createElement('div');
-        btnRow.style.cssText = 'display:flex;gap:8px';
+        btnRow.style.cssText = 'display:flex;gap:6px';
         var pubBtn = document.createElement('button');
-        pubBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:8px 18px;font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px';
+        pubBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:6px 14px;font-size:12px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px';
         pubBtn.textContent = 'Publicera';
-        var sid = s.id;
-        var sart = art;
+        var dimBtn = document.createElement('button');
+        dimBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-size:11px;cursor:pointer;border-radius:2px';
+        dimBtn.textContent = 'Avfarda';
+        var sid = s.id; var sart = art;
         pubBtn.addEventListener('click', function(){
-          pubBtn.textContent = 'Publicerar...';
-          pubBtn.disabled = true;
+          pubBtn.textContent = 'Publicerar...'; pubBtn.disabled = true;
           fetch(GRID_API + '/api/suggestions/' + sid + '/publish', {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: '{}'
+            method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'
           })
           .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
           .then(function(article){
-            injectFeed(Object.assign({}, article, {
-              cat: sart.category || article.cat || 'Nyheter',
-              type: 'ai',
-              ingress: article.ingress || sart.ingress,
-              title: article.title || sart.title
-            }));
+            injectFeed(Object.assign({}, article, {cat: sart.category||'Nyheter', type:'ai', ingress: article.ingress||sart.ingress, title: article.title||sart.title}));
             box.remove();
-            loadPublished();
+            loadLiveList();
+            loadStats();
             showMsg('Artikel publicerad i flodet', true);
           })
-          .catch(function(e){
-            pubBtn.textContent = 'Publicera';
-            pubBtn.disabled = false;
-            showMsg('Fel vid publicering: ' + e.message, false);
-          });
+          .catch(function(e){ pubBtn.textContent = 'Publicera'; pubBtn.disabled = false; showMsg('Fel: ' + e.message, false); });
         });
-        var dimBtn = document.createElement('button');
-        dimBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:8px 12px;font-size:11px;cursor:pointer;border-radius:2px';
-        dimBtn.textContent = 'Avfarda';
         dimBtn.addEventListener('click', function(){
-          fetch(GRID_API + '/api/suggestions/' + sid + '/dismiss', {method:'POST'})
-            .then(function(){ box.remove(); })
-            .catch(function(){});
+          fetch(GRID_API + '/api/suggestions/' + sid + '/dismiss', {method:'POST'}).then(function(){ box.remove(); }).catch(function(){});
         });
-        btnRow.appendChild(pubBtn);
-        btnRow.appendChild(dimBtn);
-        head.appendChild(cat); head.appendChild(title); head.appendChild(ingress);
-        head.appendChild(srcRow); head.appendChild(btnRow);
-        box.appendChild(head);
+        btnRow.appendChild(pubBtn); btnRow.appendChild(dimBtn);
+        box.appendChild(cat); box.appendChild(title); box.appendChild(ingress); box.appendChild(srcRow); box.appendChild(btnRow);
         el.appendChild(box);
       });
     })
-    .catch(function(e){
-      el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:11px;color:#e8302a">Fel: ' + e.message + '</div>';
-    });
+    .catch(function(e){ el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:#e8302a">Fel: ' + e.message + '</div>'; });
 }
 
-function loadPublished() {
+function loadLiveList() {
   if (!GRID_API) return;
-  var el = gid('published-list');
+  var el = gid('live-list');
   if (!el) return;
   fetch(GRID_API + '/api/articles')
-    .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(r){ return r.json(); })
     .then(function(arts){
       el.innerHTML = '';
-      if (!arts.length) {
-        el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:11px;color:var(--muted);text-align:center">Inga publicerade artiklar</div>';
-        return;
-      }
-      arts.forEach(function(a){
-        injectFeed(Object.assign({}, a, {
-          cat: a.cat || 'Nyheter',
-          pubDate: a.pubDate || a.pub_date || new Date().toISOString()
-        }));
+      allArticles = arts;
+      if (!arts.length) { el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Inga publicerade</div>'; return; }
+      arts.slice(0,5).forEach(function(a){
+        injectFeed(Object.assign({}, a, {cat: a.cat||'Nyheter', pubDate: a.pubDate||a.pub_date||new Date().toISOString()}));
         var row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);gap:10px';
+        row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);gap:8px';
         var info = document.createElement('div');
         info.style.flex = '1';
         var t = document.createElement('div');
-        t.style.cssText = 'font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px';
+        t.style.cssText = 'font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;line-height:1.3';
         t.textContent = a.title;
         var m = document.createElement('div');
         m.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted)';
         var d = new Date(a.pubDate||a.pub_date||Date.now());
-        m.textContent = (a.cat||'') + ' · ' + d.toLocaleDateString('sv-SE') + ' ' + d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'}) + (a.aiGenerated||a.ai_generated ? ' · AI' : ' · Journalist');
+        m.textContent = (a.cat||'') + ' · ' + d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'}) + (a.aiGenerated||a.ai_generated ? ' · AI' : ' · Journalist');
         info.appendChild(t); info.appendChild(m);
         var badge = document.createElement('span');
-        badge.style.cssText = 'background:var(--v);color:#000;font-size:9px;padding:2px 7px;border-radius:2px;font-family:monospace;font-weight:700;flex-shrink:0';
+        badge.style.cssText = 'background:#22c55e;color:#fff;font-size:9px;padding:2px 6px;border-radius:10px;font-family:monospace;flex-shrink:0';
         badge.textContent = 'LIVE';
         row.appendChild(info); row.appendChild(badge);
         el.appendChild(row);
       });
-    })
-    .catch(function(e){
-      el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:11px;color:#e8302a">Fel: ' + e.message + '</div>';
+    }).catch(function(){});
+}
+
+function loadArticlesTab() {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/articles')
+    .then(function(r){ return r.json(); })
+    .then(function(arts){ allArticles = arts; renderArticlesTab(arts); })
+    .catch(function(){});
+}
+
+function renderArticlesTab(arts) {
+  var el = gid('articles-list');
+  if (!el) return;
+  var search = (gid('art-search')||{value:''}).value.toLowerCase();
+  var filtered = arts.filter(function(a){
+    var matchFilter = currentFilter === 'all'
+      || (currentFilter === 'live' && !offlineIds.includes(a.id))
+      || (currentFilter === 'off' && offlineIds.includes(a.id))
+      || (currentFilter === 'ai' && (a.aiGenerated||a.ai_generated||a.type==='ai'))
+      || (currentFilter === 'journalist' && !a.aiGenerated && !a.ai_generated && a.type!=='ai');
+    var matchSearch = !search || (a.title||'').toLowerCase().includes(search) || (a.cat||'').toLowerCase().includes(search);
+    return matchFilter && matchSearch;
+  });
+  el.innerHTML = '';
+  if (!filtered.length) {
+    el.innerHTML = '<div style="padding:20px;text-align:center;font-family:monospace;font-size:10px;color:var(--muted)">Inga artiklar matchar</div>';
+    return;
+  }
+  filtered.forEach(function(a) {
+    var isOff = offlineIds.includes(a.id);
+    var row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:36px 1fr auto auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border)';
+    var toggle = document.createElement('div');
+    toggle.style.cssText = 'width:32px;height:18px;background:' + (isOff?'var(--border)':'#22c55e') + ';border-radius:10px;position:relative;cursor:pointer;transition:.2s;flex-shrink:0';
+    var dot = document.createElement('div');
+    dot.style.cssText = 'width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:2px;' + (isOff?'left:2px':'right:2px') + ';transition:.2s';
+    toggle.appendChild(dot);
+    toggle.addEventListener('click', function(){
+      if (offlineIds.includes(a.id)) {
+        offlineIds = offlineIds.filter(function(id){ return id !== a.id; });
+      } else {
+        offlineIds.push(a.id);
+      }
+      localStorage.setItem('grid-offline-ids', JSON.stringify(offlineIds));
+      renderArticlesTab(allArticles);
     });
+    var info = document.createElement('div');
+    info.style.opacity = isOff ? '0.4' : '1';
+    var t = document.createElement('div');
+    t.style.cssText = 'font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px;line-height:1.3';
+    t.textContent = a.title;
+    var m = document.createElement('div');
+    m.style.cssText = 'font-size:10px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap';
+    var catBadge = document.createElement('span');
+    catBadge.style.cssText = 'background:var(--surface);color:var(--muted);padding:1px 6px;border-radius:3px;font-size:9px;font-family:monospace';
+    catBadge.textContent = a.cat||'';
+    var typeBadge = document.createElement('span');
+    typeBadge.style.cssText = 'font-size:9px;color:' + ((a.aiGenerated||a.ai_generated||a.type==='ai') ? 'var(--v)' : 'var(--muted)');
+    typeBadge.textContent = (a.aiGenerated||a.ai_generated||a.type==='ai') ? 'AI' : 'Journalist';
+    var d = new Date(a.pubDate||a.pub_date||Date.now());
+    var dateSpan = document.createElement('span');
+    dateSpan.textContent = d.toLocaleDateString('sv-SE') + ' ' + d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'});
+    m.appendChild(catBadge); m.appendChild(typeBadge); m.appendChild(dateSpan);
+    info.appendChild(t); info.appendChild(m);
+    var editBtn = document.createElement('button');
+    editBtn.style.cssText = 'background:none;border:0.5px solid var(--border);color:var(--muted);padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px;white-space:nowrap';
+    editBtn.textContent = 'Redigera';
+    var aid = a.id;
+    editBtn.addEventListener('click', function(){ openEdit(a); });
+    var delBtn = document.createElement('button');
+    delBtn.style.cssText = 'background:none;border:none;color:var(--muted);padding:4px 8px;font-size:14px;cursor:pointer;opacity:.5';
+    delBtn.textContent = '×';
+    delBtn.addEventListener('click', function(){
+      if (!confirm('Ta bort artikeln?')) return;
+      allArticles = allArticles.filter(function(x){ return x.id !== aid; });
+      renderArticlesTab(allArticles);
+    });
+    row.appendChild(toggle); row.appendChild(info); row.appendChild(editBtn); row.appendChild(delBtn);
+    el.appendChild(row);
+  });
+}
+
+function openEdit(a) {
+  var modal = gid('edit-modal');
+  if (!modal) return;
+  gid('edit-id').value = a.id;
+  gid('edit-title').value = a.title || '';
+  gid('edit-ingress').value = a.ingress || '';
+  gid('edit-body').value = a.body || '';
+  gid('edit-cat').value = a.cat || '';
+  gid('edit-type').value = (a.aiGenerated||a.ai_generated||a.type==='ai') ? 'ai' : 'journalist';
+  modal.style.display = 'block';
+  modal.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function closeEdit() {
+  var modal = gid('edit-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function saveEdit() {
+  var id = (gid('edit-id')||{value:''}).value;
+  var title = (gid('edit-title')||{value:''}).value.trim();
+  var ingress = (gid('edit-ingress')||{value:''}).value.trim();
+  var body = (gid('edit-body')||{value:''}).value.trim();
+  var cat = (gid('edit-cat')||{value:''}).value.trim();
+  var type = (gid('edit-type')||{value:'journalist'}).value;
+  if (!title) { showMsg('Rubrik kravs', false); return; }
+  var updated = {id:id, title:title, ingress:ingress, body:body, cat:cat, type:type, pubDate: new Date().toISOString()};
+  if (GRID_API) {
+    fetch(GRID_API + '/api/articles/' + id, {
+      method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(updated)
+    }).catch(function(){});
+  }
+  allArticles = allArticles.map(function(a){ return a.id === id ? Object.assign({}, a, updated) : a; });
+  renderArticlesTab(allArticles);
+  closeEdit();
+  showMsg('Andringar sparade', true);
 }
 
 function publishManual() {
@@ -1904,14 +2120,15 @@ function publishManual() {
   };
   if (!GRID_API) { showMsg('Anslut till Railway forst', false); return; }
   fetch(GRID_API + '/api/articles', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(article)
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(article)
   })
   .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
   .then(function(a){
-    injectFeed(Object.assign({}, a, {cat: article.cat, type: article.type}));
-    loadPublished();
+    injectFeed(Object.assign({}, a, {cat:article.cat, type:article.type}));
+    allArticles.unshift(a);
+    renderArticlesTab(allArticles);
+    loadLiveList();
+    loadStats();
     showMsg('Artikel publicerad', true);
     ['art-title','art-ingress','art-body','art-cat'].forEach(function(id){ var el=gid(id); if(el) el.value=''; });
   })
@@ -1934,16 +2151,18 @@ function injectFeed(article) {
     + '<div class="art-byline">'+label+'<span class="art-time">'+t+'</span></div>'
     + '<p class="ingress">'+(article.ingress||'')+'</p>'
     + body + '</div></div>';
-  document.body.insertBefore(pg, document.querySelector('nav'));
+  var nav = document.querySelector('nav');
+  if (nav && nav.parentNode) nav.parentNode.insertBefore(pg, nav);
+  else document.body.appendChild(pg);
   var card = document.createElement('div');
   card.className = 'card-h';
   var pid = pageId;
   card.addEventListener('click', function(){ showPage(pid); });
   card.innerHTML = '<div class="cb"><div class="ccat">'+(article.cat||'')+'</div><div class="ctitle">'+(article.title||'')+'</div><div class="cmeta"><span class="ctime">'+t+'</span></div></div>';
   var feed = document.querySelector('.dm');
-  var first = feed ? feed.querySelector('.card-h') : null;
-  if (first) feed.insertBefore(card, first);
+  if (feed) { var first = feed.querySelector('.card-h'); if (first) feed.insertBefore(card, first); else feed.appendChild(card); }
 }
+
 </script>
 </body>
 </html>
