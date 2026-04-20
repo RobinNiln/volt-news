@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const Parser = require('rss-parser');
 const NodeCache = require('node-cache');
-const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
@@ -13,21 +12,36 @@ const cache = new NodeCache({ stdTTL: 300 });
 app.use(cors());
 app.use(express.json());
 
-// SQLite
-const DB_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH || '/data';
-if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
-const db = new Database(path.join(DB_DIR, 'grid.db'));
-db.exec(`
-  CREATE TABLE IF NOT EXISTS articles (
-    id TEXT PRIMARY KEY, title TEXT, ingress TEXT, body TEXT,
-    cat TEXT, type TEXT DEFAULT 'journalist', quote TEXT, quote_attr TEXT,
-    sources TEXT, pub_date TEXT, ai_generated INTEGER DEFAULT 0
-  );
-`);
-const insertArticle = db.prepare(`INSERT OR REPLACE INTO articles
-  (id,title,ingress,body,cat,type,quote,quote_attr,sources,pub_date,ai_generated)
-  VALUES (?,?,?,?,?,?,?,?,?,?,?)`);
-const updateArticle = db.prepare(`UPDATE articles SET title=?,ingress=?,body=?,cat=?,type=? WHERE id=?`);
+// JSON file storage on Railway Volume
+const DATA_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH || '/data';
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+const ARTICLES_FILE = path.join(DATA_DIR, 'articles.json');
+
+function readArticles() {
+  try {
+    if (fs.existsSync(ARTICLES_FILE)) return JSON.parse(fs.readFileSync(ARTICLES_FILE, 'utf8'));
+  } catch(e) { console.error('Read error:', e.message); }
+  return [];
+}
+
+function writeArticles(articles) {
+  try { fs.writeFileSync(ARTICLES_FILE, JSON.stringify(articles, null, 2)); }
+  catch(e) { console.error('Write error:', e.message); }
+}
+
+function insertArticle(a) {
+  const articles = readArticles();
+  const existing = articles.findIndex(x => x.id === a.id);
+  if (existing >= 0) articles[existing] = a;
+  else articles.unshift(a);
+  writeArticles(articles);
+}
+
+function updateArticleById(id, updates) {
+  const articles = readArticles();
+  const idx = articles.findIndex(x => x.id === id);
+  if (idx >= 0) { Object.assign(articles[idx], updates); writeArticles(articles); }
+}
 
 const SOURCES = {
   aftonbladet: { name:'Aftonbladet', code:'AB',  color:'#e8001a', url:'https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/' },
@@ -261,7 +275,7 @@ app.post('/api/suggestions/:id/publish', (req, res) => {
   const pubDate = new Date().toISOString();
   const art = s.article || {};
   const srcs = s.sourceItems || s.sources || [];
-  insertArticle.run(id, art.title||'', art.ingress||'', art.body||'', art.category||'Nyheter', 'ai', art.quote||'', art.quoteAttr||'', JSON.stringify(srcs), pubDate, 1);
+  insertArticle({ id, title: art.title||'', ingress: art.ingress||'', body: art.body||'', cat: art.category||'Nyheter', type:'ai', quote: art.quote||'', quoteAttr: art.quoteAttr||'', sources: srcs, pubDate, aiGenerated: true });
   res.json({ id, title: art.title, ingress: art.ingress, body: art.body, cat: art.category, quote: art.quote, quoteAttr: art.quoteAttr, sources: srcs, pubDate, type: 'ai', aiGenerated: true });
 });
 
@@ -273,24 +287,21 @@ app.post('/api/suggestions/:id/dismiss', (req, res) => {
 });
 
 app.get('/api/articles', (req, res) => {
-  const rows = db.prepare('SELECT * FROM articles ORDER BY pub_date DESC LIMIT 100').all();
-  res.json(rows.map(r => ({ ...r, pubDate: r.pub_date, quoteAttr: r.quote_attr, aiGenerated: !!r.ai_generated, sources: r.sources ? JSON.parse(r.sources) : [] })));
+  res.json(readArticles().slice(0, 100));
 });
 
 app.post('/api/articles', (req, res) => {
   const a = req.body;
   const id = a.id || 'art-' + Date.now();
   const pubDate = new Date().toISOString();
-  insertArticle.run(id, a.title||'', a.ingress||'', a.body||'', a.cat||'Nyheter', a.type||'journalist', a.quote||'', a.quoteAttr||'', JSON.stringify(a.sources||[]), pubDate, a.aiGenerated ? 1 : 0);
+  insertArticle({ id, title: a.title||'', ingress: a.ingress||'', body: a.body||'', cat: a.cat||'Nyheter', type: a.type||'journalist', quote: a.quote||'', quoteAttr: a.quoteAttr||'', sources: a.sources||[], pubDate, aiGenerated: !!a.aiGenerated });
   res.json({ id, ...a, pubDate });
 });
 
 app.patch('/api/articles/:id', (req, res) => {
   const { title, ingress, body, cat, type } = req.body;
-  try {
-    updateArticle.run(title||'', ingress||'', body||'', cat||'', type||'journalist', req.params.id);
-    res.json({ ok: true });
-  } catch(e) { res.status(500).json({ error: e.message }); }
+  updateArticleById(req.params.id, { title, ingress, body, cat, type });
+  res.json({ ok: true });
 });
 
 app.get('/api/pipeline/status', (req, res) => {
