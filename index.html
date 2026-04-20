@@ -2141,16 +2141,35 @@ function injectFeed(article) {
   var pg = document.createElement('div');
   pg.className = 'page';
   pg.id = pageId;
-  var label = article.type === 'ai' ? '<span class="art-ab ai">AI-assisterad</span>' : '<span class="art-ab hu">Journalist</span>';
-  var d = new Date(article.pubDate||article.pub_date||Date.now());
-  var t = d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'});
-  var body = (article.body||'').split('\n').filter(Boolean).map(function(p){ return '<p class="atext">'+p+'</p>'; }).join('');
-  pg.innerHTML = '<div class="art-page"><div class="art-body" style="padding-top:24px">'
-    + '<div class="cat" style="margin-bottom:12px">'+(article.cat||'Nyheter')+'</div>'
-    + '<h1 class="art-title">'+(article.title||'')+'</h1>'
-    + '<div class="art-byline">'+label+'<span class="art-time">'+t+'</span></div>'
-    + '<p class="ingress">'+(article.ingress||'')+'</p>'
-    + body + '</div></div>';
+  var isAI = article.type === 'ai' || article.aiGenerated || article.ai_generated;
+  var label = isAI ? '<span class="art-ab ai">AI-assisterad</span>' : '<span class="art-ab hu">Journalist</span>';
+  var d = new Date(article.pubDate || article.pub_date || Date.now());
+  var t = d.toLocaleTimeString('sv-SE', {hour:'2-digit', minute:'2-digit'});
+  var cat = article.cat || article.category || 'Nyheter';
+  var title = article.title || '';
+  var ingress = article.ingress || '';
+  var rawBody = article.body || '';
+  var bodyHtml = rawBody.split('\n').filter(Boolean).map(function(p){ return '<p class="atext">' + p + '</p>'; }).join('');
+  var quoteHtml = article.quote ? '<blockquote class="art-quote">' + article.quote + '</blockquote><p class="atext" style="font-size:12px;color:var(--muted);margin-top:-8px">' + (article.quoteAttr || article.quote_attr || '') + '</p>' : '';
+  var sources = article.sources || article.sourceItems || [];
+  var sourceHtml = '';
+  if (sources.length) {
+    sourceHtml = '<div class="mod-local"><div class="mod-local-header"><div><div class="mod-local-title">Kallor</div></div></div>'
+      + sources.map(function(s) {
+          return '<div class="srci"><div class="src-left"><div class="src-headline">' + (s.title || s.name || '') + '</div><div class="srcl">' + (s.name || s.code || '') + '</div></div><span class="srclink">Las</span></div>';
+        }).join('')
+      + '</div>';
+  }
+  pg.innerHTML = '<div class="art-page">'
+    + '<div class="art-body" style="padding-top:24px">'
+    + '<div class="cat" style="margin-bottom:12px">' + cat + '</div>'
+    + '<h1 class="art-title">' + title + '</h1>'
+    + '<div class="art-byline">' + label + '<span class="art-time">' + t + '</span></div>'
+    + '<p class="ingress">' + ingress + '</p>'
+    + bodyHtml
+    + quoteHtml
+    + sourceHtml
+    + '</div></div>';
   var nav = document.querySelector('nav');
   if (nav && nav.parentNode) nav.parentNode.insertBefore(pg, nav);
   else document.body.appendChild(pg);
@@ -2158,9 +2177,20 @@ function injectFeed(article) {
   card.className = 'card-h';
   var pid = pageId;
   card.addEventListener('click', function(){ showPage(pid); });
-  card.innerHTML = '<div class="cb"><div class="ccat">'+(article.cat||'')+'</div><div class="ctitle">'+(article.title||'')+'</div><div class="cmeta"><span class="ctime">'+t+'</span></div></div>';
+  card.innerHTML = '<div class="cb">'
+    + '<div style="display:flex;gap:5px;margin-bottom:4px;align-items:center">'
+    + '<div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:0">' + cat + '</div>'
+    + (isAI ? '<span style="font-family:monospace;font-size:8px;color:var(--v);letter-spacing:.5px">AI</span>' : '')
+    + '</div>'
+    + '<div class="ctitle">' + title + '</div>'
+    + '<div class="cmeta"><span class="ctime">' + t + '</span></div>'
+    + '</div>';
   var feed = document.querySelector('.dm');
-  if (feed) { var first = feed.querySelector('.card-h'); if (first) feed.insertBefore(card, first); else feed.appendChild(card); }
+  if (feed) {
+    var first = feed.querySelector('.card-h');
+    if (first) feed.insertBefore(card, first);
+    else feed.appendChild(card);
+  }
 }
 
 </script>
