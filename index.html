@@ -315,6 +315,17 @@ body.light .logo-light{display:block}
 .admin-desktop-btn:hover{color:var(--v);border-color:var(--v)}
 @media(min-width:520px){#admin-btn{display:block!important}}
 </style>
+
+<style>
+.art-dnd-row.drag-over { background: rgba(245,197,0,.08); border-top: 2px solid var(--v); }
+.art-dnd-row:active { cursor: grabbing; }
+</style>
+
+<style>
+.art-dnd-row { transition: background .1s; }
+.art-dnd-row.drag-over { background: rgba(245,197,0,.1); border-top: 2px solid #F5C500; }
+.art-dnd-row[draggable="true"] { cursor: grab; }
+</style>
 </head>
 <body class="dark">
 
@@ -1588,7 +1599,7 @@ body.light .logo-light{display:block}
       <button data-filter="journalist" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">Journalist</button>
     </div>
 
-    <div id="articles-list">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-family:monospace;font-size:9px;color:var(--muted)">Dra for att omordna · Position 1-15 visas manuellt · Resten placeras automatiskt efter tid</div></div><div style="font-family:monospace;font-size:9px;color:var(--muted);margin-bottom:8px;letter-spacing:.5px">Dra for att omordna · Gul siffra = position 1-15 visas manuellt i flodet · Graa = automatisk efter tid</div><div id="articles-list">
       <div style="padding:20px;text-align:center;font-family:monospace;font-size:10px;color:var(--muted)">Anslut och byt till Artiklar-fliken</div>
     </div>
 
@@ -1679,9 +1690,27 @@ function showPage(n,b){
   }
 }
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on')}));
+
+// Auto-load published articles from Railway on startup
+(function() {
+  var apiUrl = localStorage.getItem('grid-api') || '';
+  if (!apiUrl) return;
+  fetch(apiUrl + '/api/articles')
+    .then(function(r){ return r.json(); })
+    .then(function(arts){
+      if (!Array.isArray(arts)) return;
+      arts.forEach(function(a){
+        if (window.injectFeed) window.injectFeed(a);
+      });
+      // Set featured hero if any
+      var featured = arts.find(function(a){ return a.featured; });
+      if (featured && window.setFeaturedHero) window.setFeaturedHero(featured);
+    }).catch(function(){});
+})();
 </script>
 
 <script>
+
 function toggleTheme(){
   const b=document.body;
   const btn=document.getElementById('theme-btn');
@@ -1692,28 +1721,8 @@ function toggleTheme(){
     localStorage.setItem('grid-theme','light');
   } else {
     b.classList.replace('light','dark');
-    btn.textContent='☀ Ljust';
-    localStorage.setItem('grid-theme','dark');
-  }
-  updateLogos();
-}
-function updateLogos(){
-  const isLight=document.body.classList.contains('light');
-  document.querySelectorAll('.logo-dark').forEach(el=>el.style.display=isLight?'none':'block');
-  document.querySelectorAll('.logo-light').forEach(el=>el.style.display=isLight?'block':'none');
-}
-const saved=localStorage.getItem('grid-theme');
-if(saved==='light'){
-  document.body.classList.replace('dark','light');
-  document.getElementById('theme-btn').textContent='☾ Mörkt';
-}
-document.addEventListener('DOMContentLoaded', updateLogos);
-</script>
+    <script>
 
-
-
-
-<script>
 var GRID_API = localStorage.getItem('grid-api') || '';
 var allArticles = [];
 var currentFilter = 'all';
@@ -2016,8 +2025,15 @@ function renderArticlesTab(arts) {
   }
   filtered.forEach(function(a) {
     var isOff = offlineIds.includes(a.id);
+    var pos = filtered.indexOf(a) + 1;
     var row = document.createElement('div');
-    row.style.cssText = 'display:grid;grid-template-columns:36px 1fr auto auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border)';
+    row.className = 'art-dnd-row';
+    row.setAttribute('data-id', a.id);
+    row.setAttribute('draggable', 'true');
+    row.style.cssText = 'display:grid;grid-template-columns:28px 36px 1fr auto auto auto auto;align-items:center;gap:8px;padding:10px 0;border-bottom:0.5px solid var(--border);cursor:grab';
+    var posNum = document.createElement('div');
+    posNum.style.cssText = 'font-family:monospace;font-size:10px;color:' + (pos <= 15 ? 'var(--v)' : 'var(--muted)') + ';text-align:center;font-weight:' + (pos <= 15 ? '700' : '400');
+    posNum.textContent = pos;
     var toggle = document.createElement('div');
     toggle.style.cssText = 'width:32px;height:18px;background:' + (isOff?'var(--border)':'#22c55e') + ';border-radius:10px;position:relative;cursor:pointer;transition:.2s;flex-shrink:0';
     var dot = document.createElement('div');
@@ -2082,9 +2098,10 @@ function renderArticlesTab(arts) {
       allArticles = allArticles.filter(function(x){ return x.id !== aid; });
       renderArticlesTab(allArticles);
     });
-    row.appendChild(toggle); row.appendChild(info); row.appendChild(featBtn); row.appendChild(editBtn); row.appendChild(delBtn);
+    row.appendChild(posNum); row.appendChild(toggle); row.appendChild(info); row.appendChild(featBtn); row.appendChild(editBtn); row.appendChild(delBtn);
     el.appendChild(row);
   });
+  setTimeout(enableDragDrop, 50);
 }
 
 function openEdit(a) {
@@ -2256,6 +2273,103 @@ function injectFeed(article) {
     else feed.appendChild(card);
   }
 }
+
+// ─── DRAG AND DROP POSITION MANAGEMENT ───────────────────────
+var dragSrcId = null;
+
+function enableDragDrop() {
+  var rows = document.querySelectorAll('#articles-list .art-dnd-row');
+  rows.forEach(function(row) {
+    row.addEventListener('dragstart', function(e) {
+      dragSrcId = row.getAttribute('data-id');
+      row.style.opacity = '0.4';
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', function() {
+      row.style.opacity = '1';
+      document.querySelectorAll('#articles-list .art-dnd-row').forEach(function(r){
+        r.classList.remove('drag-over');
+      });
+    });
+    row.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      document.querySelectorAll('#articles-list .art-dnd-row').forEach(function(r){
+        r.classList.remove('drag-over');
+      });
+      row.classList.add('drag-over');
+    });
+    row.addEventListener('drop', function(e) {
+      e.preventDefault();
+      if (dragSrcId === row.getAttribute('data-id')) return;
+      // Reorder allArticles
+      var srcIdx = allArticles.findIndex(function(a){ return a.id === dragSrcId; });
+      var dstIdx = allArticles.findIndex(function(a){ return a.id === row.getAttribute('data-id'); });
+      if (srcIdx < 0 || dstIdx < 0) return;
+      var moved = allArticles.splice(srcIdx, 1)[0];
+      allArticles.splice(dstIdx, 0, moved);
+      // Save order to Railway
+      saveArticleOrder();
+      renderArticlesTab(allArticles);
+    });
+  });
+}
+
+function saveArticleOrder() {
+  if (!GRID_API) return;
+  var order = allArticles.map(function(a, i){ return { id: a.id, position: i }; });
+  fetch(GRID_API + '/api/articles/order', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ order: order })
+  }).catch(function(){});
+}
+
+
+var dragSrcId = null;
+
+function enableDragDrop() {
+  var rows = document.querySelectorAll('.art-dnd-row');
+  rows.forEach(function(row) {
+    row.addEventListener('dragstart', function(e) {
+      dragSrcId = row.getAttribute('data-id');
+      row.style.opacity = '0.4';
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', function() {
+      row.style.opacity = '1';
+      document.querySelectorAll('.art-dnd-row').forEach(function(r){ r.classList.remove('drag-over'); });
+    });
+    row.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.art-dnd-row').forEach(function(r){ r.classList.remove('drag-over'); });
+      row.classList.add('drag-over');
+    });
+    row.addEventListener('drop', function(e) {
+      e.preventDefault();
+      var targetId = row.getAttribute('data-id');
+      if (dragSrcId === targetId) return;
+      var srcIdx = allArticles.findIndex(function(a){ return a.id === dragSrcId; });
+      var dstIdx = allArticles.findIndex(function(a){ return a.id === targetId; });
+      if (srcIdx < 0 || dstIdx < 0) return;
+      var moved = allArticles.splice(srcIdx, 1)[0];
+      allArticles.splice(dstIdx, 0, moved);
+      saveArticleOrder();
+      renderArticlesTab(allArticles);
+    });
+  });
+}
+
+function saveArticleOrder() {
+  if (!GRID_API) return;
+  var order = allArticles.map(function(a, i){ return { id: a.id, position: i }; });
+  fetch(GRID_API + '/api/articles/reorder', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ order: order })
+  }).catch(function(){});
+}
+
 function setFeaturedHero(article) {
   var hero = document.querySelector('.hero');
   if (!hero) return;
@@ -2294,6 +2408,31 @@ function loadAndInjectPublished() {
     }).catch(function(){});
 }
 
+
+
+window.addEventListener('load', function() {
+  var apiUrl = localStorage.getItem('grid-api') || '';
+  if (!apiUrl) return;
+  fetch(apiUrl + '/api/articles')
+    .then(function(r){ return r.json(); })
+    .then(function(arts){
+      if (!Array.isArray(arts)) return;
+      arts.forEach(function(a){ if (window.injectFeed) window.injectFeed(a); });
+      var featured = arts.find(function(a){ return a.featured; });
+      if (featured && window.setFeaturedHero) window.setFeaturedHero(featured);
+    }).catch(function(){});
+});
+
+</script>n;
+  fetch(apiUrl + '/api/articles')
+    .then(function(r){ return r.json(); })
+    .then(function(arts){
+      if (!Array.isArray(arts)) return;
+      arts.forEach(function(a){ if (window.injectFeed) window.injectFeed(a); });
+      var featured = arts.find(function(a){ return a.featured; });
+      if (featured && window.setFeaturedHero) window.setFeaturedHero(featured);
+    }).catch(function(){});
+});
 
 </script>
 </body>
