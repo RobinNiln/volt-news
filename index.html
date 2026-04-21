@@ -2192,109 +2192,179 @@ function injectFeed(article) {
   if (document.getElementById(pageId)) return;
 
   var isAI = article.type === 'ai' || article.aiGenerated || article.ai_generated;
-  var label = isAI ? '<span class="art-ab ai">AI-assisterad</span>' : '<span class="art-ab hu">Journalist</span>';
   var d = new Date(article.pubDate || article.pub_date || Date.now());
   var t = d.toLocaleTimeString('sv-SE', {hour:'2-digit', minute:'2-digit'});
   var cat = article.cat || article.category || 'Nyheter';
-  var title = article.title || '';
-  var ingress = article.ingress || '';
   var rawBody = article.body || '';
-  var image = article.image || '';
-  // Category fallback images from Unsplash
-  if (!image) {
-    var catImages = {
-      'Politik': 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1200&q=80',
-      'Ekonomi': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80',
-      'Samhalle': 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&q=80',
-      'Samhälle': 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&q=80',
-      'Industri': 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80',
-      'Klimat': 'https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=1200&q=80',
-      'Sport': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&q=80',
-      'Naringsliv': 'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1200&q=80',
-      'Näringsliv': 'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1200&q=80',
-      'Kultur': 'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=1200&q=80'
-    };
-    image = catImages[cat] || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80';
-  }
-
-  // body may be array or string
   if (Array.isArray(rawBody)) rawBody = rawBody.join('\n\n');
-  var bodyHtml = rawBody.split('\n').filter(Boolean).map(function(p){
-    return '<p class="atext">' + p + '</p>';
-  }).join('');
 
-  var quoteHtml = article.quote
-    ? '<blockquote class="art-quote">' + article.quote + '</blockquote>'
-      + '<p class="atext" style="font-size:12px;color:var(--muted);margin-top:-8px">'
-      + (article.quoteAttr || article.quote_attr || '') + '</p>'
-    : '';
+  // Fallback images per category
+  var catImages = {
+    'Politik':'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1200&q=80',
+    'Ekonomi':'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80',
+    'Samhalle':'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&q=80',
+    'Samhalle':'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&q=80',
+    'Industri':'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80',
+    'Klimat':'https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=1200&q=80',
+    'Sport':'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&q=80',
+    'Naringsliv':'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1200&q=80',
+    'Kultur':'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=1200&q=80'
+  };
+  var image = article.image || catImages[cat] || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80';
 
-  var sources = article.sources || article.sourceItems || [];
-  var sourceHtml = '';
-  if (sources.length) {
-    sourceHtml = '<div style="border:1px solid var(--border);margin:20px 0"><div style="background:var(--surface);padding:10px 14px;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text)">KALLOR</div>'
-      + sources.map(function(s) {
-          var headline = s.title || s.name || '';
-          var name = s.name || s.code || '';
-          var link = (s.link || '').replace(/'/g, '%27');
-          return '<a href="' + link + '" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);text-decoration:none;cursor:pointer">'
-            + '<div><div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px">' + headline + '</div>'
-            + '<div style="font-size:11px;color:var(--muted)">' + name + '</div></div>'
-            + '<span style="background:var(--v);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:2px">LAS</span>'
-            + '</a>';
-        }).join('')
-      + '</div>';
-  }
-
-  var imageHtml = image
-    ? '<img src="' + image + '" alt="" style="width:100%;height:56vw;max-height:460px;object-fit:cover;display:block;filter:brightness(.7)">'
-    : '';
-
+  // Build article page using DOM (no innerHTML for text content)
   var pg = document.createElement('div');
   pg.className = 'page';
   pg.id = pageId;
   pg.style.display = 'none';
-  pg.innerHTML = '<div class="art-page">'
-    + imageHtml
-    + '<div class="art-body">'
-    + '<div class="cat" style="margin-bottom:12px">' + cat + '</div>'
-    + '<h1 class="art-title">' + title + '</h1>'
-    + '<div class="art-byline">' + label + '<span class="art-time">' + t + '</span></div>'
-    + '<p class="ingress">' + ingress + '</p>'
-    + bodyHtml
-    + quoteHtml
-    + sourceHtml
-    + '</div></div>';
 
-  var anchor = document.querySelector('nav') || document.querySelector('.dl') || document.body.lastElementChild;
+  var artPage = document.createElement('div');
+  artPage.className = 'art-page';
+
+  // Hero image
+  if (image) {
+    var img = document.createElement('img');
+    img.src = image;
+    img.alt = '';
+    img.style.cssText = 'width:100%;height:56vw;max-height:460px;object-fit:cover;display:block;filter:brightness(.7)';
+    artPage.appendChild(img);
+  }
+
+  // Article body wrapper
+  var artBody = document.createElement('div');
+  artBody.className = 'art-body';
+
+  // Category
+  var catEl = document.createElement('div');
+  catEl.className = 'cat';
+  catEl.style.marginBottom = '12px';
+  catEl.textContent = cat;
+  artBody.appendChild(catEl);
+
+  // Title
+  var titleEl = document.createElement('h1');
+  titleEl.className = 'art-title';
+  titleEl.textContent = article.title || '';
+  artBody.appendChild(titleEl);
+
+  // Byline
+  var byline = document.createElement('div');
+  byline.className = 'art-byline';
+  var labelSpan = document.createElement('span');
+  labelSpan.className = isAI ? 'art-ab ai' : 'art-ab hu';
+  labelSpan.textContent = isAI ? 'AI-assisterad' : 'Journalist';
+  var timeSpan = document.createElement('span');
+  timeSpan.className = 'art-time';
+  timeSpan.textContent = t;
+  byline.appendChild(labelSpan);
+  byline.appendChild(timeSpan);
+  artBody.appendChild(byline);
+
+  // Ingress
+  var ingressEl = document.createElement('p');
+  ingressEl.className = 'ingress';
+  ingressEl.textContent = article.ingress || '';
+  artBody.appendChild(ingressEl);
+
+  // Body paragraphs
+  if (rawBody) {
+    rawBody.split('\n').filter(Boolean).forEach(function(para) {
+      var p = document.createElement('p');
+      p.className = 'atext';
+      p.textContent = para;
+      artBody.appendChild(p);
+    });
+  }
+
+  // Quote
+  if (article.quote) {
+    var bq = document.createElement('blockquote');
+    bq.className = 'art-quote';
+    bq.textContent = article.quote;
+    artBody.appendChild(bq);
+    var qAttr = document.createElement('p');
+    qAttr.className = 'atext';
+    qAttr.style.cssText = 'font-size:12px;color:var(--muted);margin-top:-8px';
+    qAttr.textContent = article.quoteAttr || article.quote_attr || '';
+    artBody.appendChild(qAttr);
+  }
+
+  // Sources
+  var sources = article.sources || [];
+  if (sources.length) {
+    var srcBox = document.createElement('div');
+    srcBox.style.cssText = 'border:1px solid var(--border);margin:20px 0';
+    var srcHead = document.createElement('div');
+    srcHead.style.cssText = 'background:var(--surface);padding:10px 14px;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text)';
+    srcHead.textContent = 'KALLOR';
+    srcBox.appendChild(srcHead);
+    sources.forEach(function(s) {
+      var row = document.createElement('a');
+      row.href = s.link || '#';
+      row.target = '_blank';
+      row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);text-decoration:none;cursor:pointer';
+      var info = document.createElement('div');
+      var hl = document.createElement('div');
+      hl.style.cssText = 'font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px';
+      hl.textContent = s.title || s.name || '';
+      var src = document.createElement('div');
+      src.style.cssText = 'font-size:11px;color:var(--muted)';
+      src.textContent = s.name || s.code || '';
+      info.appendChild(hl);
+      info.appendChild(src);
+      var btn = document.createElement('span');
+      btn.style.cssText = 'background:var(--v);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:2px;flex-shrink:0';
+      btn.textContent = 'LAS';
+      row.appendChild(info);
+      row.appendChild(btn);
+      srcBox.appendChild(row);
+    });
+    artBody.appendChild(srcBox);
+  }
+
+  artPage.appendChild(artBody);
+  pg.appendChild(artPage);
+
+  // Insert before nav
+  var anchor = document.querySelector('nav') || document.body.lastElementChild;
   if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(pg, anchor);
   else document.body.appendChild(pg);
 
   // Feed card
   var card = document.createElement('div');
-  card.className = image ? 'card-v' : 'card-h';
+  card.className = 'card-v';
   var pid = pageId;
   card.addEventListener('click', function(){ showPage(pid); });
-  if (image) {
-    card.innerHTML = '<img src="' + image + '" alt="" style="width:100%;height:160px;object-fit:cover">'
-      + '<div class="cb">'
-      + '<div style="display:flex;gap:5px;margin-bottom:4px;align-items:center">'
-      + '<div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:0">' + cat + '</div>'
-      + (isAI ? '<span style="font-family:monospace;font-size:8px;color:var(--v)">AI</span>' : '')
-      + '</div>'
-      + '<div class="ctitle">' + title + '</div>'
-      + '<div class="cmeta"><span class="ctime">' + t + '</span></div>'
-      + '</div>';
-  } else {
-    card.innerHTML = '<div class="cb">'
-      + '<div style="display:flex;gap:5px;margin-bottom:4px;align-items:center">'
-      + '<div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:0">' + cat + '</div>'
-      + (isAI ? '<span style="font-family:monospace;font-size:8px;color:var(--v)">AI</span>' : '')
-      + '</div>'
-      + '<div class="ctitle">' + title + '</div>'
-      + '<div class="cmeta"><span class="ctime">' + t + '</span></div>'
-      + '</div>';
+  var cardImg = document.createElement('img');
+  cardImg.src = image;
+  cardImg.alt = '';
+  cardImg.style.cssText = 'width:100%;height:160px;object-fit:cover';
+  var cardBody = document.createElement('div');
+  cardBody.className = 'cb';
+  var cardMeta = document.createElement('div');
+  cardMeta.style.cssText = 'display:flex;gap:5px;margin-bottom:4px;align-items:center';
+  var cardCat = document.createElement('div');
+  cardCat.className = 'cat';
+  cardCat.style.cssText = 'font-size:9px;padding:1px 5px;margin-bottom:0';
+  cardCat.textContent = cat;
+  cardMeta.appendChild(cardCat);
+  if (isAI) {
+    var aiTag = document.createElement('span');
+    aiTag.style.cssText = 'font-family:monospace;font-size:8px;color:var(--v)';
+    aiTag.textContent = 'AI';
+    cardMeta.appendChild(aiTag);
   }
+  var cardTitle = document.createElement('div');
+  cardTitle.className = 'ctitle';
+  cardTitle.textContent = article.title || '';
+  var cardTime = document.createElement('div');
+  cardTime.className = 'cmeta';
+  cardTime.innerHTML = '<span class="ctime">' + t + '</span>';
+  cardBody.appendChild(cardMeta);
+  cardBody.appendChild(cardTitle);
+  cardBody.appendChild(cardTime);
+  card.appendChild(cardImg);
+  card.appendChild(cardBody);
 
   var feed = document.querySelector('.dm');
   if (feed) {
