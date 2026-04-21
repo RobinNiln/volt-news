@@ -316,6 +316,24 @@ app.post('/api/articles', (req, res) => {
   res.json({ id, ...a, pubDate });
 });
 
+
+app.post('/api/articles/reorder', (req, res) => {
+  try {
+    const { order } = req.body;
+    if (!Array.isArray(order)) return res.status(400).json({ error: 'order must be array' });
+    const articles = readArticles();
+    const idToPos = {};
+    order.forEach(function(o){ idToPos[o.id] = o.position; });
+    articles.sort(function(a, b){
+      var pa = idToPos[a.id] !== undefined ? idToPos[a.id] : 999;
+      var pb = idToPos[b.id] !== undefined ? idToPos[b.id] : 999;
+      return pa - pb;
+    });
+    writeArticles(articles);
+    res.json({ ok: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 app.patch('/api/articles/:id', (req, res) => {
   const updates = {};
   ['title','ingress','body','cat','type','featured'].forEach(k => {
