@@ -1681,7 +1681,7 @@ body.light .logo-light{display:block}
 <script>
 function showPage(n,b){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const pg=document.getElementById('page-'+n);
+  var pg=document.getElementById('page-'+n)||document.getElementById(n);
   if(pg){pg.classList.add('active');window.scrollTo(0,0)}
   if(b){
     document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
@@ -2197,6 +2197,22 @@ function injectFeed(article) {
   var ingress = article.ingress || '';
   var rawBody = article.body || '';
   var image = article.image || '';
+  // Category fallback images from Unsplash
+  if (!image) {
+    var catImages = {
+      'Politik': 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1200&q=80',
+      'Ekonomi': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80',
+      'Samhalle': 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&q=80',
+      'Samhälle': 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&q=80',
+      'Industri': 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80',
+      'Klimat': 'https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=1200&q=80',
+      'Sport': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&q=80',
+      'Naringsliv': 'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1200&q=80',
+      'Näringsliv': 'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1200&q=80',
+      'Kultur': 'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=1200&q=80'
+    };
+    image = catImages[cat] || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80';
+  }
 
   // body may be array or string
   if (Array.isArray(rawBody)) rawBody = rawBody.join('\n\n');
