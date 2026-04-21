@@ -2172,7 +2172,8 @@ function publishManual() {
 }
 
 function injectFeed(article) {
-  var pageId = 'page-art-' + article.id;
+  var rawId = (article.id || '').replace(/^art-/, '');
+  var pageId = 'page-art-' + rawId;
   if (document.getElementById(pageId)) return;
 
   var isAI = article.type === 'ai' || article.aiGenerated || article.ai_generated;
