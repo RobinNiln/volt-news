@@ -2310,10 +2310,13 @@ function injectFeed(article) {
   artPage.appendChild(artBody);
   pg.appendChild(artPage);
 
-  // Insert before nav
-  var anchor = document.querySelector('nav') || document.body.lastElementChild;
-  if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(pg, anchor);
-  else document.body.appendChild(pg);
+  // Always insert as direct child of body, before nav
+  var navEl = document.querySelector('body > nav');
+  if (navEl) {
+    document.body.insertBefore(pg, navEl);
+  } else {
+    document.body.appendChild(pg);
+  }
 
   // Feed card
   var card = document.createElement('div');
