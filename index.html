@@ -1694,23 +1694,7 @@ function showPage(n,b){
 }
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on')}));
 
-// Auto-load published articles from Railway on startup
-(function() {
-  var apiUrl = localStorage.getItem('grid-api') || '';
-  if (!apiUrl) return;
-  fetch(apiUrl + '/api/articles')
-    .then(function(r){ return r.json(); })
-    .then(function(arts){
-      if (!Array.isArray(arts)) return;
-      arts.forEach(function(a){
-        if (window.injectFeed) window.injectFeed(a);
-      });
-      // Set featured hero if any
-      var featured = arts.find(function(a){ return a.featured; });
-      if (featured && window.setFeaturedHero) window.setFeaturedHero(featured);
-    }).catch(function(){});
-})();
-</script>
+// Auto-load published articles from Railway on startup</script>
 
 <script>
 
@@ -2526,6 +2510,20 @@ window.addEventListener('load', function() {
 
 window.addEventListener('load',function(){var u=localStorage.getItem('grid-api')||'';if(!u)return;fetch(u+'/api/articles').then(function(r){return r.json();}).then(function(arts){if(!Array.isArray(arts))return;arts.forEach(function(a){if(window.injectFeed)window.injectFeed(a);});var f=arts.find(function(a){return a.featured;});if(f&&window.setFeaturedHero)window.setFeaturedHero(f);}).catch(function(){});});
 
+
+// Auto-load published articles on page load - placed here so injectFeed is defined
+window.addEventListener('load', function() {
+  var apiUrl = localStorage.getItem('grid-api') || '';
+  if (!apiUrl) return;
+  fetch(apiUrl + '/api/articles')
+    .then(function(r){ return r.json(); })
+    .then(function(arts){
+      if (!Array.isArray(arts)) return;
+      arts.forEach(function(a){ injectFeed(a); });
+      var featured = arts.find(function(a){ return a.featured; });
+      if (featured) setFeaturedHero(featured);
+    }).catch(function(){});
+});
 </script>
 </body>
 </html>
