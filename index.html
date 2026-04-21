@@ -99,7 +99,7 @@ body{padding-bottom:0}.dsr-sticky{position:sticky;top:74px}}
 .atag{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:2px}
 
 /* ARTICLE PAGE */
-.art-page{max-width:720px;margin:0 auto}
+.art-page{max-width:720px;margin:0 auto}.art-page>img:first-child{margin-top:-90px}
 .art-page>img{width:100%;height:56vw;max-height:460px;object-fit:cover;display:block;filter:brightness(.7)}
 .art-body{padding:20px 14px}
 .art-title{font-family:sans-serif;font-size:clamp(28px,6vw,48px);font-weight:700;line-height:1.02;letter-spacing:.2px;color:var(--text);margin-bottom:12px}
@@ -314,17 +314,26 @@ body.light .logo-light{display:block}
 .admin-desktop-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s}
 .admin-desktop-btn:hover{color:var(--v);border-color:var(--v)}
 @media(min-width:520px){#admin-btn{display:block!important}}
+
+.page[data-dynamic]{display:none}
+.page[data-dynamic].active{display:block;padding-top:90px}
 </style>
 
 <style>
 .art-dnd-row.drag-over { background: rgba(245,197,0,.08); border-top: 2px solid var(--v); }
 .art-dnd-row:active { cursor: grabbing; }
+
+.page[data-dynamic]{display:none}
+.page[data-dynamic].active{display:block;padding-top:90px}
 </style>
 
 <style>
 .art-dnd-row { transition: background .1s; }
 .art-dnd-row.drag-over { background: rgba(245,197,0,.1); border-top: 2px solid #F5C500; }
 .art-dnd-row[draggable="true"] { cursor: grab; }
+
+.page[data-dynamic]{display:none}
+.page[data-dynamic].active{display:block;padding-top:90px}
 </style>
 </head>
 <body class="dark">
@@ -1682,7 +1691,7 @@ body.light .logo-light{display:block}
 function showPage(n,b){
   document.querySelectorAll('.page').forEach(function(p){
     p.classList.remove('active');
-    p.style.display='none';
+    if(p.dataset.dynamic) p.style.display='none';
   });
   var pg=document.getElementById('page-'+n)||document.getElementById(n);
   if(pg){pg.classList.add('active');pg.style.display='block';window.scrollTo(0,0);}
@@ -2202,6 +2211,7 @@ function injectFeed(article) {
   pg.className = 'page';
   pg.id = pageId;
   pg.style.display = 'none';
+  pg.dataset.dynamic = '1';
 
   var artPage = document.createElement('div');
   artPage.className = 'art-page';
