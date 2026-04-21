@@ -293,6 +293,7 @@ app.post('/api/suggestions/:id/publish', (req, res) => {
   const bodyStr = Array.isArray(art.body) ? art.body.join('\n\n') : (art.body || '');
   const artData = { id, title: art.title||'', ingress: art.ingress||'', body: bodyStr, cat: art.category||'Nyheter', type:'ai', quote: art.quote||'', quoteAttr: art.quoteAttr||'', sources: srcs, pubDate, aiGenerated: true, featured: false };
   insertArticle(artData);
+  log('Publicerar: ' + art.title + ' | ingress: ' + (art.ingress||'').slice(0,50) + ' | body: ' + bodyStr.slice(0,50));
   res.json(artData);
 });
 
