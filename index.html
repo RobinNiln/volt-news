@@ -1680,9 +1680,12 @@ body.light .logo-light{display:block}
 </nav>
 <script>
 function showPage(n,b){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(function(p){
+    p.classList.remove('active');
+    p.style.display='none';
+  });
   var pg=document.getElementById('page-'+n)||document.getElementById(n);
-  if(pg){pg.classList.add('active');window.scrollTo(0,0)}
+  if(pg){pg.classList.add('active');pg.style.display='block';window.scrollTo(0,0);}
   if(b){
     document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
     document.querySelectorAll('.sni').forEach(x=>x.classList.remove('on'));
@@ -2229,17 +2232,16 @@ function injectFeed(article) {
   var sources = article.sources || article.sourceItems || [];
   var sourceHtml = '';
   if (sources.length) {
-    sourceHtml = '<div class="mod-local"><div class="mod-local-header"><div>'
-      + '<div class="mod-local-title">Kallor</div></div></div>'
+    sourceHtml = '<div style="border:1px solid var(--border);margin:20px 0"><div style="background:var(--surface);padding:10px 14px;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text)">KALLOR</div>'
       + sources.map(function(s) {
           var headline = s.title || s.name || '';
           var name = s.name || s.code || '';
-          var link = s.link || '';
-          return '<div class="srci" style="cursor:pointer" onclick="' + (link ? 'window.open(\'' + link + '\',\'_blank\')' : '') + '">'
-            + '<div class="src-left"><div class="src-headline">' + headline + '</div>'
-            + '<div class="srcl">' + name + '</div></div>'
-            + (link ? '<span class="srclink">Las</span>' : '')
-            + '</div>';
+          var link = (s.link || '').replace(/'/g, '%27');
+          return '<a href="' + link + '" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);text-decoration:none;cursor:pointer">'
+            + '<div><div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px">' + headline + '</div>'
+            + '<div style="font-size:11px;color:var(--muted)">' + name + '</div></div>'
+            + '<span style="background:var(--v);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:2px">LAS</span>'
+            + '</a>';
         }).join('')
       + '</div>';
   }
@@ -2251,6 +2253,7 @@ function injectFeed(article) {
   var pg = document.createElement('div');
   pg.className = 'page';
   pg.id = pageId;
+  pg.style.display = 'none';
   pg.innerHTML = '<div class="art-page">'
     + imageHtml
     + '<div class="art-body">'
@@ -2263,8 +2266,8 @@ function injectFeed(article) {
     + sourceHtml
     + '</div></div>';
 
-  var nav = document.querySelector('nav');
-  if (nav && nav.parentNode) nav.parentNode.insertBefore(pg, nav);
+  var anchor = document.querySelector('nav') || document.querySelector('.dl') || document.body.lastElementChild;
+  if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(pg, anchor);
   else document.body.appendChild(pg);
 
   // Feed card
