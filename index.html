@@ -325,7 +325,7 @@ body.light .logo-light{display:block}
 .art-page>img{width:100%;height:56vw;max-height:460px;object-fit:cover;display:block;filter:brightness(.7)}
 <
 .art-page-dyn{display:none}
-.art-page-dyn.active{display:block}
+.art-page-dyn.active{display:block;padding-top:80px}
 </style>
 </head>
 <body class="dark">
@@ -2294,12 +2294,17 @@ function injectFeed(article) {
   artPage.appendChild(artBody);
   pg.appendChild(artPage);
 
-  // Insert as direct child of body
-  document.body.insertBefore(pg, document.body.firstChild);
+  // Insert as direct child of body, before the bottom nav
+  var bottomNav = document.querySelector('body > nav');
+  if (bottomNav) {
+    document.body.insertBefore(pg, bottomNav);
+  } else {
+    document.body.appendChild(pg);
+  }
 
-  // Feed card
+  // Feed card - use same card-h format as hardcoded cards
   var card = document.createElement('div');
-  card.className = 'card-v';
+  card.className = 'card-h';
   var pid = pageId;
   card.addEventListener('click', function(){ showPage(pid); });
   var cardImg = document.createElement('img');
@@ -2307,28 +2312,19 @@ function injectFeed(article) {
   cardImg.alt = '';
   var cardBody = document.createElement('div');
   cardBody.className = 'cb';
-  var cardMeta = document.createElement('div');
-  cardMeta.style.cssText = 'display:flex;gap:5px;margin-bottom:4px;align-items:center';
-  var cardCat = document.createElement('div');
-  cardCat.className = 'cat';
-  cardCat.style.cssText = 'font-size:9px;padding:1px 5px;margin-bottom:0';
-  cardCat.textContent = cat;
-  cardMeta.appendChild(cardCat);
-  if (isAI) {
-    var aiTag = document.createElement('span');
-    aiTag.style.cssText = 'font-family:monospace;font-size:8px;color:var(--v)';
-    aiTag.textContent = 'AI';
-    cardMeta.appendChild(aiTag);
-  }
-  var cardTitle = document.createElement('div');
-  cardTitle.className = 'ctitle';
-  cardTitle.textContent = article.title || '';
-  var cardTime = document.createElement('div');
-  cardTime.className = 'cmeta';
-  cardTime.innerHTML = '<span class="ctime">' + t + '</span>';
-  cardBody.appendChild(cardMeta);
-  cardBody.appendChild(cardTitle);
-  cardBody.appendChild(cardTime);
+  var catDiv = document.createElement('div');
+  catDiv.className = 'cat';
+  catDiv.style.cssText = 'font-size:9px;padding:1px 5px;margin-bottom:4px';
+  catDiv.textContent = cat + (isAI ? ' · AI' : '');
+  var titleDiv = document.createElement('div');
+  titleDiv.className = 'ctitle';
+  titleDiv.textContent = article.title || '';
+  var metaDiv = document.createElement('div');
+  metaDiv.className = 'cmeta';
+  metaDiv.innerHTML = '<span class="ctime">' + t + '</span>';
+  cardBody.appendChild(catDiv);
+  cardBody.appendChild(titleDiv);
+  cardBody.appendChild(metaDiv);
   card.appendChild(cardImg);
   card.appendChild(cardBody);
 
