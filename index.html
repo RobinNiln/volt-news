@@ -2136,6 +2136,7 @@ function publishManual() {
     body: (gid('art-body')||{value:''}).value.trim(),
     cat: (gid('art-cat')||{value:'Nyheter'}).value.trim() || 'Nyheter',
     type: (gid('art-type')||{value:'journalist'}).value,
+    image: (gid('art-image')||{value:''}).value.trim(),
     pubDate: new Date().toISOString()
   };
   if (!GRID_API) { showMsg('Anslut till Railway forst', false); return; }
@@ -2158,9 +2159,7 @@ function publishManual() {
 function injectFeed(article) {
   var pageId = 'page-art-' + article.id;
   if (document.getElementById(pageId)) return;
-  var pg = document.createElement('div');
-  pg.className = 'page';
-  pg.id = pageId;
+
   var isAI = article.type === 'ai' || article.aiGenerated || article.ai_generated;
   var label = isAI ? '<span class="art-ab ai">AI-assisterad</span>' : '<span class="art-ab hu">Journalist</span>';
   var d = new Date(article.pubDate || article.pub_date || Date.now());
@@ -2169,19 +2168,48 @@ function injectFeed(article) {
   var title = article.title || '';
   var ingress = article.ingress || '';
   var rawBody = article.body || '';
-  var bodyHtml = rawBody.split('\n').filter(Boolean).map(function(p){ return '<p class="atext">' + p + '</p>'; }).join('');
-  var quoteHtml = article.quote ? '<blockquote class="art-quote">' + article.quote + '</blockquote><p class="atext" style="font-size:12px;color:var(--muted);margin-top:-8px">' + (article.quoteAttr || article.quote_attr || '') + '</p>' : '';
+  var image = article.image || '';
+
+  // body may be array or string
+  if (Array.isArray(rawBody)) rawBody = rawBody.join('\n\n');
+  var bodyHtml = rawBody.split('\n').filter(Boolean).map(function(p){
+    return '<p class="atext">' + p + '</p>';
+  }).join('');
+
+  var quoteHtml = article.quote
+    ? '<blockquote class="art-quote">' + article.quote + '</blockquote>'
+      + '<p class="atext" style="font-size:12px;color:var(--muted);margin-top:-8px">'
+      + (article.quoteAttr || article.quote_attr || '') + '</p>'
+    : '';
+
   var sources = article.sources || article.sourceItems || [];
   var sourceHtml = '';
   if (sources.length) {
-    sourceHtml = '<div class="mod-local"><div class="mod-local-header"><div><div class="mod-local-title">Kallor</div></div></div>'
+    sourceHtml = '<div class="mod-local"><div class="mod-local-header"><div>'
+      + '<div class="mod-local-title">Kallor</div></div></div>'
       + sources.map(function(s) {
-          return '<div class="srci"><div class="src-left"><div class="src-headline">' + (s.title || s.name || '') + '</div><div class="srcl">' + (s.name || s.code || '') + '</div></div><span class="srclink">Las</span></div>';
+          var headline = s.title || s.name || '';
+          var name = s.name || s.code || '';
+          var link = s.link || '';
+          return '<div class="srci" style="cursor:pointer" onclick="' + (link ? 'window.open(\'' + link + '\',\'_blank\')' : '') + '">'
+            + '<div class="src-left"><div class="src-headline">' + headline + '</div>'
+            + '<div class="srcl">' + name + '</div></div>'
+            + (link ? '<span class="srclink">Las</span>' : '')
+            + '</div>';
         }).join('')
       + '</div>';
   }
+
+  var imageHtml = image
+    ? '<img src="' + image + '" alt="" style="width:100%;height:56vw;max-height:460px;object-fit:cover;display:block;filter:brightness(.7)">'
+    : '';
+
+  var pg = document.createElement('div');
+  pg.className = 'page';
+  pg.id = pageId;
   pg.innerHTML = '<div class="art-page">'
-    + '<div class="art-body" style="padding-top:24px">'
+    + imageHtml
+    + '<div class="art-body">'
     + '<div class="cat" style="margin-bottom:12px">' + cat + '</div>'
     + '<h1 class="art-title">' + title + '</h1>'
     + '<div class="art-byline">' + label + '<span class="art-time">' + t + '</span></div>'
@@ -2190,24 +2218,40 @@ function injectFeed(article) {
     + quoteHtml
     + sourceHtml
     + '</div></div>';
+
   var nav = document.querySelector('nav');
   if (nav && nav.parentNode) nav.parentNode.insertBefore(pg, nav);
   else document.body.appendChild(pg);
+
+  // Feed card
   var card = document.createElement('div');
-  card.className = 'card-h';
+  card.className = image ? 'card-v' : 'card-h';
   var pid = pageId;
   card.addEventListener('click', function(){ showPage(pid); });
-  card.innerHTML = '<div class="cb">'
-    + '<div style="display:flex;gap:5px;margin-bottom:4px;align-items:center">'
-    + '<div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:0">' + cat + '</div>'
-    + (isAI ? '<span style="font-family:monospace;font-size:8px;color:var(--v);letter-spacing:.5px">AI</span>' : '')
-    + '</div>'
-    + '<div class="ctitle">' + title + '</div>'
-    + '<div class="cmeta"><span class="ctime">' + t + '</span></div>'
-    + '</div>';
+  if (image) {
+    card.innerHTML = '<img src="' + image + '" alt="" style="width:100%;height:160px;object-fit:cover">'
+      + '<div class="cb">'
+      + '<div style="display:flex;gap:5px;margin-bottom:4px;align-items:center">'
+      + '<div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:0">' + cat + '</div>'
+      + (isAI ? '<span style="font-family:monospace;font-size:8px;color:var(--v)">AI</span>' : '')
+      + '</div>'
+      + '<div class="ctitle">' + title + '</div>'
+      + '<div class="cmeta"><span class="ctime">' + t + '</span></div>'
+      + '</div>';
+  } else {
+    card.innerHTML = '<div class="cb">'
+      + '<div style="display:flex;gap:5px;margin-bottom:4px;align-items:center">'
+      + '<div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:0">' + cat + '</div>'
+      + (isAI ? '<span style="font-family:monospace;font-size:8px;color:var(--v)">AI</span>' : '')
+      + '</div>'
+      + '<div class="ctitle">' + title + '</div>'
+      + '<div class="cmeta"><span class="ctime">' + t + '</span></div>'
+      + '</div>';
+  }
+
   var feed = document.querySelector('.dm');
   if (feed) {
-    var first = feed.querySelector('.card-h');
+    var first = feed.querySelector('.card-h, .card-v');
     if (first) feed.insertBefore(card, first);
     else feed.appendChild(card);
   }
@@ -2215,15 +2259,23 @@ function injectFeed(article) {
 function setFeaturedHero(article) {
   var hero = document.querySelector('.hero');
   if (!hero) return;
-  var heroTitle = hero.querySelector('.hero-title, h1, .art-title');
-  var heroIngress = hero.querySelector('.hero-ingress, .ingress');
-  var heroCat = hero.querySelector('.hero-cat, .cat');
-  if (heroTitle) heroTitle.textContent = article.title;
-  if (heroIngress) heroIngress.textContent = article.ingress;
-  if (heroCat) heroCat.textContent = article.cat || 'Nyheter';
-  hero.style.cursor = 'pointer';
   var pid = 'page-art-' + article.id;
+  injectFeed(article);
+  // Update hero image
+  var heroImg = hero.querySelector('img');
+  if (heroImg && article.image) heroImg.src = article.image;
+  // Update hero content
+  var heroContent = hero.querySelector('.hero-content');
+  if (heroContent) {
+    var catEl = heroContent.querySelector('.cat');
+    var titleEl = heroContent.querySelector('h1, .hero-title');
+    var ingressEl = heroContent.querySelector('.hero-ingress, p');
+    if (catEl) catEl.textContent = article.cat || 'Nyheter';
+    if (titleEl) titleEl.textContent = article.title || '';
+    if (ingressEl) ingressEl.textContent = article.ingress || '';
+  }
   hero.onclick = function(){ showPage(pid); };
+  hero.style.cursor = 'pointer';
 }
 
 function loadAndInjectPublished() {
