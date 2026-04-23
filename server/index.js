@@ -212,7 +212,19 @@ async function fetchUnsplashImage(query) {
 }
 
 // ── Claude ────────────────────────────────────────────────────
-function stripJsonFences(s) { var r = s.trim(); var i = r.indexOf('{'); return i >= 0 ? r.slice(i) : r; }
+function stripJsonFences(s) {
+  var r = s.trim();
+  var start = r.indexOf('{');
+  if (start < 0) return r;
+  r = r.slice(start);
+  // Find the matching closing brace
+  var depth = 0;
+  for (var i = 0; i < r.length; i++) {
+    if (r[i] === '{') depth++;
+    else if (r[i] === '}') { depth--; if (depth === 0) return r.slice(0, i + 1); }
+  }
+  return r;
+}
 
 async function analyzeSignals(signals) {
   const key = process.env.ANTHROPIC_API_KEY;
