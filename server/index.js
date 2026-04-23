@@ -212,32 +212,17 @@ async function fetchUnsplashImage(query) {
 }
 
 // ── Claude ────────────────────────────────────────────────────
+function stripJsonFences(s) { var r = s.trim(); var i = r.indexOf('{'); return i >= 0 ? r.slice(i) : r; }
+
 async function analyzeSignals(signals) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
 
-  const signalText = signals.slice(0, 10).map((s, i) =>
-    `${i+1}. "${s.headline}" — ${s.sourceCount} källor (${s.riksCount} riksmedier, ${s.ntmCount} lokala)${s.growing ? ' ↑ VÄXER' : ''}\n   Källor: ${s.sourceCodes.join(', ')}\n   Regioner: ${s.regions.length ? s.regions.join(', ') : 'rikstäckande'}`
-  ).join('\n\n');
+  const signalText = signals.slice(0, 10).map(function(s, i) {
+    return (i+1) + '. "' + s.headline + '" — ' + s.sourceCount + ' kallor (' + s.riksCount + ' riksmedier, ' + s.ntmCount + ' lokala)' + (s.growing ? ' VAXER' : '') + '\n   Kallor: ' + s.sourceCodes.join(', ') + '\n   Regioner: ' + (s.regions.length ? s.regions.join(', ') : 'rikstackande');
+  }).join('\n\n');
 
-  const prompt = `Du är chefsredaktör på GRID, en nationell nyhetstjänst. Nedan är de starkaste nyhetssignalerna just nu baserade på vad svenska medier skriver om.
-
-${signalText}
-
-Välj de 5 mest värda att bevaka ur ett nationellt perspektiv. En lokal händelse som rapporteras i flera regioner är en nationell historia.
-
-Svara ENDAST med JSON:
-{
-  "trends": [
-    {
-      "signalIndex": 0,
-      "headline": "Konkret rubrik max 10 ord",
-      "angle": "Varför detta är en nationell nyhet i en mening",
-      "category": "Politik|Ekonomi|Samhälle|Industri|Klimat|Sport|Näringsliv|Kultur",
-      "imageQuery": "2-3 engelska ord för bildsökning"
-    }
-  ]
-}`;
+  const prompt = 'Du ar chefsredaktor pa GRID, en nationell nyhetstjanst. Nedan ar de starkaste nyhetssignalerna just nu baserade pa vad svenska medier skriver om.\n\n' + signalText + '\n\nValj de 5 mest varda att bevaka ur ett nationellt perspektiv. En lokal handelse som rapporteras i flera regioner ar en nationell historia.\n\nSvara ENDAST med JSON:\n{\n  "trends": [\n    {\n      "signalIndex": 0,\n      "headline": "Konkret rubrik max 10 ord",\n      "angle": "Varfor detta ar en nationell nyhet i en mening",\n      "category": "Politik|Ekonomi|Samhalle|Industri|Klimat|Sport|Naringsliv|Kultur",\n      "imageQuery": "2-3 engelska ord for bildsokning"\n    }\n  ]\n}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -246,41 +231,20 @@ Svara ENDAST med JSON:
   });
   if (!r.ok) throw new Error('Claude API ' + r.status);
   const d = await r.json();
-  const text = d.content[0].text.replace(/```json\n?|```\n?/g, '').trim();
+  const text = stripJsonFences(d.content[0].text);
   return JSON.parse(text);
 }
+
 
 async function generateDraft(signal, trend) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
 
-  // Pass actual headlines and links so Claude reports facts, not assumptions
-  const sourceList = signal.items.map(i =>
-    `[${i.source}] "${i.title}"${i.link ? '\n   Länk: ' + i.link : ''}`
-  ).join('\n\n');
+  const sourceList = signal.items.map(function(i) {
+    return '[' + i.source + '] "' + i.title + '"' + (i.link ? '\n   Lank: ' + i.link : '');
+  }).join('\n\n');
 
-  const prompt = `Du är erfaren nyhetsjournalist på GRID, en svensk nationell nyhetssajt.
-
-Här är vad svenska medier rapporterar just nu:
-
-${sourceList}
-
-Din uppgift: Skriv en nyhetartikel baserad ENBART på vad som faktiskt rapporteras ovan. 
-- Använd konkreta detaljer, namn, platser och siffror från rubrikerna
-- Hittar du inte ett faktum i källorna — skriv det inte
-- Rubriken ska vara specifik och nyhetsdriven, inte generell ("Riksbanken håller räntan — tredje gången i rad" inte "Ekonomiska beslut påverkar Sverige")
-- Ingressen svarar på: vad hände, vem är inblandad, varför spelar det roll
-- Varje stycke i brödtexten tillför ny information
-- Citatpersonen ska vara specifik (namn + titel) och citatets innehåll ska vara trovärdigt givet källorna
-
-Svara ENDAST med JSON utan kommentarer:
-{
-  "title": "Specifik nyhetrubrik max 12 ord",
-  "ingress": "2-3 meningar. Konkret, informativ, lockar till läsning.",
-  "body": "Stycke 1: Vad hände konkret (3-4 meningar med fakta).\n\nStycke 2: Bakgrund och varför det spelar roll (2-3 meningar).\n\nStycke 3: Vad händer härnäst eller reaktioner (1-2 meningar).",
-  "quote": "Konkret citat kopplat till händelsen",
-  "quoteAttr": "Förnamn Efternamn, titel"
-}`;
+  const prompt = 'Du ar erfaren nyhetsjournalist pa GRID, en svensk nationell nyhetssajt.\n\nHar ar vad svenska medier rapporterar just nu:\n\n' + sourceList + '\n\nDin uppgift: Skriv en nyhetsartikel baserad ENBART pa vad som faktiskt rapporteras ovan.\n- Anvand konkreta detaljer, namn, platser och siffror fran rubrikerna\n- Hittar du inte ett faktum i kallorna, skriv det inte\n- Rubriken ska vara specifik och nyhetsdriven, inte generell\n- Ingressen svarar pa: vad hande, vem ar inblandad, varfor spelar det roll\n- Varje stycke i brodtexten tillfor ny information\n- Citatpersonen ska vara specifik (namn + titel)\n\nSvara ENDAST med JSON utan kommentarer:\n{\n  "title": "Specifik nyhetrubrik max 12 ord",\n  "ingress": "2-3 meningar. Konkret, informativ, lockar till lasning.",\n  "body": "Stycke 1: Vad hande konkret (3-4 meningar med fakta).\\n\\nStycke 2: Bakgrund och varfor det spelar roll (2-3 meningar).\\n\\nStycke 3: Vad hander harnat eller reaktioner (1-2 meningar).",\n  "quote": "Konkret citat kopplat till handelsen",\n  "quoteAttr": "Fornamn Efternamn, titel"\n}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -289,20 +253,10 @@ Svara ENDAST med JSON utan kommentarer:
   });
   if (!r.ok) throw new Error('Claude API ' + r.status);
   const d = await r.json();
-  const text = d.content[0].text.replace(/```json\n?|```\n?/g, '').trim();
-  return JSON.parse(text);
-}`;
-
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] })
-  });
-  if (!r.ok) throw new Error('Claude API ' + r.status);
-  const d = await r.json();
-  const text = d.content[0].text.replace(/```json\n?|```\n?/g, '').trim();
+  const text = stripJsonFences(d.content[0].text);
   return JSON.parse(text);
 }
+
 
 // ── Pipeline State ────────────────────────────────────────────
 let signals = [];
