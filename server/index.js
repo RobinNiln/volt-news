@@ -155,6 +155,7 @@ Svara MED EXAKT DETTA JSON-format och ingenting annat:
         "ingress": "2-3 meningar som satter scenen och lockar lasaren. Ska svara pa vad hande vem ar inblandad och varfor det spelar roll.",
         "body": "Forsta stycket med 3-4 meningar om vad som faktiskt hant baserat pa rubrikerna. Andra stycket med 2-3 meningar om bakgrund eller kontext. Tredje stycket med 1-2 meningar om vad som vantas handa.",
         "quote": "Ett trovärdigt citat fran en relevant person",
+        "imageQuery": "Ett engelskt sokord for en nyhetsbild (1-2 ord, ex: parliament, flooding, economy)",
         "quoteAttr": "Namn Titel"
       }
     }
@@ -181,8 +182,12 @@ Svara MED EXAKT DETTA JSON-format och ingenting annat:
   const sourceMap = {};
   Object.entries(SOURCES).forEach(([, s]) => { sourceMap[s.code] = s; });
 
-  return parsed.trends.map((t, i) => {
+  const results = await Promise.all(parsed.trends.map(async (t, i) => {
     const matchedItems = recent.filter(item => (t.sources || []).includes(item.sourceCode));
+    const imageQuery = t.imageQuery || t.headline || t.category || 'sweden news';
+    log('Unsplash query: ' + imageQuery);
+    const image = await fetchUnsplashImage(imageQuery);
+    log('Unsplash image: ' + (image ? image.slice(0,60) : 'EMPTY'));
     return {
       id: 'sug-' + Date.now() + '-' + i,
       keyword: t.headline,
@@ -193,6 +198,7 @@ Svara MED EXAKT DETTA JSON-format och ingenting annat:
       sourceCount: (t.sources || []).length,
       sources: (t.sources || []).map(code => sourceMap[code] || { name: code, code, color: '#555' }),
       totalArticles: recent.length,
+      image: image,
       article: {
         title: (t.article && t.article.title) || t.headline,
         ingress: (t.article && t.article.ingress) || '',
@@ -200,6 +206,7 @@ Svara MED EXAKT DETTA JSON-format och ingenting annat:
         quote: (t.article && t.article.quote) || '',
         quoteAttr: (t.article && t.article.quoteAttr) || '',
         category: t.category || 'Nyheter',
+        image: image,
       },
       sourceItems: matchedItems.slice(0, 5).map(item => ({
         name: item.source, code: item.sourceCode, color: item.sourceColor,
@@ -208,7 +215,28 @@ Svara MED EXAKT DETTA JSON-format och ingenting annat:
       status: 'pending',
       createdAt: new Date().toISOString(),
     };
-  });
+  }));
+  return results;
+}
+
+
+async function fetchUnsplashImage(query) {
+  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+  if (!accessKey) return '';
+  try {
+    const r = await fetch('https://api.unsplash.com/photos/random?query=' + encodeURIComponent(query) + '&orientation=landscape&content_filter=high', {
+      headers: { 'Authorization': 'Client-ID ' + accessKey }
+    });
+    if (!r.ok) {
+      console.error('Unsplash error:', r.status, await r.text().catch(()=>''));
+      return '';
+    }
+    const d = await r.json();
+    return (d.urls && d.urls.regular) ? d.urls.regular : '';
+  } catch(e) {
+    console.error('Unsplash exception:', e.message);
+    return '';
+  }
 }
 
 async function runPipeline() {
@@ -291,7 +319,8 @@ app.post('/api/suggestions/:id/publish', (req, res) => {
   const art = s.article || {};
   const srcs = s.sourceItems || s.sources || [];
   const bodyStr = Array.isArray(art.body) ? art.body.join('\n\n') : (art.body || '');
-  const artData = { id, title: art.title||'', ingress: art.ingress||'', body: bodyStr, cat: art.category||'Nyheter', type:'ai', quote: art.quote||'', quoteAttr: art.quoteAttr||'', sources: srcs, pubDate, aiGenerated: true, featured: false };
+  const imageStr = s.image || (art && art.image) || '';
+  const artData = { id, title: art.title||'', ingress: art.ingress||'', body: bodyStr, cat: art.category||'Nyheter', type:'ai', quote: art.quote||'', quoteAttr: art.quoteAttr||'', sources: srcs, pubDate, aiGenerated: true, featured: false, image: imageStr };
   insertArticle(artData);
   log('Publicerar: ' + art.title + ' | ingress: ' + (art.ingress||'').slice(0,50) + ' | body: ' + bodyStr.slice(0,50));
   res.json(artData);
