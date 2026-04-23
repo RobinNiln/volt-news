@@ -254,22 +254,43 @@ async function generateDraft(signal, trend) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
 
-  const sourceList = signal.items.map(i => `- ${i.source}: "${i.title}"`).join('\n');
+  // Pass actual headlines and links so Claude reports facts, not assumptions
+  const sourceList = signal.items.map(i =>
+    `[${i.source}] "${i.title}"${i.link ? '\n   Länk: ' + i.link : ''}`
+  ).join('\n\n');
 
-  const prompt = `Du är journalist på GRID. Skriv en komplett nyhetsartikel baserad på dessa källor:
+  const prompt = `Du är erfaren nyhetsjournalist på GRID, en svensk nationell nyhetssajt.
+
+Här är vad svenska medier rapporterar just nu:
 
 ${sourceList}
 
-Nationell vinkel: ${trend.angle}
-Kategori: ${trend.category}
+Din uppgift: Skriv en nyhetartikel baserad ENBART på vad som faktiskt rapporteras ovan. 
+- Använd konkreta detaljer, namn, platser och siffror från rubrikerna
+- Hittar du inte ett faktum i källorna — skriv det inte
+- Rubriken ska vara specifik och nyhetsdriven, inte generell ("Riksbanken håller räntan — tredje gången i rad" inte "Ekonomiska beslut påverkar Sverige")
+- Ingressen svarar på: vad hände, vem är inblandad, varför spelar det roll
+- Varje stycke i brödtexten tillför ny information
+- Citatpersonen ska vara specifik (namn + titel) och citatets innehåll ska vara trovärdigt givet källorna
 
-Svara ENDAST med JSON:
+Svara ENDAST med JSON utan kommentarer:
 {
-  "title": "Rubrik max 12 ord",
-  "ingress": "2-3 meningar som sätter scenen och lockar läsaren",
-  "body": "Tre stycken separerade med \\n\\n. Första: vad hände. Andra: bakgrund/kontext. Tredje: vad händer härnäst.",
-  "quote": "Ett trovärdigt citat",
-  "quoteAttr": "Namn, titel"
+  "title": "Specifik nyhetrubrik max 12 ord",
+  "ingress": "2-3 meningar. Konkret, informativ, lockar till läsning.",
+  "body": "Stycke 1: Vad hände konkret (3-4 meningar med fakta).\n\nStycke 2: Bakgrund och varför det spelar roll (2-3 meningar).\n\nStycke 3: Vad händer härnäst eller reaktioner (1-2 meningar).",
+  "quote": "Konkret citat kopplat till händelsen",
+  "quoteAttr": "Förnamn Efternamn, titel"
+}`;
+
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!r.ok) throw new Error('Claude API ' + r.status);
+  const d = await r.json();
+  const text = d.content[0].text.replace(/```json\n?|```\n?/g, '').trim();
+  return JSON.parse(text);
 }`;
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
