@@ -230,11 +230,12 @@ async function analyzeSignals(signals) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
 
-  const signalText = signals.slice(0, 10).map(function(s, i) {
-    return (i+1) + '. "' + s.headline + '" — ' + s.sourceCount + ' kallor (' + s.riksCount + ' riksmedier, ' + s.ntmCount + ' lokala)' + (s.growing ? ' VAXER' : '') + '\n   Kallor: ' + s.sourceCodes.join(', ') + '\n   Regioner: ' + (s.regions.length ? s.regions.join(', ') : 'rikstackande');
+  const top10 = signals.slice(0, 10);
+  const signalText = top10.map(function(s, i) {
+    return 'ID:' + s.id + ' (' + (i+1) + '). "' + s.headline + '" — ' + s.sourceCount + ' kallor (' + s.riksCount + ' riksmedier, ' + s.ntmCount + ' lokala)' + (s.growing ? ' VAXER' : '') + '\n   Kallor: ' + s.sourceCodes.join(', ') + '\n   Regioner: ' + (s.regions.length ? s.regions.join(', ') : 'rikstackande') + '\n   Artiklar: ' + s.items.slice(0,3).map(function(x){ return '"' + x.title + '"'; }).join(' | ');
   }).join('\n\n');
 
-  const prompt = 'Du ar chefsredaktor pa GRID, en nationell nyhetstjanst. Nedan ar de starkaste nyhetssignalerna just nu baserade pa vad svenska medier skriver om.\n\n' + signalText + '\n\nValj de 5 mest varda att bevaka ur ett nationellt perspektiv. En lokal handelse som rapporteras i flera regioner ar en nationell historia.\n\nSvara ENDAST med JSON:\n{\n  "trends": [\n    {\n      "signalIndex": 0,\n      "headline": "Konkret rubrik max 10 ord",\n      "angle": "Varfor detta ar en nationell nyhet i en mening",\n      "category": "Politik|Ekonomi|Samhalle|Industri|Klimat|Sport|Naringsliv|Kultur",\n      "imageQuery": "2-3 engelska ord for bildsokning"\n    }\n  ]\n}';
+  const prompt = 'Du ar chefsredaktor pa GRID, en nationell nyhetstjanst. Nedan ar de starkaste nyhetssignalerna just nu baserade pa vad svenska medier skriver om.\n\n' + signalText + '\n\nValj de 5 mest varda att bevaka ur ett nationellt perspektiv. En lokal handelse som rapporteras i flera regioner ar en nationell historia.\n\nSvara ENDAST med JSON:\n{\n  "trends": [\n    {\n      "signalId": "ID-stringen fran signalen ovan",\n      "headline": "Konkret rubrik max 10 ord",\n      "angle": "Varfor detta ar en nationell nyhet i en mening",\n      "category": "Politik|Ekonomi|Samhalle|Industri|Klimat|Sport|Naringsliv|Kultur",\n      "imageQuery": "2-3 engelska ord for bildsokning"\n    }\n  ]\n}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -306,7 +307,8 @@ async function runTrendAnalysis() {
   try {
     const result = await analyzeSignals(signals);
     trends = await Promise.all(result.trends.map(async (t, i) => {
-      const signal = signals[t.signalIndex] || signals[i] || signals[0];
+      var signal = signals.find(function(s){ return s.id === t.signalId; });
+      if (!signal) signal = signals[t.signalIndex] || signals[i] || signals[0];
       const image = await fetchUnsplashImage(t.imageQuery || t.category);
       log('Bild för "' + t.headline + '": ' + (image ? 'OK' : 'saknas'));
       return {
