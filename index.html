@@ -2435,7 +2435,8 @@ function saveArticleOrder() {
 function setFeaturedHero(article) {
   var hero = document.querySelector('.hero');
   if (!hero) return;
-  var pid = 'page-art-' + article.id;
+  var rawArtId = (article.id || '').replace(/^art-/, '');
+  var pid = 'page-art-' + rawArtId;
   injectFeed(article);
   // Update hero image
   var heroImg = hero.querySelector('img');
