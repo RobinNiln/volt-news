@@ -1514,160 +1514,95 @@ body.light .logo-light{display:block}
 </div>
 </div>
 <div class="page" id="page-cms">
-<div style="max-width:960px;margin:0 auto;padding:16px 14px 80px">
+<div style="max-width:1400px;margin:0 auto;padding:80px 14px 80px">
 
-  <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:2px solid var(--v);margin-bottom:16px">
-    <div style="font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text)">GRID Redaktion</div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div id="cms-status" style="font-family:monospace;font-size:10px;color:var(--muted);background:var(--surface);padding:3px 10px;border-radius:10px">Ej ansluten</div>
-      <div style="display:flex;gap:4px">
-        <button id="tab-pipeline" style="background:var(--v);color:#000;border:none;padding:5px 14px;font-size:11px;font-weight:700;cursor:pointer;border-radius:10px">Pipeline</button>
-        <button id="tab-articles" style="background:none;border:1px solid var(--border);color:var(--muted);padding:5px 14px;font-size:11px;cursor:pointer;border-radius:10px">Artiklar</button>
-      </div>
-    </div>
+<!-- Header -->
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+  <div>
+    <div style="font-family:monospace;font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">REDAKTIONSVERKTYG</div>
+    <div style="font-size:22px;font-weight:700">GRID Admin</div>
   </div>
-
-  <div id="msg-box" style="display:none;padding:8px 12px;border-radius:3px;margin-bottom:14px;font-family:monospace;font-size:12px"></div>
-
-  <div style="margin-bottom:16px;border:1px solid var(--border);border-radius:3px;padding:12px 14px">
-    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Railway URL</div>
-    <div style="display:flex;gap:8px">
-      <input id="api-url" type="text" placeholder="https://volt-news-production.up.railway.app" style="flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-family:monospace;font-size:12px;border-radius:2px;outline:none">
-      <button id="btn-connect" style="background:var(--v);color:#000;border:none;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;border-radius:2px">Anslut</button>
-    </div>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <div id="cms-status" style="font-family:monospace;font-size:10px;color:var(--muted)">Ej ansluten</div>
+    <input id="cms-api" type="text" placeholder="Railway URL" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;font-size:12px;border-radius:2px;width:220px;outline:none">
+    <button onclick="cmsConnect()" style="background:var(--v);color:#000;border:none;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px">ANSLUT</button>
   </div>
+</div>
 
-  <!-- PIPELINE TAB -->
-  <div id="view-pipeline">
-
-    <div id="stats-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">
-      <div style="background:var(--surface);border-radius:3px;padding:10px 12px"><div id="stat-articles" style="font-size:20px;font-weight:700;color:var(--text)">—</div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">ARTIKLAR 6H</div></div>
-      <div style="background:var(--surface);border-radius:3px;padding:10px 12px"><div id="stat-trends" style="font-size:20px;font-weight:700;color:var(--v)">—</div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">TRENDER</div></div>
-      <div style="background:var(--surface);border-radius:3px;padding:10px 12px"><div id="stat-suggestions" style="font-size:20px;font-weight:700;color:var(--text)">—</div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">FORSLAG</div></div>
-      <div style="background:var(--surface);border-radius:3px;padding:10px 12px"><div id="stat-published" style="font-size:20px;font-weight:700;color:var(--text)">—</div><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">PUBLICERADE</div></div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-
-      <div>
-        <div style="display:flex;align-items:center;justify-content:space-between;border-top:2px solid var(--v);padding-top:10px;margin-bottom:12px">
-          <div>
-            <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">Trender just nu</div>
-            <div id="trends-meta" style="font-family:monospace;font-size:9px;color:var(--muted);margin-top:2px">Klicka Uppdatera</div>
-          </div>
-          <div style="display:flex;gap:5px;align-items:center">
-            <span style="background:var(--v);color:#000;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px">AI</span>
-            <button id="btn-trends" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px">Uppdatera</button>
-          </div>
-        </div>
-        <div id="trends-list" style="border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:10px">
-          <div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Anslut och klicka Uppdatera</div>
-        </div>
-        <div style="border-top:2px solid var(--v);padding-top:10px;margin-bottom:10px;margin-top:16px">
-          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin-bottom:10px">Publicerade artiklar</div>
-        </div>
-        <div id="live-list" style="border:1px solid var(--border);border-radius:3px;overflow:hidden">
-          <div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Anslut for att se</div>
-        </div>
-      </div>
-
-      <div>
-        <div style="display:flex;align-items:center;justify-content:space-between;border-top:2px solid var(--v);padding-top:10px;margin-bottom:12px">
-          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">AI-forslag</div>
-          <div style="display:flex;gap:5px">
-            <button id="btn-suggestions" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px">Uppdatera</button>
-          </div>
-        </div>
-        <div id="suggestions-list">
-          <div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Anslut och generera forslag</div>
-        </div>
-        <button id="btn-gen" style="width:100%;background:var(--v);color:#000;border:none;padding:10px;font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-top:12px">Kor pipeline och generera forslag</button>
-      </div>
-
-    </div>
-
+<!-- Stats bar -->
+<div id="cms-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">
+  <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:2px">
+    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">SIGNALER</div>
+    <div id="stat-signals" style="font-size:28px;font-weight:700;color:var(--v)">—</div>
   </div>
+  <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:2px">
+    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">TRENDER</div>
+    <div id="stat-trends" style="font-size:28px;font-weight:700;color:var(--v)">—</div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:2px">
+    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">UTKAST KLARA</div>
+    <div id="stat-drafts" style="font-size:28px;font-weight:700;color:var(--v)">—</div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:2px">
+    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">PUBLICERADE</div>
+    <div id="stat-published" style="font-size:28px;font-weight:700;color:var(--v)">—</div>
+  </div>
+</div>
 
-  <!-- ARTICLES TAB -->
-  <div id="view-articles" style="display:none">
+<!-- Tab nav -->
+<div style="display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px">
+  <button id="tab-btn-pipeline" onclick="cmsTab('pipeline')" style="background:var(--v);color:#000;border:none;padding:8px 18px;font-size:11px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px">PIPELINE</button>
+  <button id="tab-btn-articles" onclick="cmsTab('articles')" style="background:none;color:var(--muted);border:none;padding:8px 18px;font-size:11px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px">ARTIKLAR</button>
+</div>
 
-    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
-      <input id="art-search" type="text" placeholder="Sök artiklar..." style="flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:12px;border-radius:2px;outline:none">
-      <button data-filter="all" class="art-filter active-filter" style="background:var(--v);color:#000;border:none;padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px;font-weight:700">Alla</button>
-      <button data-filter="live" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">Live</button>
-      <button data-filter="off" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">Avpublicerade</button>
-      <button data-filter="ai" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">AI</button>
-      <button data-filter="journalist" class="art-filter" style="background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;border-radius:10px">Journalist</button>
+<!-- PIPELINE TAB -->
+<div id="cms-tab-pipeline">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+    <!-- Col 1: Signals -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px">SIGNALER</div>
+        <button onclick="cmsRunSignals()" id="btn-signals" style="background:none;border:1px solid var(--border);color:var(--text);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px;font-family:monospace">UPPDATERA</button>
+      </div>
+      <div id="signals-list" style="display:flex;flex-direction:column;gap:6px"></div>
     </div>
 
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-family:monospace;font-size:9px;color:var(--muted)">Dra for att omordna · Position 1-15 visas manuellt · Resten placeras automatiskt efter tid</div></div><div style="font-family:monospace;font-size:9px;color:var(--muted);margin-bottom:8px;letter-spacing:.5px">Dra for att omordna · Gul siffra = position 1-15 visas manuellt i flodet · Graa = automatisk efter tid</div><div id="articles-list">
-      <div style="padding:20px;text-align:center;font-family:monospace;font-size:10px;color:var(--muted)">Anslut och byt till Artiklar-fliken</div>
+    <!-- Col 2: Trends -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px">TRENDER</div>
+        <button onclick="cmsRunTrends()" id="btn-trends" style="background:none;border:1px solid var(--border);color:var(--text);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px;font-family:monospace">ANALYSERA</button>
+      </div>
+      <div id="trends-list" style="display:flex;flex-direction:column;gap:8px"></div>
     </div>
 
-    <!-- EDIT MODAL -->
-    <div id="edit-modal" style="display:none;margin-top:16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-        <div style="font-size:14px;font-weight:700;color:var(--text)">Redigera artikel</div>
-        <button id="btn-edit-close" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1">×</button>
+    <!-- Col 3: Drafts -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px">UTKAST</div>
+        <div id="draft-status" style="font-family:monospace;font-size:9px;color:var(--muted)"></div>
       </div>
-      <input type="hidden" id="edit-id">
-      <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Rubrik</div>
-      <input id="edit-title" type="text" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:14px;font-weight:600;border-radius:2px;outline:none;margin-bottom:10px">
-      <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Ingress</div>
-      <textarea id="edit-ingress" rows="3" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical;margin-bottom:10px;line-height:1.6"></textarea>
-      <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Brodtext</div>
-      <textarea id="edit-body" rows="5" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical;margin-bottom:10px;line-height:1.6"></textarea>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-        <div>
-          <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Kategori</div>
-          <input id="edit-cat" type="text" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:13px;border-radius:2px;outline:none">
-        </div>
-        <div>
-          <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Typ</div>
-          <select id="edit-type" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:13px;border-radius:2px;outline:none">
-            <option value="journalist">Journalist</option>
-            <option value="ai">AI-assisterad</option>
-          </select>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button id="btn-edit-cancel" style="background:none;border:1px solid var(--border);color:var(--muted);padding:8px 16px;font-size:12px;cursor:pointer;border-radius:2px">Avbryt</button>
-        <button id="btn-edit-save" style="background:var(--v);color:#000;border:none;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;border-radius:2px">Spara andringar</button>
-      </div>
-    </div>
-
-    <!-- NEW ARTICLE FORM -->
-    <div style="border-top:2px solid var(--v);padding-top:12px;margin-top:20px">
-      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin-bottom:12px">Ny artikel</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-        <div>
-          <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Kategori</div>
-          <input id="art-cat" type="text" placeholder="t.ex. Samhalle" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:13px;border-radius:2px;outline:none">
-        </div>
-        <div>
-          <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Typ</div>
-          <select id="art-type" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:13px;border-radius:2px;outline:none">
-            <option value="journalist">Journalist</option>
-            <option value="ai">AI-assisterad</option>
-          </select>
-        </div>
-      </div>
-      <div style="margin-bottom:10px">
-        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Rubrik</div>
-        <input id="art-title" type="text" placeholder="Artikelrubrik" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:15px;font-weight:600;border-radius:2px;outline:none">
-      </div>
-      <div style="margin-bottom:10px">
-        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Ingress</div>
-        <textarea id="art-ingress" rows="3" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical"></textarea>
-      </div>
-      <div style="margin-bottom:14px">
-        <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">Brodtext</div>
-        <textarea id="art-body" rows="5" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;resize:vertical;line-height:1.6"></textarea>
-      </div>
-      <button id="btn-publish-article" style="width:100%;background:var(--v);color:#000;border:none;padding:12px;font-size:14px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px">Publicera artikel</button>
+      <div id="drafts-list" style="display:flex;flex-direction:column;gap:8px"></div>
     </div>
 
   </div>
+
+  <!-- Log -->
+  <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:14px">
+    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">PIPELINE LOG</div>
+    <div id="pipeline-log" style="font-family:monospace;font-size:11px;color:var(--muted);max-height:120px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<!-- ARTICLES TAB -->
+<div id="cms-tab-articles" style="display:none">
+  <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+    <button onclick="openNewArticle()" style="background:var(--v);color:#000;border:none;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace">+ NY ARTIKEL</button>
+  </div>
+  <div style="font-family:monospace;font-size:9px;color:var(--muted);margin-bottom:8px;letter-spacing:.5px">Dra för att omordna · Gul siffra = position 1-15 visas manuellt · Grå = automatisk efter tid</div>
+  <div id="articles-list"></div>
+</div>
 
 </div>
 </div>
@@ -1718,456 +1653,540 @@ function updateLogos(){
   document.querySelectorAll('.logo-light').forEach(function(el){ el.style.display=isLight?'block':'none'; });
 }
 </script>
-<script>
-var GRID_API = localStorage.getItem('grid-api') || '';
+<script>var GRID_API = localStorage.getItem('grid-api') || '';
 var allArticles = [];
-var currentFilter = 'all';
-var offlineIds = JSON.parse(localStorage.getItem('grid-offline-ids') || '[]');
+var dragSrcId = null;
 
 function gid(id){ return document.getElementById(id); }
 
-function showMsg(text, ok) {
-  var el = gid('msg-box');
-  if (!el) return;
-  el.textContent = text;
-  el.style.display = 'block';
-  el.style.background = ok ? 'rgba(245,197,0,.15)' : 'rgba(232,48,42,.15)';
-  el.style.color = ok ? 'var(--v)' : '#e8302a';
-  el.style.border = ok ? '1px solid rgba(245,197,0,.3)' : '1px solid rgba(232,48,42,.3)';
-  clearTimeout(showMsg._t);
-  showMsg._t = setTimeout(function(){ el.style.display='none'; }, 5000);
-}
-
-function setStatus(text, color) {
-  var el = gid('cms-status');
-  if (el) { el.textContent = text; el.style.color = color || ''; }
-}
-
-function switchTab(tab) {
-  var pipeline = gid('view-pipeline');
-  var articles = gid('view-articles');
-  var tbP = gid('tab-pipeline');
-  var tbA = gid('tab-articles');
-  if (tab === 'pipeline') {
-    pipeline.style.display = 'block';
-    articles.style.display = 'none';
-    tbP.style.background = 'var(--v)'; tbP.style.color = '#000'; tbP.style.border = 'none';
-    tbA.style.background = 'none'; tbA.style.color = 'var(--muted)'; tbA.style.border = '1px solid var(--border)';
-  } else {
-    pipeline.style.display = 'none';
-    articles.style.display = 'block';
-    tbA.style.background = 'var(--v)'; tbA.style.color = '#000'; tbA.style.border = 'none';
-    tbP.style.background = 'none'; tbP.style.color = 'var(--muted)'; tbP.style.border = '1px solid var(--border)';
-    loadArticlesTab();
-  }
-}
-
-window.addEventListener('DOMContentLoaded', function() {
-  var urlInput = gid('api-url');
-  if (urlInput && GRID_API) urlInput.value = GRID_API;
-
-  gid('btn-connect') && gid('btn-connect').addEventListener('click', function() {
-    var url = (gid('api-url').value || '').trim().replace(/\/$/, '');
-    if (!url) { showMsg('Ange URL', false); return; }
-    GRID_API = url;
-    localStorage.setItem('grid-api', url);
-    setStatus('Ansluter...');
-    fetch(url + '/api/sources')
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        setStatus('Ansluten ' + d.length + ' kallor', 'var(--v)');
-        loadTrends();
-        loadSuggestions();
-        loadLiveList();
-        loadStats();
-        loadAndInjectPublished();
-      })
-      .catch(function(e){ setStatus('Misslyckades: ' + e.message, '#e8302a'); });
-  });
-
-  gid('tab-pipeline') && gid('tab-pipeline').addEventListener('click', function(){ switchTab('pipeline'); });
-  gid('tab-articles') && gid('tab-articles').addEventListener('click', function(){ switchTab('articles'); });
-  gid('btn-trends') && gid('btn-trends').addEventListener('click', loadTrends);
-  gid('btn-suggestions') && gid('btn-suggestions').addEventListener('click', loadSuggestions);
-  gid('btn-gen') && gid('btn-gen').addEventListener('click', function() {
-    if (!GRID_API) { showMsg('Anslut forst', false); return; }
-    showMsg('Pipeline startad — Claude analyserar trender, vanta 40 sek...', true);
-    fetch(GRID_API + '/api/pipeline/run', {method:'POST'})
-      .then(function(){ setTimeout(function(){ loadSuggestions(); loadTrends(); loadStats(); }, 42000); })
-      .catch(function(e){ showMsg('Fel: ' + e.message, false); });
-  });
-  gid('btn-publish-article') && gid('btn-publish-article').addEventListener('click', publishManual);
-  gid('btn-edit-close') && gid('btn-edit-close').addEventListener('click', closeEdit);
-  gid('btn-edit-cancel') && gid('btn-edit-cancel').addEventListener('click', closeEdit);
-  gid('btn-edit-save') && gid('btn-edit-save').addEventListener('click', saveEdit);
-
-  gid('art-search') && gid('art-search').addEventListener('input', function() {
-    renderArticlesTab(allArticles);
-  });
-
-  document.querySelectorAll('.art-filter').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      currentFilter = btn.getAttribute('data-filter');
-      document.querySelectorAll('.art-filter').forEach(function(b) {
-        b.style.background = 'none'; b.style.color = 'var(--muted)'; b.style.border = '1px solid var(--border)'; b.style.fontWeight = '';
-      });
-      btn.style.background = 'var(--v)'; btn.style.color = '#000'; btn.style.border = 'none'; btn.style.fontWeight = '700';
-      renderArticlesTab(allArticles);
+function cmsConnect() {
+  var url = (gid('cms-api').value || '').replace(/\/+$/, '');
+  if (!url) return;
+  GRID_API = url;
+  localStorage.setItem('grid-api', url);
+  gid('cms-status').textContent = 'Ansluter...';
+  fetch(url + '/api/pipeline/status')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      gid('cms-status').textContent = '● Ansluten';
+      gid('cms-status').style.color = '#4CAF50';
+      cmsLoadAll();
+    })
+    .catch(function(){
+      gid('cms-status').textContent = 'Fel';
+      gid('cms-status').style.color = '#e8001a';
     });
-  });
-});
+}
+
+function cmsTab(tab) {
+  gid('cms-tab-pipeline').style.display = tab === 'pipeline' ? '' : 'none';
+  gid('cms-tab-articles').style.display = tab === 'articles' ? '' : 'none';
+  gid('tab-btn-pipeline').style.background = tab === 'pipeline' ? 'var(--v)' : 'none';
+  gid('tab-btn-pipeline').style.color = tab === 'pipeline' ? '#000' : 'var(--muted)';
+  gid('tab-btn-articles').style.background = tab === 'articles' ? 'var(--v)' : 'none';
+  gid('tab-btn-articles').style.color = tab === 'articles' ? '#000' : 'var(--muted)';
+  if (tab === 'articles') loadArticlesTab();
+}
+
+function cmsLoadAll() {
+  loadStats();
+  loadSignals();
+  loadTrends();
+  loadLog();
+}
 
 function loadStats() {
   if (!GRID_API) return;
-  fetch(GRID_API + '/api/pipeline/status')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if (gid('stat-suggestions')) gid('stat-suggestions').textContent = d.suggestions || 0;
-    }).catch(function(){});
-  fetch(GRID_API + '/api/articles')
-    .then(function(r){ return r.json(); })
-    .then(function(arts){
-      if (gid('stat-published')) gid('stat-published').textContent = arts.length;
-    }).catch(function(){});
-  fetch(GRID_API + '/api/trends')
-    .then(function(r){ return r.json(); })
-    .then(function(trends){
-      if (gid('stat-trends')) gid('stat-trends').textContent = trends.length;
-      if (gid('stat-articles') && trends[0]) gid('stat-articles').textContent = trends[0].totalArticles || '—';
-    }).catch(function(){});
+  fetch(GRID_API + '/api/pipeline/status').then(function(r){ return r.json(); }).then(function(d){
+    gid('stat-signals').textContent = d.signals || 0;
+    gid('stat-trends').textContent = d.trends || 0;
+    gid('stat-drafts').textContent = d.pending || 0;
+    renderLog(d.log || []);
+  }).catch(function(){});
+  fetch(GRID_API + '/api/articles').then(function(r){ return r.json(); }).then(function(arts){
+    gid('stat-published').textContent = Array.isArray(arts) ? arts.length : 0;
+  }).catch(function(){});
 }
 
-function loadTrends() {
-  if (!GRID_API) { showMsg('Anslut forst', false); return; }
+function loadLog() {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/pipeline/status').then(function(r){ return r.json(); }).then(function(d){
+    renderLog(d.log || []);
+  }).catch(function(){});
+}
+
+function renderLog(logs) {
+  var el = gid('pipeline-log');
+  if (!el) return;
+  el.innerHTML = (logs || []).map(function(l){
+    return '<div>' + l.time.slice(11,19) + ' ' + l.msg + '</div>';
+  }).join('');
+}
+
+// Signals
+function cmsRunSignals() {
+  if (!GRID_API) return;
+  var btn = gid('btn-signals');
+  btn.textContent = '...';
+  fetch(GRID_API + '/api/pipeline/signals', { method: 'POST' })
+    .then(function(){
+      setTimeout(function(){ loadSignals(); loadStats(); btn.textContent = 'UPPDATERA'; }, 8000);
+    });
+}
+
+function loadSignals() {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/signals').then(function(r){ return r.json(); }).then(function(sigs){
+    renderSignals(sigs);
+    gid('stat-signals').textContent = sigs.length;
+  }).catch(function(){});
+}
+
+function renderSignals(sigs) {
+  var el = gid('signals-list');
+  if (!el) return;
+  el.innerHTML = '';
+  if (!sigs || !sigs.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:20px 0;text-align:center">Inga signaler</div>';
+    return;
+  }
+  sigs.slice(0, 15).forEach(function(s) {
+    var div = document.createElement('div');
+    div.style.cssText = 'background:var(--surface);border:1px solid var(--border);padding:10px 12px;border-radius:2px;margin-bottom:6px';
+    var bar = Math.min(100, Math.round(s.score / 2));
+
+    var top = document.createElement('div');
+    top.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:6px';
+    var hl = document.createElement('div');
+    hl.style.cssText = 'font-size:12px;font-weight:600;color:var(--text);line-height:1.3;flex:1';
+    hl.textContent = s.headline;
+    top.appendChild(hl);
+    if (s.growing) {
+      var grow = document.createElement('span');
+      grow.style.cssText = 'background:#1a4a1a;color:#4CAF50;font-size:9px;padding:2px 5px;border-radius:2px;flex-shrink:0;font-family:monospace';
+      grow.textContent = 'VÄXER';
+      top.appendChild(grow);
+    }
+    div.appendChild(top);
+
+    var barEl = document.createElement('div');
+    barEl.style.cssText = 'background:var(--border);height:2px;margin-bottom:6px';
+    var fill = document.createElement('div');
+    fill.style.cssText = 'background:var(--v);height:2px;width:' + bar + '%';
+    barEl.appendChild(fill);
+    div.appendChild(barEl);
+
+    var meta = document.createElement('div');
+    meta.style.cssText = 'display:flex;gap:4px;flex-wrap:wrap;align-items:center';
+    s.sourceCodes.slice(0,6).forEach(function(c){
+      var tag = document.createElement('span');
+      tag.style.cssText = 'background:var(--card);color:var(--text);font-size:9px;padding:1px 5px;border-radius:2px;font-family:monospace';
+      tag.textContent = c;
+      meta.appendChild(tag);
+    });
+    var cnt = document.createElement('span');
+    cnt.style.cssText = 'font-size:10px;color:var(--muted);margin-left:4px';
+    cnt.textContent = s.sourceCount + ' kallor · ' + s.articleCount + ' art';
+    meta.appendChild(cnt);
+    div.appendChild(meta);
+
+    el.appendChild(div);
+  });
+}
+
+// Trends
+function cmsRunTrends() {
+  if (!GRID_API) return;
+  var btn = gid('btn-trends');
+  btn.textContent = '...';
+  btn.disabled = true;
+  fetch(GRID_API + '/api/pipeline/trends', { method: 'POST' })
+    .then(function(){
+      var attempts = 0;
+      var poll = setInterval(function(){
+        attempts++;
+        loadTrends(function(ts){ 
+          if (ts && ts.length || attempts > 20) { 
+            clearInterval(poll);
+            btn.textContent = 'ANALYSERA';
+            btn.disabled = false;
+            loadStats();
+          }
+        });
+      }, 3000);
+    });
+}
+
+function loadTrends(cb) {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/trends').then(function(r){ return r.json(); }).then(function(ts){
+    renderTrends(ts);
+    gid('stat-trends').textContent = ts.length;
+    if (cb) cb(ts);
+  }).catch(function(){});
+}
+
+function renderTrends(ts) {
   var el = gid('trends-list');
   if (!el) return;
-  el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:var(--muted)">Claude analyserar — tar 10-15 sek...</div>';
-  fetch(GRID_API + '/api/trends')
-    .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(function(trends){
-      el.innerHTML = '';
-      var metaEl = gid('trends-meta');
-      if (metaEl) metaEl.textContent = trends.length + ' unika trender identifierade';
-      if (!trends.length) { el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Inga trender</div>'; return; }
-      var max = trends[0].articleCount || 1;
-      trends.forEach(function(t, i) {
-        var row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:10px 12px' + (i < trends.length-1 ? ';border-bottom:1px solid var(--border)' : '');
-        var num = document.createElement('div');
-        num.style.cssText = 'font-size:20px;font-weight:700;color:' + (i===0?'var(--v)':'var(--muted)') + ';flex-shrink:0;width:20px;line-height:1';
-        num.textContent = i+1;
-        var info = document.createElement('div');
-        info.style.flex = '1';
-        var hl = document.createElement('div');
-        hl.style.cssText = 'font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.3';
-        hl.textContent = t.headline || t.keyword;
-        var expl = document.createElement('div');
-        expl.style.cssText = 'font-size:11px;color:var(--mid);line-height:1.45;margin-bottom:5px';
-        expl.textContent = t.explanation || '';
-        var sub = document.createElement('div');
-        sub.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted);margin-bottom:5px';
-        sub.textContent = (t.articleCount||0) + ' artiklar · ' + (t.sourceCount||0) + ' kallor' + (t.category ? ' · ' + t.category : '');
-        var srcs = document.createElement('div');
-        srcs.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;margin-bottom:5px';
-        (t.sources||[]).slice(0,6).forEach(function(s){
-          var b = document.createElement('span');
-          b.style.cssText = 'background:' + (s.color||'#555') + ';color:#fff;padding:1px 5px;border-radius:2px;font-size:9px;font-family:monospace';
-          b.textContent = s.code||s.name;
-          srcs.appendChild(b);
+  el.innerHTML = '';
+  var pending = (ts || []).filter(function(t){ return t.status !== 'dismissed'; });
+  if (!pending.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:20px 0;text-align:center">Inga trender</div>';
+    return;
+  }
+  pending.forEach(function(trend) {
+    var div = document.createElement('div');
+    div.style.cssText = 'background:var(--surface);border:1px solid var(--border);padding:12px;border-radius:2px;margin-bottom:8px';
+
+    var catEl = document.createElement('div');
+    catEl.style.cssText = 'font-family:monospace;font-size:9px;color:var(--v);letter-spacing:.5px;margin-bottom:4px';
+    catEl.textContent = trend.category || 'NYHETER';
+    div.appendChild(catEl);
+
+    var headEl = document.createElement('div');
+    headEl.style.cssText = 'font-size:13px;font-weight:700;margin-bottom:4px;line-height:1.3';
+    headEl.textContent = trend.headline;
+    div.appendChild(headEl);
+
+    var angleEl = document.createElement('div');
+    angleEl.style.cssText = 'font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.4';
+    angleEl.textContent = trend.angle || '';
+    div.appendChild(angleEl);
+
+    if (trend.image) {
+      var img = document.createElement('img');
+      img.src = trend.image;
+      img.style.cssText = 'width:100%;height:80px;object-fit:cover;display:block;margin-bottom:10px;border-radius:2px';
+      div.appendChild(img);
+    }
+
+    var btns = document.createElement('div');
+    btns.style.cssText = 'display:flex;gap:6px';
+
+    if (trend.status === 'published') {
+      var pubLabel = document.createElement('span');
+      pubLabel.style.cssText = 'font-family:monospace;font-size:10px;color:#4CAF50';
+      pubLabel.textContent = 'PUBLICERAD';
+      btns.appendChild(pubLabel);
+    } else {
+      var mainBtn = document.createElement('button');
+      mainBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;flex:1';
+      mainBtn.textContent = trend.status === 'drafted' ? 'GRANSKA UTKAST' : 'GENERERA UTKAST';
+      (function(tid, drafted){
+        mainBtn.addEventListener('click', function(){
+          if (drafted) cmsDraftReview(tid); else cmsGenerateDraft(tid);
         });
-        var bar = document.createElement('div');
-        bar.style.cssText = 'height:2px;background:var(--border);border-radius:1px;overflow:hidden';
-        var fill = document.createElement('div');
-        fill.style.cssText = 'height:100%;background:var(--v);width:' + Math.round((t.articleCount||0)/max*100) + '%';
-        bar.appendChild(fill);
-        info.appendChild(hl);
-        if (t.explanation) info.appendChild(expl);
-        info.appendChild(sub); info.appendChild(srcs); info.appendChild(bar);
-        row.appendChild(num); row.appendChild(info);
-        el.appendChild(row);
-      });
-    })
-    .catch(function(e){ el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:#e8302a">Fel: ' + e.message + '</div>'; });
+      })(trend.id, trend.status === 'drafted');
+
+      var dismissBtn = document.createElement('button');
+      dismissBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:5px 10px;font-size:10px;cursor:pointer;border-radius:2px';
+      dismissBtn.textContent = 'Avfarda';
+      (function(tid){ dismissBtn.addEventListener('click', function(){ cmsDismissTrend(tid); }); })(trend.id);
+
+      btns.appendChild(mainBtn);
+      btns.appendChild(dismissBtn);
+    }
+
+    div.appendChild(btns);
+    el.appendChild(div);
+  });
 }
 
-function loadSuggestions() {
+function cmsGenerateDraft(trendId) {
   if (!GRID_API) return;
-  var el = gid('suggestions-list');
-  if (!el) return;
-  fetch(GRID_API + '/api/suggestions')
-    .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(function(list){
-      el.innerHTML = '';
-      var pending = list.filter(function(s){ return s.status === 'pending'; });
-      if (gid('stat-suggestions')) gid('stat-suggestions').textContent = pending.length;
-      if (!pending.length) {
-        el.innerHTML = '<div style="padding:14px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Inga forslag — klicka Kor pipeline</div>';
-        return;
-      }
-      pending.forEach(function(s) {
-        var art = s.article || {};
-        var box = document.createElement('div');
-        box.style.cssText = 'border:1px solid var(--border);border-left:3px solid var(--border);border-radius:0 3px 3px 0;margin-bottom:10px;padding:12px;overflow:hidden';
-        var cat = document.createElement('div');
-        cat.style.cssText = 'font-family:monospace;font-size:9px;color:var(--v);letter-spacing:1px;margin-bottom:4px';
-        cat.textContent = (art.category||'NYHETER').toUpperCase() + ' — ' + (s.sources||[]).length + ' kallor';
-        var title = document.createElement('div');
-        title.style.cssText = 'font-size:14px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:5px';
-        title.textContent = art.title || s.keyword || '(Rubrik saknas)';
-        var ingress = document.createElement('div');
-        ingress.style.cssText = 'font-size:12px;color:var(--mid);line-height:1.5;margin-bottom:10px';
-        ingress.textContent = art.ingress || '(Ingen ingress)';
-        var srcRow = document.createElement('div');
-        srcRow.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px';
-        (s.sources||[]).slice(0,5).forEach(function(src){
-          var b = document.createElement('span');
-          b.style.cssText = 'background:' + (src.sourceColor||src.color||'#555') + ';color:#fff;padding:1px 5px;border-radius:2px;font-size:9px;font-family:monospace';
-          b.textContent = src.sourceCode||src.code||src.name||'';
-          srcRow.appendChild(b);
-        });
-        var btnRow = document.createElement('div');
-        btnRow.style.cssText = 'display:flex;gap:6px';
-        var pubBtn = document.createElement('button');
-        pubBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:6px 14px;font-size:12px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px';
-        pubBtn.textContent = 'Publicera';
-        var dimBtn = document.createElement('button');
-        dimBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-size:11px;cursor:pointer;border-radius:2px';
-        dimBtn.textContent = 'Avfarda';
-        var sid = s.id; var sart = art;
-        pubBtn.addEventListener('click', function(){
-          pubBtn.textContent = 'Publicerar...'; pubBtn.disabled = true;
-          fetch(GRID_API + '/api/suggestions/' + sid + '/publish', {
-            method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'
-          })
-          .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-          .then(function(article){
-            injectFeed(Object.assign({}, article, {cat: sart.category||'Nyheter', type:'ai', ingress: article.ingress||sart.ingress, title: article.title||sart.title}));
-            box.remove();
-            loadLiveList();
-            loadStats();
-            showMsg('Artikel publicerad i flodet', true);
-          })
-          .catch(function(e){ pubBtn.textContent = 'Publicera'; pubBtn.disabled = false; showMsg('Fel: ' + e.message, false); });
-        });
-        dimBtn.addEventListener('click', function(){
-          fetch(GRID_API + '/api/suggestions/' + sid + '/dismiss', {method:'POST'}).then(function(){ box.remove(); }).catch(function(){});
-        });
-        btnRow.appendChild(pubBtn); btnRow.appendChild(dimBtn);
-        box.appendChild(cat); box.appendChild(title); box.appendChild(ingress); box.appendChild(srcRow); box.appendChild(btnRow);
-        el.appendChild(box);
-      });
-    })
-    .catch(function(e){ el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:#e8302a">Fel: ' + e.message + '</div>'; });
-}
-
-function loadLiveList() {
-  if (!GRID_API) return;
-  var el = gid('live-list');
-  if (!el) return;
-  fetch(GRID_API + '/api/articles')
+  var statusEl = gid('draft-status');
+  if (statusEl) statusEl.textContent = 'Genererar med Claude Sonnet...';
+  fetch(GRID_API + '/api/trends/' + trendId + '/draft', { method: 'POST' })
     .then(function(r){ return r.json(); })
-    .then(function(arts){
-      el.innerHTML = '';
-      allArticles = arts;
-      if (!arts.length) { el.innerHTML = '<div style="padding:12px;font-family:monospace;font-size:10px;color:var(--muted);text-align:center">Inga publicerade</div>'; return; }
-      arts.slice(0,5).forEach(function(a){
-        injectFeed(Object.assign({}, a, {cat: a.cat||'Nyheter', pubDate: a.pubDate||a.pub_date||new Date().toISOString()}));
-        var row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);gap:8px';
-        var info = document.createElement('div');
-        info.style.flex = '1';
-        var t = document.createElement('div');
-        t.style.cssText = 'font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;line-height:1.3';
-        t.textContent = a.title;
-        var m = document.createElement('div');
-        m.style.cssText = 'font-family:monospace;font-size:9px;color:var(--muted)';
-        var d = new Date(a.pubDate||a.pub_date||Date.now());
-        m.textContent = (a.cat||'') + ' · ' + d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'}) + (a.aiGenerated||a.ai_generated ? ' · AI' : ' · Journalist');
-        info.appendChild(t); info.appendChild(m);
-        var badge = document.createElement('span');
-        badge.style.cssText = 'background:#22c55e;color:#fff;font-size:9px;padding:2px 6px;border-radius:10px;font-family:monospace;flex-shrink:0';
-        badge.textContent = 'LIVE';
-        row.appendChild(info); row.appendChild(badge);
-        el.appendChild(row);
-      });
+    .then(function(draft){
+      if (statusEl) statusEl.textContent = '';
+      loadTrends();
+      renderDraft(trendId, draft);
+    })
+    .catch(function(){ if (statusEl) statusEl.textContent = 'Fel'; });
+}
+
+function cmsDraftReview(trendId) {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/trends').then(function(r){ return r.json(); }).then(function(ts){
+    var t = ts.find(function(x){ return x.id === trendId; });
+    if (t && t.draft) renderDraft(trendId, t.draft);
+  });
+}
+
+function renderDraft(trendId, draft) {
+  var el = gid('drafts-list');
+  if (!el) return;
+  var existing = document.getElementById('draft-' + trendId);
+  if (existing) existing.remove();
+
+  var div = document.createElement('div');
+  div.id = 'draft-' + trendId;
+  div.style.cssText = 'background:var(--surface);border:1px solid var(--v);padding:14px;border-radius:2px;margin-bottom:8px';
+
+  var titleEl = document.createElement('div');
+  titleEl.style.cssText = 'font-size:14px;font-weight:700;margin-bottom:8px;line-height:1.3';
+  titleEl.textContent = draft.title || '';
+  div.appendChild(titleEl);
+
+  var ingressEl = document.createElement('div');
+  ingressEl.style.cssText = 'font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;border-left:2px solid var(--v);padding-left:8px';
+  ingressEl.textContent = draft.ingress || '';
+  div.appendChild(ingressEl);
+
+  if (draft.body) {
+    var bodyEl = document.createElement('div');
+    bodyEl.style.cssText = 'font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.6';
+    bodyEl.textContent = (draft.body || '').split('\n\n')[0] || '';
+    div.appendChild(bodyEl);
+  }
+
+  if (draft.quote) {
+    var quoteEl = document.createElement('div');
+    quoteEl.style.cssText = 'font-size:11px;font-style:italic;color:var(--muted);margin-bottom:10px;border-left:2px solid var(--border);padding-left:8px';
+    quoteEl.textContent = '"' + draft.quote + '" — ' + (draft.quoteAttr || '');
+    div.appendChild(quoteEl);
+  }
+
+  var btns = document.createElement('div');
+  btns.style.cssText = 'display:flex;gap:6px';
+
+  var pubBtn = document.createElement('button');
+  pubBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;flex:1';
+  pubBtn.textContent = 'PUBLICERA';
+  (function(tid){ pubBtn.addEventListener('click', function(){ cmsPublishTrend(tid); }); })(trendId);
+
+  var closeBtn = document.createElement('button');
+  closeBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-size:11px;cursor:pointer;border-radius:2px';
+  closeBtn.textContent = 'X';
+  closeBtn.addEventListener('click', function(){ div.remove(); });
+
+  btns.appendChild(pubBtn);
+  btns.appendChild(closeBtn);
+  div.appendChild(btns);
+  el.insertBefore(div, el.firstChild);
+}
+
+function cmsPublishTrend(trendId) {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/trends/' + trendId + '/publish', { method: 'POST' })
+    .then(function(r){ return r.json(); })
+    .then(function(art){
+      injectFeed(art);
+      loadTrends();
+      loadStats();
+      var el = document.getElementById('draft-' + trendId);
+      if (el) el.remove();
     }).catch(function(){});
 }
 
+function cmsDismissTrend(trendId) {
+  if (!GRID_API) return;
+  fetch(GRID_API + '/api/trends/' + trendId + '/dismiss', { method: 'POST' })
+    .then(function(){ loadTrends(); });
+}
+
+// Articles tab
 function loadArticlesTab() {
   if (!GRID_API) return;
-  fetch(GRID_API + '/api/articles')
-    .then(function(r){ return r.json(); })
-    .then(function(arts){ allArticles = arts; renderArticlesTab(arts); })
-    .catch(function(){});
+  fetch(GRID_API + '/api/articles').then(function(r){ return r.json(); }).then(function(arts){
+    allArticles = arts || [];
+    renderArticlesTab(allArticles);
+    gid('stat-published').textContent = allArticles.length;
+  }).catch(function(){});
 }
 
 function renderArticlesTab(arts) {
   var el = gid('articles-list');
   if (!el) return;
-  var search = (gid('art-search')||{value:''}).value.toLowerCase();
-  var filtered = arts.filter(function(a){
-    var matchFilter = currentFilter === 'all'
-      || (currentFilter === 'live' && !offlineIds.includes(a.id))
-      || (currentFilter === 'off' && offlineIds.includes(a.id))
-      || (currentFilter === 'ai' && (a.aiGenerated||a.ai_generated||a.type==='ai'))
-      || (currentFilter === 'journalist' && !a.aiGenerated && !a.ai_generated && a.type!=='ai');
-    var matchSearch = !search || (a.title||'').toLowerCase().includes(search) || (a.cat||'').toLowerCase().includes(search);
-    return matchFilter && matchSearch;
-  });
   el.innerHTML = '';
-  if (!filtered.length) {
-    el.innerHTML = '<div style="padding:20px;text-align:center;font-family:monospace;font-size:10px;color:var(--muted)">Inga artiklar matchar</div>';
+  if (!arts || !arts.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:20px 0">Inga artiklar</div>';
     return;
   }
-  filtered.forEach(function(a) {
-    var isOff = offlineIds.includes(a.id);
-    var pos = filtered.indexOf(a) + 1;
+  arts.forEach(function(a, idx) {
     var row = document.createElement('div');
     row.className = 'art-dnd-row';
     row.setAttribute('data-id', a.id);
     row.setAttribute('draggable', 'true');
-    row.style.cssText = 'display:grid;grid-template-columns:28px 36px 1fr auto auto auto auto;align-items:center;gap:8px;padding:10px 0;border-bottom:0.5px solid var(--border);cursor:grab';
-    var posNum = document.createElement('div');
-    posNum.style.cssText = 'font-family:monospace;font-size:10px;color:' + (pos <= 15 ? 'var(--v)' : 'var(--muted)') + ';text-align:center;font-weight:' + (pos <= 15 ? '700' : '400');
-    posNum.textContent = pos;
-    var toggle = document.createElement('div');
-    toggle.style.cssText = 'width:32px;height:18px;background:' + (isOff?'var(--border)':'#22c55e') + ';border-radius:10px;position:relative;cursor:pointer;transition:.2s;flex-shrink:0';
-    var dot = document.createElement('div');
-    dot.style.cssText = 'width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:2px;' + (isOff?'left:2px':'right:2px') + ';transition:.2s';
-    toggle.appendChild(dot);
-    toggle.addEventListener('click', function(){
-      if (offlineIds.includes(a.id)) {
-        offlineIds = offlineIds.filter(function(id){ return id !== a.id; });
-      } else {
-        offlineIds.push(a.id);
-      }
-      localStorage.setItem('grid-offline-ids', JSON.stringify(offlineIds));
-      renderArticlesTab(allArticles);
-    });
+    row.style.cssText = 'display:grid;grid-template-columns:26px 1fr auto auto auto;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);cursor:grab';
+
+    var posEl = document.createElement('div');
+    posEl.style.cssText = 'font-family:monospace;font-size:10px;font-weight:700;text-align:center;color:' + (idx < 15 ? 'var(--v)' : 'var(--muted)');
+    posEl.textContent = idx + 1;
+
     var info = document.createElement('div');
-    info.style.opacity = isOff ? '0.4' : '1';
-    var t = document.createElement('div');
-    t.style.cssText = 'font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px;line-height:1.3';
-    t.textContent = a.title;
-    var m = document.createElement('div');
-    m.style.cssText = 'font-size:10px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap';
-    var catBadge = document.createElement('span');
-    catBadge.style.cssText = 'background:var(--surface);color:var(--muted);padding:1px 6px;border-radius:3px;font-size:9px;font-family:monospace';
-    catBadge.textContent = a.cat||'';
-    var typeBadge = document.createElement('span');
-    typeBadge.style.cssText = 'font-size:9px;color:' + ((a.aiGenerated||a.ai_generated||a.type==='ai') ? 'var(--v)' : 'var(--muted)');
-    typeBadge.textContent = (a.aiGenerated||a.ai_generated||a.type==='ai') ? 'AI' : 'Journalist';
-    var d = new Date(a.pubDate||a.pub_date||Date.now());
-    var dateSpan = document.createElement('span');
-    dateSpan.textContent = d.toLocaleDateString('sv-SE') + ' ' + d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'});
-    m.appendChild(catBadge); m.appendChild(typeBadge); m.appendChild(dateSpan);
-    info.appendChild(t); info.appendChild(m);
+    var t = new Date(a.pubDate || Date.now()).toLocaleTimeString('sv-SE', {hour:'2-digit',minute:'2-digit'});
+    var titleD = document.createElement('div');
+    titleD.style.cssText = 'font-size:12px;font-weight:600;margin-bottom:2px';
+    titleD.textContent = a.title || '';
+    var metaD = document.createElement('div');
+    metaD.style.cssText = 'font-size:10px;color:var(--muted)';
+    metaD.textContent = (a.cat || '') + ' · ' + t + (a.aiGenerated ? ' · AI' : '');
+    info.appendChild(titleD);
+    info.appendChild(metaD);
+
     var featBtn = document.createElement('button');
-    var isFeatured = a.featured;
-    featBtn.style.cssText = 'background:' + (isFeatured ? 'var(--v)' : 'none') + ';border:1px solid var(--border);color:' + (isFeatured ? '#000' : 'var(--muted)') + ';padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px;white-space:nowrap;font-weight:' + (isFeatured ? '700' : '400');
-    featBtn.textContent = isFeatured ? 'TOP' : 'Toppa';
-    featBtn.title = 'Visa som hero-artikel hogst upp pa sajten';
-    featBtn.addEventListener('click', function() {
-      var newVal = !a.featured;
-      if (GRID_API) {
-        fetch(GRID_API + '/api/articles/' + a.id, {
-          method:'PATCH', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({featured: newVal})
-        }).then(function(){
-          a.featured = newVal;
-          allArticles = allArticles.map(function(x){ return x.id === a.id ? Object.assign({}, x, {featured: newVal}) : x; });
-          renderArticlesTab(allArticles);
-          if (newVal) setFeaturedHero(a);
-        }).catch(function(){});
-      }
-    });
+    featBtn.style.cssText = 'border:1px solid var(--border);padding:4px 8px;font-size:10px;cursor:pointer;border-radius:2px;font-weight:700;white-space:nowrap;background:' + (a.featured ? 'var(--v)' : 'none') + ';color:' + (a.featured ? '#000' : 'var(--muted)');
+    featBtn.textContent = a.featured ? 'TOP' : 'Toppa';
+    (function(art){ featBtn.addEventListener('click', function(){
+      var v = !art.featured;
+      fetch(GRID_API + '/api/articles/' + art.id, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({featured:v})})
+        .then(function(){ art.featured = v; renderArticlesTab(allArticles); if (v) setFeaturedHero(art); });
+    }); })(a);
+
     var editBtn = document.createElement('button');
-    editBtn.style.cssText = 'background:none;border:0.5px solid var(--border);color:var(--muted);padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px;white-space:nowrap';
+    editBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:4px 8px;font-size:10px;cursor:pointer;border-radius:2px;white-space:nowrap';
     editBtn.textContent = 'Redigera';
-    var aid = a.id;
-    editBtn.addEventListener('click', function(){ openEdit(a); });
+    (function(art){ editBtn.addEventListener('click', function(){ openEdit(art); }); })(a);
+
     var delBtn = document.createElement('button');
-    delBtn.style.cssText = 'background:none;border:none;color:var(--muted);padding:4px 8px;font-size:14px;cursor:pointer;opacity:.5';
-    delBtn.textContent = '×';
-    delBtn.addEventListener('click', function(){
-      if (!confirm('Ta bort artikeln?')) return;
-      allArticles = allArticles.filter(function(x){ return x.id !== aid; });
+    delBtn.style.cssText = 'background:none;border:1px solid #333;color:#666;padding:4px 8px;font-size:10px;cursor:pointer;border-radius:2px';
+    delBtn.textContent = 'X';
+    (function(art){ delBtn.addEventListener('click', function(){
+      if (!confirm('Ta bort?')) return;
+      allArticles = allArticles.filter(function(x){ return x.id !== art.id; });
       renderArticlesTab(allArticles);
-    });
-    row.appendChild(posNum); row.appendChild(toggle); row.appendChild(info); row.appendChild(featBtn); row.appendChild(editBtn); row.appendChild(delBtn);
+    }); })(a);
+
+    row.appendChild(posEl); row.appendChild(info); row.appendChild(featBtn); row.appendChild(editBtn); row.appendChild(delBtn);
     el.appendChild(row);
   });
-  setTimeout(enableDragDrop, 50);
+  setTimeout(enableDragDrop, 0);
+}
+
+function enableDragDrop() {
+  document.querySelectorAll('.art-dnd-row').forEach(function(row) {
+    row.addEventListener('dragstart', function(e) {
+      dragSrcId = row.getAttribute('data-id');
+      row.style.opacity = '0.4';
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', function() { row.style.opacity = '1'; });
+    row.addEventListener('dragover', function(e) { e.preventDefault(); });
+    row.addEventListener('drop', function(e) {
+      e.preventDefault();
+      var targetId = row.getAttribute('data-id');
+      if (dragSrcId === targetId) return;
+      var si = allArticles.findIndex(function(a){ return a.id === dragSrcId; });
+      var di = allArticles.findIndex(function(a){ return a.id === targetId; });
+      if (si < 0 || di < 0) return;
+      var moved = allArticles.splice(si, 1)[0];
+      allArticles.splice(di, 0, moved);
+      renderArticlesTab(allArticles);
+      if (GRID_API) fetch(GRID_API + '/api/articles/reorder', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({order:allArticles.map(function(a,i){return{id:a.id,position:i};})})}).catch(function(){});
+    });
+  });
 }
 
 function openEdit(a) {
-  var modal = gid('edit-modal');
-  if (!modal) return;
-  gid('edit-id').value = a.id;
-  gid('edit-title').value = a.title || '';
-  gid('edit-ingress').value = a.ingress || '';
-  gid('edit-body').value = a.body || '';
-  gid('edit-cat').value = a.cat || '';
-  gid('edit-type').value = (a.aiGenerated||a.ai_generated||a.type==='ai') ? 'ai' : 'journalist';
-  modal.style.display = 'block';
-  modal.scrollIntoView({behavior:'smooth', block:'nearest'});
-}
-
-function closeEdit() {
-  var modal = gid('edit-modal');
-  if (modal) modal.style.display = 'none';
-}
-
-function saveEdit() {
-  var id = (gid('edit-id')||{value:''}).value;
-  var title = (gid('edit-title')||{value:''}).value.trim();
-  var ingress = (gid('edit-ingress')||{value:''}).value.trim();
-  var body = (gid('edit-body')||{value:''}).value.trim();
-  var cat = (gid('edit-cat')||{value:''}).value.trim();
-  var type = (gid('edit-type')||{value:'journalist'}).value;
-  if (!title) { showMsg('Rubrik kravs', false); return; }
-  var updated = {id:id, title:title, ingress:ingress, body:body, cat:cat, type:type, pubDate: new Date().toISOString()};
-  if (GRID_API) {
-    fetch(GRID_API + '/api/articles/' + id, {
-      method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(updated)
-    }).catch(function(){});
+  var m = document.createElement('div');
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:var(--surface);border:1px solid var(--border);padding:20px;width:100%;max-width:540px;max-height:80vh;overflow-y:auto;border-radius:4px';
+  
+  function field(label, id, val, tag) {
+    var wrap = document.createElement('div');
+    wrap.style.marginBottom = '8px';
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'font-size:10px;color:var(--muted);margin-bottom:3px';
+    lbl.textContent = label;
+    var inp = document.createElement(tag || 'input');
+    inp.id = id;
+    inp.style.cssText = 'width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:12px;border-radius:2px;outline:none;box-sizing:border-box';
+    if (tag === 'textarea') { inp.style.height = '100px'; inp.style.resize = 'vertical'; inp.textContent = val || ''; }
+    else inp.value = val || '';
+    wrap.appendChild(lbl); wrap.appendChild(inp);
+    return wrap;
   }
-  allArticles = allArticles.map(function(a){ return a.id === id ? Object.assign({}, a, updated) : a; });
-  renderArticlesTab(allArticles);
-  closeEdit();
-  showMsg('Andringar sparade', true);
+
+  box.appendChild(field('Rubrik', 'e-title', a.title));
+  box.appendChild(field('Ingress', 'e-ingress', a.ingress, 'textarea'));
+  box.appendChild(field('Brodtext', 'e-body', a.body, 'textarea'));
+  box.appendChild(field('Kategori', 'e-cat', a.cat));
+  box.querySelector('#e-body').style.height = '140px';
+
+  var btns = document.createElement('div');
+  btns.style.cssText = 'display:flex;gap:8px;margin-top:6px';
+  var save = document.createElement('button');
+  save.style.cssText = 'background:var(--v);color:#000;border:none;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px;flex:1';
+  save.textContent = 'SPARA';
+  save.addEventListener('click', function(){
+    var upd = { title: gid('e-title').value, ingress: gid('e-ingress').value, body: gid('e-body').value, cat: gid('e-cat').value };
+    if (GRID_API) fetch(GRID_API + '/api/articles/' + a.id, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(upd)})
+      .then(function(){ Object.assign(a, upd); m.remove(); renderArticlesTab(allArticles); });
+  });
+  var cancel = document.createElement('button');
+  cancel.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:8px 14px;font-size:12px;cursor:pointer;border-radius:2px';
+  cancel.textContent = 'Avbryt';
+  cancel.addEventListener('click', function(){ m.remove(); });
+  btns.appendChild(save); btns.appendChild(cancel);
+  box.appendChild(btns);
+  m.appendChild(box);
+  document.body.appendChild(m);
 }
 
-function publishManual() {
-  var title = (gid('art-title')||{value:''}).value.trim();
-  var ingress = (gid('art-ingress')||{value:''}).value.trim();
-  if (!title || !ingress) { showMsg('Rubrik och ingress kravs', false); return; }
-  var article = {
-    id: 'art-' + Date.now(),
-    title: title,
-    ingress: ingress,
-    body: (gid('art-body')||{value:''}).value.trim(),
-    cat: (gid('art-cat')||{value:'Nyheter'}).value.trim() || 'Nyheter',
-    type: (gid('art-type')||{value:'journalist'}).value,
-    image: (gid('art-image')||{value:''}).value.trim(),
-    pubDate: new Date().toISOString()
-  };
-  if (!GRID_API) { showMsg('Anslut till Railway forst', false); return; }
-  fetch(GRID_API + '/api/articles', {
-    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(article)
-  })
-  .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-  .then(function(a){
-    injectFeed(Object.assign({}, a, {cat:article.cat, type:article.type}));
-    allArticles.unshift(a);
-    renderArticlesTab(allArticles);
-    loadLiveList();
-    loadStats();
-    showMsg('Artikel publicerad', true);
-    ['art-title','art-ingress','art-body','art-cat'].forEach(function(id){ var el=gid(id); if(el) el.value=''; });
-  })
-  .catch(function(e){ showMsg('Fel: ' + e.message, false); });
+function openNewArticle() {
+  var m = document.createElement('div');
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:var(--surface);border:1px solid var(--border);padding:20px;width:100%;max-width:540px;max-height:80vh;overflow-y:auto;border-radius:4px';
+
+  function field(label, id, placeholder, tag) {
+    var wrap = document.createElement('div');
+    wrap.style.marginBottom = '8px';
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'font-size:10px;color:var(--muted);margin-bottom:3px';
+    lbl.textContent = label;
+    var inp = document.createElement(tag || 'input');
+    inp.id = id;
+    inp.style.cssText = 'width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:12px;border-radius:2px;outline:none;box-sizing:border-box';
+    if (tag === 'textarea') { inp.style.height = '100px'; inp.style.resize = 'vertical'; }
+    else if (placeholder) inp.placeholder = placeholder;
+    wrap.appendChild(lbl); wrap.appendChild(inp);
+    return wrap;
+  }
+
+  var hdr = document.createElement('div');
+  hdr.style.cssText = 'font-family:monospace;font-size:11px;font-weight:700;margin-bottom:14px;letter-spacing:1px';
+  hdr.textContent = 'NY ARTIKEL';
+  box.appendChild(hdr);
+  box.appendChild(field('Bild-URL', 'n-image', 'https://images.unsplash.com/...'));
+  box.appendChild(field('Rubrik', 'n-title', ''));
+  box.appendChild(field('Ingress', 'n-ingress', '', 'textarea'));
+  box.appendChild(field('Brodtext', 'n-body', '', 'textarea'));
+  box.querySelector('#n-body').style.height = '140px';
+  var catWrap = field('Kategori', 'n-cat', 'Nyheter');
+  catWrap.querySelector('input').value = 'Nyheter';
+  box.appendChild(catWrap);
+
+  var btns = document.createElement('div');
+  btns.style.cssText = 'display:flex;gap:8px;margin-top:6px';
+  var pub = document.createElement('button');
+  pub.style.cssText = 'background:var(--v);color:#000;border:none;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px;flex:1';
+  pub.textContent = 'PUBLICERA';
+  pub.addEventListener('click', function(){
+    var art = { title: gid('n-title').value.trim(), ingress: gid('n-ingress').value.trim(), body: gid('n-body').value.trim(), cat: gid('n-cat').value.trim() || 'Nyheter', image: gid('n-image').value.trim(), type: 'journalist', aiGenerated: false };
+    if (!art.title || !GRID_API) return;
+    fetch(GRID_API + '/api/articles', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(art)})
+      .then(function(r){ return r.json(); })
+      .then(function(saved){ injectFeed(saved); allArticles.unshift(saved); m.remove(); loadArticlesTab(); });
+  });
+  var cancel = document.createElement('button');
+  cancel.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:8px 14px;font-size:12px;cursor:pointer;border-radius:2px';
+  cancel.textContent = 'Avbryt';
+  cancel.addEventListener('click', function(){ m.remove(); });
+  btns.appendChild(pub); btns.appendChild(cancel);
+  box.appendChild(btns);
+  m.appendChild(box);
+  document.body.appendChild(m);
 }
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem('grid-api') || '';
+  if (saved) { var inp = gid('cms-api'); if (inp) inp.value = saved; }
+});
 
 function injectFeed(article) {
   var rawId = (article.id || '').replace(/^art-/, '');
@@ -2335,103 +2354,6 @@ function injectFeed(article) {
     else feed.appendChild(card);
   }
 }
-
-// ─── DRAG AND DROP POSITION MANAGEMENT ───────────────────────
-var dragSrcId = null;
-
-function enableDragDrop() {
-  var rows = document.querySelectorAll('#articles-list .art-dnd-row');
-  rows.forEach(function(row) {
-    row.addEventListener('dragstart', function(e) {
-      dragSrcId = row.getAttribute('data-id');
-      row.style.opacity = '0.4';
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    row.addEventListener('dragend', function() {
-      row.style.opacity = '1';
-      document.querySelectorAll('#articles-list .art-dnd-row').forEach(function(r){
-        r.classList.remove('drag-over');
-      });
-    });
-    row.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      document.querySelectorAll('#articles-list .art-dnd-row').forEach(function(r){
-        r.classList.remove('drag-over');
-      });
-      row.classList.add('drag-over');
-    });
-    row.addEventListener('drop', function(e) {
-      e.preventDefault();
-      if (dragSrcId === row.getAttribute('data-id')) return;
-      // Reorder allArticles
-      var srcIdx = allArticles.findIndex(function(a){ return a.id === dragSrcId; });
-      var dstIdx = allArticles.findIndex(function(a){ return a.id === row.getAttribute('data-id'); });
-      if (srcIdx < 0 || dstIdx < 0) return;
-      var moved = allArticles.splice(srcIdx, 1)[0];
-      allArticles.splice(dstIdx, 0, moved);
-      // Save order to Railway
-      saveArticleOrder();
-      renderArticlesTab(allArticles);
-    });
-  });
-}
-
-function saveArticleOrder() {
-  if (!GRID_API) return;
-  var order = allArticles.map(function(a, i){ return { id: a.id, position: i }; });
-  fetch(GRID_API + '/api/articles/order', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ order: order })
-  }).catch(function(){});
-}
-
-
-var dragSrcId = null;
-
-function enableDragDrop() {
-  var rows = document.querySelectorAll('.art-dnd-row');
-  rows.forEach(function(row) {
-    row.addEventListener('dragstart', function(e) {
-      dragSrcId = row.getAttribute('data-id');
-      row.style.opacity = '0.4';
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    row.addEventListener('dragend', function() {
-      row.style.opacity = '1';
-      document.querySelectorAll('.art-dnd-row').forEach(function(r){ r.classList.remove('drag-over'); });
-    });
-    row.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      document.querySelectorAll('.art-dnd-row').forEach(function(r){ r.classList.remove('drag-over'); });
-      row.classList.add('drag-over');
-    });
-    row.addEventListener('drop', function(e) {
-      e.preventDefault();
-      var targetId = row.getAttribute('data-id');
-      if (dragSrcId === targetId) return;
-      var srcIdx = allArticles.findIndex(function(a){ return a.id === dragSrcId; });
-      var dstIdx = allArticles.findIndex(function(a){ return a.id === targetId; });
-      if (srcIdx < 0 || dstIdx < 0) return;
-      var moved = allArticles.splice(srcIdx, 1)[0];
-      allArticles.splice(dstIdx, 0, moved);
-      saveArticleOrder();
-      renderArticlesTab(allArticles);
-    });
-  });
-}
-
-function saveArticleOrder() {
-  if (!GRID_API) return;
-  var order = allArticles.map(function(a, i){ return { id: a.id, position: i }; });
-  fetch(GRID_API + '/api/articles/reorder', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ order: order })
-  }).catch(function(){});
-}
-
 function setFeaturedHero(article) {
   var hero = document.querySelector('.hero');
   if (!hero) return;
@@ -2455,42 +2377,6 @@ function setFeaturedHero(article) {
   hero.style.cursor = 'pointer';
 }
 
-function loadAndInjectPublished() {
-  if (!GRID_API) return;
-  fetch(GRID_API + '/api/articles')
-    .then(function(r){ return r.json(); })
-    .then(function(arts){
-      arts.forEach(function(a){
-        injectFeed(Object.assign({}, a, {
-          cat: a.cat || 'Nyheter',
-          pubDate: a.pubDate || a.pub_date || new Date().toISOString()
-        }));
-      });
-      var featured = arts.find(function(a){ return a.featured; });
-      if (featured) setFeaturedHero(featured);
-    }).catch(function(){});
-}
-
-
-
-window.addEventListener('load', function() {
-  var apiUrl = localStorage.getItem('grid-api') || '';
-  if (!apiUrl) return;
-  fetch(apiUrl + '/api/articles')
-    .then(function(r){ return r.json(); })
-    .then(function(arts){
-      if (!Array.isArray(arts)) return;
-      arts.forEach(function(a){ if (window.injectFeed) window.injectFeed(a); });
-      var featured = arts.find(function(a){ return a.featured; });
-      if (featured && window.setFeaturedHero) window.setFeaturedHero(featured);
-    }).catch(function(){});
-});
-
-
-window.addEventListener('load',function(){var u=localStorage.getItem('grid-api')||'';if(!u)return;fetch(u+'/api/articles').then(function(r){return r.json();}).then(function(arts){if(!Array.isArray(arts))return;arts.forEach(function(a){if(window.injectFeed)window.injectFeed(a);});var f=arts.find(function(a){return a.featured;});if(f&&window.setFeaturedHero)window.setFeaturedHero(f);}).catch(function(){});});
-
-
-// Auto-load published articles on page load - placed here so injectFeed is defined
 window.addEventListener('load', function() {
   var apiUrl = localStorage.getItem('grid-api') || '';
   if (!apiUrl) return;
