@@ -12,96 +12,83 @@ const cache = new NodeCache({ stdTTL: 300 });
 app.use(cors());
 app.use(express.json());
 
-// JSON file storage on Railway Volume
+// ── Storage ──────────────────────────────────────────────────
 const DATA_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH || '/data';
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 const ARTICLES_FILE = path.join(DATA_DIR, 'articles.json');
 
 function readArticles() {
-  try {
-    if (fs.existsSync(ARTICLES_FILE)) return JSON.parse(fs.readFileSync(ARTICLES_FILE, 'utf8'));
-  } catch(e) { console.error('Read error:', e.message); }
+  try { if (fs.existsSync(ARTICLES_FILE)) return JSON.parse(fs.readFileSync(ARTICLES_FILE, 'utf8')); }
+  catch(e) { console.error('Read error:', e.message); }
   return [];
 }
-
-function writeArticles(articles) {
-  try { fs.writeFileSync(ARTICLES_FILE, JSON.stringify(articles, null, 2)); }
+function writeArticles(arts) {
+  try { fs.writeFileSync(ARTICLES_FILE, JSON.stringify(arts, null, 2)); }
   catch(e) { console.error('Write error:', e.message); }
 }
-
-function insertArticle(a) {
-  const articles = readArticles();
-  const existing = articles.findIndex(x => x.id === a.id);
-  if (existing >= 0) articles[existing] = a;
-  else articles.unshift(a);
-  writeArticles(articles);
+function saveArticle(a) {
+  const arts = readArticles();
+  const idx = arts.findIndex(x => x.id === a.id);
+  if (idx >= 0) arts[idx] = a; else arts.unshift(a);
+  writeArticles(arts);
+}
+function updateArticle(id, updates) {
+  const arts = readArticles();
+  const idx = arts.findIndex(x => x.id === id);
+  if (idx >= 0) { Object.assign(arts[idx], updates); writeArticles(arts); }
 }
 
-function updateArticleById(id, updates) {
-  const articles = readArticles();
-  const idx = articles.findIndex(x => x.id === id);
-  if (idx >= 0) { Object.assign(articles[idx], updates); writeArticles(articles); }
-}
-
+// ── Sources ───────────────────────────────────────────────────
 const SOURCES = {
   // Riksmedier
-  aftonbladet: { name:'Aftonbladet',          code:'AB',  color:'#e8001a', url:'https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/' },
-  expressen:   { name:'Expressen',            code:'EX',  color:'#006AA7', url:'https://feeds.expressen.se/nyheter/' },
-  dn:          { name:'DN',                   code:'DN',  color:'#1a1a1a', url:'https://www.dn.se/rss/' },
-  svd:         { name:'SvD',                  code:'SvD', color:'#002E6E', url:'https://www.svd.se/feed/articles.rss' },
-  sydsvenskan: { name:'Sydsvenskan',           code:'SDS', color:'#D92B3A', url:'https://www.sydsvenskan.se/rss.xml' },
-  barometern:  { name:'Barometern',            code:'BAR', color:'#2B6E3A', url:'https://www.barometern.se/rss/' },
-  svt:         { name:'SVT Nyheter',           code:'SVT', color:'#1A5276', url:'https://www.svt.se/nyheter/rss.xml' },
-  // NTM-titlar
-  corren:      { name:'Corren',               code:'COR', color:'#C0392B', url:'https://www.corren.se/rss/' },
-  nt:          { name:'NT',                   code:'NT',  color:'#C0392B', url:'https://www.nt.se/rss/' },
-  enkoping:    { name:'Enköpings-Posten',      code:'EP',  color:'#C0392B', url:'https://www.enköpingsposten.se/rss/' },
-  eskilstuna:  { name:'Eskilstuna-Kuriren',    code:'EK',  color:'#C0392B', url:'https://www.eskilstuna-kuriren.se/rss/' },
-  helagotland: { name:'Hela Gotland',          code:'HG',  color:'#C0392B', url:'https://www.helagotland.se/rss/' },
-  gotlandsallehanda: { name:'Gotlands Allehanda', code:'GA', color:'#C0392B', url:'https://www.gotlandsallehanda.se/rss/' },
-  gt:          { name:'GT',                   code:'GT',  color:'#C0392B', url:'https://www.gt.se/rss/' },
-  katrineholms:{ name:'Katrineholms-Kuriren',  code:'KK',  color:'#C0392B', url:'https://www.katrineholms-kuriren.se/rss/' },
-  kuriren:     { name:'Kuriren',              code:'KUR', color:'#C0392B', url:'https://www.kuriren.nu/rss/' },
-  mvt:         { name:'MVT',                  code:'MVT', color:'#C0392B', url:'https://www.mvt.se/rss/' },
-  norrbotten:  { name:'Norrbottens-Kuriren',   code:'NK',  color:'#C0392B', url:'https://www.nk.se/rss/' },
-  norran:      { name:'Norran',               code:'NOR', color:'#C0392B', url:'https://www.norran.se/rss/' },
-  nsd:         { name:'NSD',                  code:'NSD', color:'#C0392B', url:'https://www.nsd.se/rss/' },
-  pitea:       { name:'Piteå-Tidningen',       code:'PT',  color:'#C0392B', url:'https://www.pitea-tidningen.se/rss/' },
-  sn:          { name:'SN',                   code:'SN',  color:'#C0392B', url:'https://www.sn.se/rss/' },
-  strengnas:   { name:'Strengnäs Tidning',     code:'ST',  color:'#C0392B', url:'https://www.strengnas-tidning.se/rss/' },
-  unt:         { name:'UNT',                  code:'UNT', color:'#C0392B', url:'https://www.unt.se/rss/' },
-  vimmerby:    { name:'Vimmerby Tidning',      code:'VIM', color:'#C0392B', url:'https://www.vimmerbytidning.se/rss/' },
-  vasterviks:  { name:'Västerviks Tidningen',  code:'VT',  color:'#C0392B', url:'https://www.vt.se/rss/' },
+  aftonbladet: { name:'Aftonbladet', code:'AB',  color:'#e8001a', type:'riks', url:'https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/' },
+  expressen:   { name:'Expressen',   code:'EX',  color:'#006AA7', type:'riks', url:'https://feeds.expressen.se/nyheter/' },
+  dn:          { name:'DN',          code:'DN',  color:'#1a1a1a', type:'riks', url:'https://www.dn.se/rss/' },
+  svd:         { name:'SvD',         code:'SvD', color:'#002E6E', type:'riks', url:'https://www.svd.se/feed/articles.rss' },
+  sydsvenskan: { name:'Sydsvenskan', code:'SDS', color:'#D92B3A', type:'riks', url:'https://www.sydsvenskan.se/rss.xml' },
+  barometern:  { name:'Barometern',  code:'BAR', color:'#2B6E3A', type:'riks', url:'https://www.barometern.se/rss/' },
+  svt:         { name:'SVT Nyheter', code:'SVT', color:'#1A5276', type:'riks', url:'https://www.svt.se/nyheter/rss.xml' },
+  // NTM — Norr
+  norran:      { name:'Norran',      code:'NOR', color:'#C0392B', type:'ntm', region:'norr', url:'https://www.norran.se/rss/' },
+  nsd:         { name:'NSD',         code:'NSD', color:'#C0392B', type:'ntm', region:'norr', url:'https://www.nsd.se/rss/' },
+  norrbotten:  { name:'Norrbottens-Kuriren', code:'NK', color:'#C0392B', type:'ntm', region:'norr', url:'https://www.nk.se/rss/' },
+  pitea:       { name:'Piteå-Tidningen', code:'PT', color:'#C0392B', type:'ntm', region:'norr', url:'https://www.pitea-tidningen.se/rss/' },
+  // NTM — Mitt
+  unt:         { name:'UNT',         code:'UNT', color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.unt.se/rss/' },
+  nt:          { name:'NT',          code:'NT',  color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.nt.se/rss/' },
+  corren:      { name:'Corren',      code:'COR', color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.corren.se/rss/' },
+  sn:          { name:'SN',          code:'SN',  color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.sn.se/rss/' },
+  strengnas:   { name:'Strengnäs Tidning', code:'ST', color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.strengnas-tidning.se/rss/' },
+  eskilstuna:  { name:'Eskilstuna-Kuriren', code:'EK', color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.eskilstuna-kuriren.se/rss/' },
+  enkoping:    { name:'Enköpings-Posten', code:'EP', color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.enkopingsposten.se/rss/' },
+  katrineholms:{ name:'Katrineholms-Kuriren', code:'KK', color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.katrineholms-kuriren.se/rss/' },
+  kuriren:     { name:'Kuriren',     code:'KUR', color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.kuriren.nu/rss/' },
+  mvt:         { name:'MVT',         code:'MVT', color:'#C0392B', type:'ntm', region:'mitt', url:'https://www.mvt.se/rss/' },
+  // NTM — Syd/Öst
+  gt:          { name:'GT',          code:'GT',  color:'#C0392B', type:'ntm', region:'syd', url:'https://www.gt.se/rss/' },
+  helagotland: { name:'Hela Gotland', code:'HG', color:'#C0392B', type:'ntm', region:'syd', url:'https://www.helagotland.se/rss/' },
+  gotlandsallehanda: { name:'Gotlands Allehanda', code:'GA', color:'#C0392B', type:'ntm', region:'syd', url:'https://www.gotlandsallehanda.se/rss/' },
+  vimmerby:    { name:'Vimmerby Tidning', code:'VIM', color:'#C0392B', type:'ntm', region:'syd', url:'https://www.vimmerbytidning.se/rss/' },
+  vasterviks:  { name:'Västerviks Tidningen', code:'VT', color:'#C0392B', type:'ntm', region:'syd', url:'https://www.vt.se/rss/' },
 };
 
-let suggestions = [];
-let pipelineLog = [];
-let pipelineEnabled = true;
-let isRunning = false;
-let lastRun = null;
-
-function log(msg) {
-  const e = { time: new Date().toISOString(), msg };
-  pipelineLog.unshift(e);
-  pipelineLog = pipelineLog.slice(0, 50);
-  console.log('[PIPELINE] ' + msg);
-}
-
+// ── RSS Fetch ─────────────────────────────────────────────────
 async function fetchFeed(key, source) {
   try {
     const feed = await parser.parseURL(source.url);
-    return feed.items.slice(0, 20).map(item => ({
+    return feed.items.slice(0, 15).map(item => ({
       id: item.guid || item.link,
-      title: item.title || '',
+      title: (item.title || '').trim(),
       description: item.contentSnippet || item.summary || '',
-      link: item.link,
+      link: item.link || '',
       pubDate: item.pubDate || item.isoDate || new Date().toISOString(),
       source: source.name,
       sourceCode: source.code,
       sourceColor: source.color,
+      sourceType: source.type,
+      sourceRegion: source.region || 'riks',
     }));
   } catch(e) {
-    console.error('Failed ' + key + ':', e.message);
     return [];
   }
 }
@@ -116,276 +103,350 @@ async function fetchAllFeeds() {
     .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 }
 
-// ─── CORE AI FUNCTION ────────────────────────────────────────
-// Sends headlines to Claude, gets back trends + full article drafts in one call
-async function runAIPipeline(items) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error('ANTHROPIC_API_KEY saknas');
+// ── Signal Clustering ─────────────────────────────────────────
+// Groups articles by shared keywords to find overlapping stories
+function clusterItems(items) {
+  const cutoff = Date.now() - 10 * 60 * 60 * 1000; // 10h
+  const recent = items.filter(i => new Date(i.pubDate) > cutoff);
 
-  const cutoff = Date.now() - 8 * 60 * 60 * 1000;
-  const recent = items
-    .filter(i => new Date(i.pubDate) > cutoff)
-    .slice(0, 80);
+  // Extract significant words (4+ chars, not stopwords)
+  const stopwords = new Set(['från','till','efter','under','över','utan','inte','eller','även','samt','enligt','detta','dessa','alla','många','vara','hade','kommer','sedan','innan','genom','deras','deras','sigsjälv','men','och','att','det','den','som','för','med','har','han','hon','när','var','vid','mot','hos','kring','bland','trots','inför','anser']);
+  
+  function keywords(title) {
+    return title.toLowerCase()
+      .replace(/[–—\-:,."'!?()]/g, ' ')
+      .split(/\s+/)
+      .filter(w => w.length >= 4 && !stopwords.has(w));
+  }
 
-  if (recent.length < 5) throw new Error('For fa artiklar: ' + recent.length);
+  // Build clusters
+  const clusters = [];
+  const used = new Set();
 
-  const headlines = recent.map(i => i.sourceCode + ': ' + i.title).join('\n');
+  for (let i = 0; i < recent.length; i++) {
+    if (used.has(i)) continue;
+    const kw = keywords(recent[i].title);
+    if (!kw.length) continue;
 
-  const prompt = `Du ar chefsredaktor pa GRID, en svensk nyhetssajt. Nedan ar ${recent.length} rubriker fran svenska nyhetsmedier de senaste 8 timmarna.
+    const cluster = { items: [recent[i]], keywords: new Set(kw) };
+    used.add(i);
 
-${headlines}
+    for (let j = i + 1; j < recent.length; j++) {
+      if (used.has(j)) continue;
+      const kw2 = keywords(recent[j].title);
+      const overlap = kw2.filter(w => cluster.keywords.has(w));
+      if (overlap.length >= 1) {
+        cluster.items.push(recent[j]);
+        kw2.forEach(w => cluster.keywords.add(w));
+        used.add(j);
+      }
+    }
 
-GOR FOLJANDE:
+    if (cluster.items.length >= 2) clusters.push(cluster);
+  }
 
-1. Identifiera de 5 mest bevakvarda UNIKA nyhetsamnesena. Varje amne maste vara en specifik verklig handelse. FORBJUDNA amnen: generella ord som "sverige", "skriver", "kommer", "svenska", "manden", "dagen" etc. Gruppera relaterade nyheter (tex Iran+USA+militart = ETT amne).
+  // Score each cluster
+  return clusters.map(cl => {
+    const sourceCodes = [...new Set(cl.items.map(i => i.sourceCode))];
+    const sourceTypes = cl.items.map(i => i.sourceType);
+    const regions = [...new Set(cl.items.map(i => i.sourceRegion).filter(r => r !== 'riks'))];
+    
+    const riksCount = sourceTypes.filter(t => t === 'riks').length;
+    const ntmCount = sourceTypes.filter(t => t === 'ntm').length;
+    
+    // Score: NTM titles weighted 1.5x, geographic spread bonus
+    const baseScore = riksCount + ntmCount * 1.5;
+    const spreadBonus = regions.length >= 2 ? 1.3 : regions.length === 1 ? 1.1 : 1.0;
+    const score = Math.round(baseScore * spreadBonus * 10);
 
-2. For varje amne, skriv ett komplett artikelutkast som GRID kan publicera.
+    // Time gradient — how many articles in last 2h vs 2-10h
+    const twoHoursAgo = Date.now() - 2 * 60 * 60 * 1000;
+    const fresh = cl.items.filter(i => new Date(i.pubDate) > twoHoursAgo).length;
+    const growing = fresh >= 2;
 
-Svara MED EXAKT DETTA JSON-format och ingenting annat:
+    // Representative headline — prefer riksmedia
+    const riksItems = cl.items.filter(i => i.sourceType === 'riks');
+    const lead = riksItems[0] || cl.items[0];
+
+    return {
+      id: 'sig-' + Date.now() + '-' + Math.random().toString(36).slice(2,6),
+      headline: lead.title,
+      keywords: [...cl.keywords].slice(0, 5),
+      articleCount: cl.items.length,
+      sourceCount: sourceCodes.length,
+      sourceCodes,
+      regions,
+      riksCount,
+      ntmCount,
+      score,
+      growing,
+      freshCount: fresh,
+      items: cl.items.slice(0, 8).map(i => ({
+        title: i.title,
+        link: i.link,
+        source: i.source,
+        code: i.sourceCode,
+        color: i.sourceColor,
+        type: i.sourceType,
+        region: i.sourceRegion,
+        pubDate: i.pubDate,
+      })),
+    };
+  }).sort((a, b) => b.score - a.score).slice(0, 20);
+}
+
+// ── Unsplash ──────────────────────────────────────────────────
+async function fetchUnsplashImage(query) {
+  const key = process.env.UNSPLASH_ACCESS_KEY;
+  if (!key) return '';
+  try {
+    const r = await fetch(
+      'https://api.unsplash.com/photos/random?query=' + encodeURIComponent(query) +
+      '&orientation=landscape&content_filter=high',
+      { headers: { 'Authorization': 'Client-ID ' + key } }
+    );
+    if (!r.ok) return '';
+    const d = await r.json();
+    return d.urls?.regular || '';
+  } catch(e) { return ''; }
+}
+
+// ── Claude ────────────────────────────────────────────────────
+async function analyzeSignals(signals) {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
+
+  const signalText = signals.slice(0, 10).map((s, i) =>
+    `${i+1}. "${s.headline}" — ${s.sourceCount} källor (${s.riksCount} riksmedier, ${s.ntmCount} lokala)${s.growing ? ' ↑ VÄXER' : ''}\n   Källor: ${s.sourceCodes.join(', ')}\n   Regioner: ${s.regions.length ? s.regions.join(', ') : 'rikstäckande'}`
+  ).join('\n\n');
+
+  const prompt = `Du är chefsredaktör på GRID, en nationell nyhetstjänst. Nedan är de starkaste nyhetssignalerna just nu baserade på vad svenska medier skriver om.
+
+${signalText}
+
+Välj de 5 mest värda att bevaka ur ett nationellt perspektiv. En lokal händelse som rapporteras i flera regioner är en nationell historia.
+
+Svara ENDAST med JSON:
 {
   "trends": [
     {
-      "headline": "Konkret rubrik max 10 ord som beskriver specifik handelse",
-      "explanation": "Mening 1 om vad som hander. Mening 2 om varfor det ar viktigt.",
-      "category": "En av: Politik / Ekonomi / Samhalle / Industri / Klimat / Sport / Naringsliv / Kultur",
-      "sources": ["AB", "EX"],
-      "articleCount": 7,
-      "article": {
-        "title": "Fullstandig rubrik for artikeln max 12 ord",
-        "ingress": "2-3 meningar som satter scenen och lockar lasaren. Ska svara pa vad hande vem ar inblandad och varfor det spelar roll.",
-        "body": "Forsta stycket med 3-4 meningar om vad som faktiskt hant baserat pa rubrikerna. Andra stycket med 2-3 meningar om bakgrund eller kontext. Tredje stycket med 1-2 meningar om vad som vantas handa.",
-        "quote": "Ett trovärdigt citat fran en relevant person",
-        "imageQuery": "Ett engelskt sokord for en nyhetsbild (1-2 ord, ex: parliament, flooding, economy)",
-        "quoteAttr": "Namn Titel"
-      }
+      "signalIndex": 0,
+      "headline": "Konkret rubrik max 10 ord",
+      "angle": "Varför detta är en nationell nyhet i en mening",
+      "category": "Politik|Ekonomi|Samhälle|Industri|Klimat|Sport|Näringsliv|Kultur",
+      "imageQuery": "2-3 engelska ord för bildsökning"
     }
   ]
 }`;
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 4000, messages: [{ role: 'user', content: prompt }] })
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
   });
-
-  if (!r.ok) throw new Error('Anthropic API ' + r.status);
+  if (!r.ok) throw new Error('Claude API ' + r.status);
   const d = await r.json();
-  const text = d.content[0].text.trim().replace(/```json\n?|```\n?/g, '').trim();
-
-  let parsed;
-  try {
-    parsed = JSON.parse(text);
-  } catch(e) {
-    throw new Error('JSON parse failed: ' + text.slice(0, 200));
-  }
-
-  const sourceMap = {};
-  Object.entries(SOURCES).forEach(([, s]) => { sourceMap[s.code] = s; });
-
-  const results = await Promise.all(parsed.trends.map(async (t, i) => {
-    const matchedItems = recent.filter(item => (t.sources || []).includes(item.sourceCode));
-    const imageQuery = t.imageQuery || t.headline || t.category || 'sweden news';
-    log('Unsplash query: ' + imageQuery);
-    const image = await fetchUnsplashImage(imageQuery);
-    log('Unsplash image: ' + (image ? image.slice(0,60) : 'EMPTY'));
-    return {
-      id: 'sug-' + Date.now() + '-' + i,
-      keyword: t.headline,
-      headline: t.headline,
-      explanation: t.explanation || '',
-      category: t.category || 'Nyheter',
-      articleCount: t.articleCount || matchedItems.length,
-      sourceCount: (t.sources || []).length,
-      sources: (t.sources || []).map(code => sourceMap[code] || { name: code, code, color: '#555' }),
-      totalArticles: recent.length,
-      image: image,
-      article: {
-        title: (t.article && t.article.title) || t.headline,
-        ingress: (t.article && t.article.ingress) || '',
-        body: (t.article && t.article.body) || '',
-        quote: (t.article && t.article.quote) || '',
-        quoteAttr: (t.article && t.article.quoteAttr) || '',
-        category: t.category || 'Nyheter',
-        image: image,
-      },
-      sourceItems: matchedItems.slice(0, 5).map(item => ({
-        name: item.source, code: item.sourceCode, color: item.sourceColor,
-        title: item.title, link: item.link
-      })),
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    };
-  }));
-  return results;
+  const text = d.content[0].text.replace(/```json\n?|```\n?/g, '').trim();
+  return JSON.parse(text);
 }
 
+async function generateDraft(signal, trend) {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
 
-async function fetchUnsplashImage(query) {
-  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
-  if (!accessKey) return '';
-  try {
-    const r = await fetch('https://api.unsplash.com/photos/random?query=' + encodeURIComponent(query) + '&orientation=landscape&content_filter=high', {
-      headers: { 'Authorization': 'Client-ID ' + accessKey }
-    });
-    if (!r.ok) {
-      console.error('Unsplash error:', r.status, await r.text().catch(()=>''));
-      return '';
-    }
-    const d = await r.json();
-    return (d.urls && d.urls.regular) ? d.urls.regular : '';
-  } catch(e) {
-    console.error('Unsplash exception:', e.message);
-    return '';
-  }
+  const sourceList = signal.items.map(i => `- ${i.source}: "${i.title}"`).join('\n');
+
+  const prompt = `Du är journalist på GRID. Skriv en komplett nyhetsartikel baserad på dessa källor:
+
+${sourceList}
+
+Nationell vinkel: ${trend.angle}
+Kategori: ${trend.category}
+
+Svara ENDAST med JSON:
+{
+  "title": "Rubrik max 12 ord",
+  "ingress": "2-3 meningar som sätter scenen och lockar läsaren",
+  "body": "Tre stycken separerade med \\n\\n. Första: vad hände. Andra: bakgrund/kontext. Tredje: vad händer härnäst.",
+  "quote": "Ett trovärdigt citat",
+  "quoteAttr": "Namn, titel"
+}`;
+
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!r.ok) throw new Error('Claude API ' + r.status);
+  const d = await r.json();
+  const text = d.content[0].text.replace(/```json\n?|```\n?/g, '').trim();
+  return JSON.parse(text);
 }
 
-async function runPipeline() {
-  if (!pipelineEnabled || isRunning) return;
+// ── Pipeline State ────────────────────────────────────────────
+let signals = [];
+let trends = [];
+let suggestions = [];
+let pipelineLog = [];
+let isRunning = false;
+let lastRun = null;
+
+function log(msg) {
+  const e = { time: new Date().toISOString(), msg };
+  pipelineLog.unshift(e);
+  pipelineLog = pipelineLog.slice(0, 50);
+  console.log('[PIPELINE]', msg);
+}
+
+async function runSignalPipeline() {
+  if (isRunning) return;
   isRunning = true;
-  log('Pipeline startar...');
+  log('Hämtar RSS från ' + Object.keys(SOURCES).length + ' källor...');
   try {
     const items = await fetchAllFeeds();
-    log('Hamtade ' + items.length + ' artiklar fran ' + Object.keys(SOURCES).length + ' kallor');
-    log('Skickar till Claude for trendanalys och artikelutkast...');
-    const results = await runAIPipeline(items);
-    suggestions = results;
-    cache.del('trends');
-    log('Klar: ' + results.length + ' trender och artikelutkast genererade');
-  } catch(e) {
-    log('Fel: ' + e.message);
-  }
-  lastRun = new Date().toISOString();
+    log('Hämtade ' + items.length + ' artiklar');
+    signals = clusterItems(items);
+    log('Identifierade ' + signals.length + ' signaler');
+    cache.del('signals');
+  } catch(e) { log('Fel (signaler): ' + e.message); }
   isRunning = false;
+  lastRun = new Date().toISOString();
 }
 
-// ─── ROUTES ──────────────────────────────────────────────────
+async function runTrendAnalysis() {
+  if (!signals.length) await runSignalPipeline();
+  log('Analyserar signaler med Claude...');
+  try {
+    const result = await analyzeSignals(signals);
+    trends = await Promise.all(result.trends.map(async (t, i) => {
+      const signal = signals[t.signalIndex] || signals[i] || signals[0];
+      const image = await fetchUnsplashImage(t.imageQuery || t.category);
+      log('Bild för "' + t.headline + '": ' + (image ? 'OK' : 'saknas'));
+      return {
+        id: 'trend-' + Date.now() + '-' + i,
+        headline: t.headline,
+        angle: t.angle,
+        category: t.category,
+        image,
+        signal,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      };
+    }));
+    log('Klar: ' + trends.length + ' trender identifierade');
+  } catch(e) { log('Fel (trender): ' + e.message); }
+}
+
+// ── Routes ────────────────────────────────────────────────────
 app.get('/', (req, res) => res.json({ status: 'ok', sources: Object.keys(SOURCES).length }));
 
-app.get('/api/sources', (req, res) => {
-  res.json(Object.entries(SOURCES).map(([key, s]) => ({ key, name: s.name, code: s.code, color: s.color })));
+app.get('/api/signals', async (req, res) => {
+  if (!signals.length) await runSignalPipeline();
+  res.json(signals);
 });
 
-app.get('/api/feed', async (req, res) => {
-  const cached = cache.get('feed');
-  if (cached) return res.json(cached);
-  const items = await fetchAllFeeds();
-  cache.set('feed', items);
-  res.json(items);
+app.get('/api/trends', (req, res) => res.json(trends));
+
+app.post('/api/pipeline/signals', async (req, res) => {
+  res.json({ ok: true });
+  runSignalPipeline();
 });
 
-app.get('/api/trends', async (req, res) => {
-  // Return cached pipeline results as trends
-  const pending = suggestions.filter(s => s.status === 'pending');
-  if (pending.length) {
-    return res.json(pending.map(s => ({
-      keyword: s.keyword,
-      headline: s.headline,
-      explanation: s.explanation,
-      category: s.category,
-      articleCount: s.articleCount,
-      sourceCount: s.sourceCount,
-      sources: s.sources,
-      totalArticles: s.totalArticles,
-    })));
-  }
-  // No cached results — run a lightweight trend fetch
+app.post('/api/pipeline/trends', async (req, res) => {
+  res.json({ ok: true });
+  runTrendAnalysis();
+});
+
+app.post('/api/trends/:id/draft', async (req, res) => {
+  const trend = trends.find(t => t.id === req.params.id);
+  if (!trend) return res.status(404).json({ error: 'Trend not found' });
   try {
-    const cached = cache.get('trends');
-    if (cached) return res.json(cached);
-    const items = await fetchAllFeeds();
-    const results = await runAIPipeline(items);
-    // Store as suggestions so they can be published
-    suggestions = results;
-    const trends = results.map(s => ({
-      keyword: s.keyword, headline: s.headline, explanation: s.explanation,
-      category: s.category, articleCount: s.articleCount,
-      sourceCount: s.sourceCount, sources: s.sources, totalArticles: s.totalArticles,
-    }));
-    cache.set('trends', trends, 900);
-    res.json(trends);
+    log('Genererar artikelutkast för: ' + trend.headline);
+    const draft = await generateDraft(trend.signal, trend);
+    trend.draft = draft;
+    trend.status = 'drafted';
+    res.json(draft);
   } catch(e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-app.get('/api/suggestions', (req, res) => res.json(suggestions));
-
-app.post('/api/suggestions/:id/publish', (req, res) => {
-  const s = suggestions.find(s => s.id === req.params.id);
-  if (!s) return res.status(404).json({ error: 'Not found' });
-  s.status = 'published';
+app.post('/api/trends/:id/publish', async (req, res) => {
+  const trend = trends.find(t => t.id === req.params.id);
+  if (!trend || !trend.draft) return res.status(400).json({ error: 'No draft' });
   const id = 'art-' + Date.now();
-  const pubDate = new Date().toISOString();
-  const art = s.article || {};
-  const srcs = s.sourceItems || s.sources || [];
-  const bodyStr = Array.isArray(art.body) ? art.body.join('\n\n') : (art.body || '');
-  const imageStr = s.image || (art && art.image) || '';
-  const artData = { id, title: art.title||'', ingress: art.ingress||'', body: bodyStr, cat: art.category||'Nyheter', type:'ai', quote: art.quote||'', quoteAttr: art.quoteAttr||'', sources: srcs, pubDate, aiGenerated: true, featured: false, image: imageStr };
-  insertArticle(artData);
-  log('Publicerar: ' + art.title + ' | ingress: ' + (art.ingress||'').slice(0,50) + ' | body: ' + bodyStr.slice(0,50));
-  res.json(artData);
+  const art = {
+    id,
+    title: trend.draft.title || trend.headline,
+    ingress: trend.draft.ingress || '',
+    body: trend.draft.body || '',
+    quote: trend.draft.quote || '',
+    quoteAttr: trend.draft.quoteAttr || '',
+    cat: trend.category,
+    type: 'ai',
+    image: trend.image || '',
+    sources: (trend.signal?.items || []).slice(0, 5),
+    pubDate: new Date().toISOString(),
+    aiGenerated: true,
+    featured: false,
+  };
+  saveArticle(art);
+  trend.status = 'published';
+  log('Publicerade: ' + art.title);
+  res.json(art);
 });
 
-app.post('/api/suggestions/:id/dismiss', (req, res) => {
-  const s = suggestions.find(s => s.id === req.params.id);
-  if (!s) return res.status(404).json({ error: 'Not found' });
-  s.status = 'dismissed';
+app.post('/api/trends/:id/dismiss', (req, res) => {
+  const trend = trends.find(t => t.id === req.params.id);
+  if (trend) trend.status = 'dismissed';
   res.json({ ok: true });
 });
 
-app.get('/api/articles', (req, res) => {
-  res.json(readArticles().slice(0, 100));
-});
+app.get('/api/articles', (req, res) => res.json(readArticles().slice(0, 100)));
 
 app.post('/api/articles', (req, res) => {
   const a = req.body;
   const id = a.id || 'art-' + Date.now();
-  const pubDate = new Date().toISOString();
-  insertArticle({ id, title: a.title||'', ingress: a.ingress||'', body: a.body||'', cat: a.cat||'Nyheter', type: a.type||'journalist', quote: a.quote||'', quoteAttr: a.quoteAttr||'', sources: a.sources||[], pubDate, aiGenerated: !!a.aiGenerated });
-  res.json({ id, ...a, pubDate });
-});
-
-
-app.post('/api/articles/reorder', (req, res) => {
-  try {
-    const { order } = req.body;
-    if (!Array.isArray(order)) return res.status(400).json({ error: 'order must be array' });
-    const articles = readArticles();
-    const idToPos = {};
-    order.forEach(function(o){ idToPos[o.id] = o.position; });
-    articles.sort(function(a, b){
-      var pa = idToPos[a.id] !== undefined ? idToPos[a.id] : 999;
-      var pb = idToPos[b.id] !== undefined ? idToPos[b.id] : 999;
-      return pa - pb;
-    });
-    writeArticles(articles);
-    res.json({ ok: true });
-  } catch(e) { res.status(500).json({ error: e.message }); }
+  const art = { ...a, id, pubDate: a.pubDate || new Date().toISOString() };
+  saveArticle(art);
+  res.json(art);
 });
 
 app.patch('/api/articles/:id', (req, res) => {
+  const allowed = ['title','ingress','body','cat','type','featured','image'];
   const updates = {};
-  ['title','ingress','body','cat','type','featured'].forEach(k => {
-    if (req.body[k] !== undefined) updates[k] = req.body[k];
-  });
-  updateArticleById(req.params.id, updates);
+  allowed.forEach(k => { if (req.body[k] !== undefined) updates[k] = req.body[k]; });
+  updateArticle(req.params.id, updates);
   res.json({ ok: true });
 });
 
-app.get('/api/pipeline/status', (req, res) => {
-  res.json({ enabled: pipelineEnabled, lastRun, running: isRunning, suggestions: suggestions.filter(s => s.status === 'pending').length, log: pipelineLog.slice(0, 20) });
-});
-
-app.post('/api/pipeline/toggle', (req, res) => {
-  pipelineEnabled = !pipelineEnabled;
-  log(pipelineEnabled ? 'Aktiverad' : 'Pausad');
-  res.json({ enabled: pipelineEnabled });
-});
-
-app.post('/api/pipeline/run', (req, res) => {
+app.post('/api/articles/reorder', (req, res) => {
+  const { order } = req.body;
+  if (!Array.isArray(order)) return res.status(400).json({ error: 'invalid' });
+  const arts = readArticles();
+  const posMap = {};
+  order.forEach(o => { posMap[o.id] = o.position; });
+  arts.sort((a, b) => (posMap[a.id] ?? 999) - (posMap[b.id] ?? 999));
+  writeArticles(arts);
   res.json({ ok: true });
-  runPipeline();
+});
+
+app.get('/api/pipeline/status', (req, res) => res.json({
+  lastRun,
+  running: isRunning,
+  signals: signals.length,
+  trends: trends.length,
+  pending: trends.filter(t => t.status === 'pending').length,
+  log: pipelineLog.slice(0, 20),
+}));
+
+app.get('/api/feed', async (req, res) => {
+  const cached = cache.get('feed');
+  if (cached) return res.json(cached);
+  const items = await fetchAllFeeds();
+  cache.set('feed', items, 180);
+  res.json(items);
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('GRID backend pa port ' + PORT));
+app.listen(PORT, () => console.log('GRID backend på port ' + PORT));
