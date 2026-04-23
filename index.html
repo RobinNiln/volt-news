@@ -326,6 +326,13 @@ body.light .logo-light{display:block}
 <
 .art-page-dyn{display:none}
 .art-page-dyn.active{display:block;padding-top:80px}
+
+.top-slot{transition:.15s}
+.top-slot:hover{opacity:.9}
+.top-slot img{width:100%;height:160px;object-fit:cover;display:block;filter:brightness(.7)}
+.top-slot .slot-content{position:absolute;bottom:0;left:0;right:0;padding:8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.8))}
+.top-slot .slot-cat{font-family:monospace;font-size:8px;letter-spacing:1px;color:var(--v);margin-bottom:3px}
+.top-slot .slot-title{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
 </style>
 </head>
 <body class="dark">
@@ -404,6 +411,18 @@ body.light .logo-light{display:block}
   <div class="ad"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Swedbank</div><div class="atag">Bostadslån med fast ränta</div></div></div></div>
 
   <div class="feed-label">Senaste</div>
+
+  <!-- Top slots puff 2 and 3 -->
+  <div id="top-puffs" style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--border)">
+    <div id="slot-puff2" class="top-slot" data-slot="2" onclick="topSlotClick(2)" style="border-right:1px solid var(--border);min-height:160px;cursor:pointer;position:relative;overflow:hidden">
+      <div class="slot-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:var(--muted);font-family:monospace;font-size:10px;letter-spacing:1px">PUFF 2</div>
+    </div>
+    <div id="slot-puff3" class="top-slot" data-slot="3" onclick="topSlotClick(3)" style="min-height:160px;cursor:pointer;position:relative;overflow:hidden">
+      <div class="slot-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:var(--muted);font-family:monospace;font-size:10px;letter-spacing:1px">PUFF 3</div>
+    </div>
+  </div>
+
+
   <div class="card-h" onclick="showPage('infrastruktur')">
     <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Politik</div><div class="ctitle">Regeringen presenterar ny infrastrukturplan — E4 i fokus</div><div class="cmeta"><span class="ctime">10:02</span></div></div>
@@ -1653,7 +1672,101 @@ function updateLogos(){
   document.querySelectorAll('.logo-light').forEach(function(el){ el.style.display=isLight?'block':'none'; });
 }
 </script>
-<script>var GRID_API = localStorage.getItem('grid-api') || '';
+<script>
+// ── Top slot management ────────────────────────────────────────
+var topSlots = { 1: null, 2: null, 3: null };
+
+function loadTopSlots() {
+  try {
+    var saved = localStorage.getItem('grid-top-slots');
+    if (saved) topSlots = JSON.parse(saved);
+  } catch(e) {}
+  renderTopSlots();
+}
+
+function saveTopSlots() {
+  localStorage.setItem('grid-top-slots', JSON.stringify(topSlots));
+  // Sync to Railway if connected
+  if (GRID_API) {
+    fetch(GRID_API + '/api/slots', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(topSlots)
+    }).catch(function(){});
+  }
+}
+
+function setTopSlot(slot, article) {
+  topSlots[slot] = article;
+  saveTopSlots();
+  renderTopSlots();
+  if (slot === 1) setFeaturedHero(article);
+}
+
+function clearTopSlot(slot) {
+  topSlots[slot] = null;
+  saveTopSlots();
+  renderTopSlots();
+}
+
+function renderTopSlots() {
+  // Slot 1 = hero (handled by setFeaturedHero)
+  [2, 3].forEach(function(slot) {
+    var el = document.getElementById('slot-puff' + slot);
+    if (!el) return;
+    var art = topSlots[slot];
+    if (!art) {
+      el.innerHTML = '<div class="slot-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:var(--muted);font-family:monospace;font-size:10px;letter-spacing:1px">PUFF ' + slot + '</div>';
+      return;
+    }
+    var catImages = {
+      'Politik':'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
+      'Ekonomi':'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80',
+      'Samhälle':'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80',
+      'Samhalle':'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80',
+      'Klimat':'https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=800&q=80',
+      'Sport':'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&q=80',
+      'Industri':'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80'
+    };
+    var img = art.image || catImages[art.cat || 'Nyheter'] || catImages['Industri'];
+    var rawId = (art.id || '').replace(/^art-/, '');
+    var pid = 'page-art-' + rawId;
+
+    el.innerHTML = '';
+    el.onclick = function(){ showPage(pid); };
+
+    var imgEl = document.createElement('img');
+    imgEl.src = img;
+    el.appendChild(imgEl);
+
+    var overlay = document.createElement('div');
+    overlay.className = 'slot-content';
+    var catEl = document.createElement('div');
+    catEl.className = 'slot-cat';
+    catEl.textContent = (art.cat || 'Nyheter').toUpperCase();
+    var titleEl = document.createElement('div');
+    titleEl.className = 'slot-title';
+    titleEl.textContent = art.title || '';
+    overlay.appendChild(catEl);
+    overlay.appendChild(titleEl);
+    el.appendChild(overlay);
+  });
+}
+
+// Called when visitor clicks an empty slot (only useful in admin context)
+function topSlotClick(slot) {
+  // Only interactive in admin — visitors just see content
+  var art = topSlots[slot];
+  if (art) {
+    var rawId = (art.id || '').replace(/^art-/, '');
+    showPage('page-art-' + rawId);
+  }
+}
+
+window.addEventListener('load', function() {
+  loadTopSlots();
+});
+var GRID_API = localStorage.getItem('grid-api') || '';
 var allArticles = [];
 var dragSrcId = null;
 
@@ -2001,16 +2114,52 @@ function renderArticlesTab(arts) {
   var el = gid('articles-list');
   if (!el) return;
   el.innerHTML = '';
+
+  // Top slots panel
+  var slotsPanel = document.createElement('div');
+  slotsPanel.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;padding-bottom:16px;border-bottom:2px solid var(--v)';
+  [1,2,3].forEach(function(slot) {
+    var art = topSlots[slot];
+    var box = document.createElement('div');
+    box.style.cssText = 'background:var(--surface);border:1px solid ' + (art ? 'var(--v)' : 'var(--border)') + ';padding:10px;border-radius:2px;min-height:80px;position:relative';
+    var label = document.createElement('div');
+    label.style.cssText = 'font-family:monospace;font-size:9px;letter-spacing:1px;color:' + (art ? 'var(--v)' : 'var(--muted)') + ';margin-bottom:6px';
+    label.textContent = slot === 1 ? 'HERO' : 'PUFF ' + slot;
+    box.appendChild(label);
+    if (art) {
+      var t = document.createElement('div');
+      t.style.cssText = 'font-size:11px;font-weight:600;line-height:1.3;margin-bottom:8px';
+      t.textContent = art.title || '';
+      var clr = document.createElement('button');
+      clr.style.cssText = 'font-size:9px;color:#666;background:none;border:1px solid #333;padding:2px 6px;cursor:pointer;border-radius:2px;font-family:monospace';
+      clr.textContent = 'TA BORT';
+      (function(s){ clr.addEventListener('click', function(){ clearTopSlot(s); renderArticlesTab(allArticles); }); })(slot);
+      box.appendChild(t);
+      box.appendChild(clr);
+    } else {
+      var empty = document.createElement('div');
+      empty.style.cssText = 'font-size:11px;color:var(--muted);font-style:italic';
+      empty.textContent = 'Tomt';
+      box.appendChild(empty);
+    }
+    slotsPanel.appendChild(box);
+  });
+  el.appendChild(slotsPanel);
+
   if (!arts || !arts.length) {
-    el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:20px 0">Inga artiklar</div>';
+    var none = document.createElement('div');
+    none.style.cssText = 'color:var(--muted);font-size:12px;padding:20px 0';
+    none.textContent = 'Inga artiklar';
+    el.appendChild(none);
     return;
   }
+
   arts.forEach(function(a, idx) {
     var row = document.createElement('div');
     row.className = 'art-dnd-row';
     row.setAttribute('data-id', a.id);
     row.setAttribute('draggable', 'true');
-    row.style.cssText = 'display:grid;grid-template-columns:26px 1fr auto auto auto;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);cursor:grab';
+    row.style.cssText = 'display:grid;grid-template-columns:26px 1fr auto auto auto auto auto;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid var(--border);cursor:grab';
 
     var posEl = document.createElement('div');
     posEl.style.cssText = 'font-family:monospace;font-size:10px;font-weight:700;text-align:center;color:' + (idx < 15 ? 'var(--v)' : 'var(--muted)');
@@ -2027,22 +2176,26 @@ function renderArticlesTab(arts) {
     info.appendChild(titleD);
     info.appendChild(metaD);
 
-    var featBtn = document.createElement('button');
-    featBtn.style.cssText = 'border:1px solid var(--border);padding:4px 8px;font-size:10px;cursor:pointer;border-radius:2px;font-weight:700;white-space:nowrap;background:' + (a.featured ? 'var(--v)' : 'none') + ';color:' + (a.featured ? '#000' : 'var(--muted)');
-    featBtn.textContent = a.featured ? 'TOP' : 'Toppa';
-    (function(art){ featBtn.addEventListener('click', function(){
-      var v = !art.featured;
-      fetch(GRID_API + '/api/articles/' + art.id, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({featured:v})})
-        .then(function(){ art.featured = v; renderArticlesTab(allArticles); if (v) setFeaturedHero(art); });
-    }); })(a);
+    // Slot buttons: Hero, P2, P3
+    function makeSlotBtn(slot, label) {
+      var btn = document.createElement('button');
+      var isActive = topSlots[slot] && topSlots[slot].id === a.id;
+      btn.style.cssText = 'border:1px solid ' + (isActive ? 'var(--v)' : 'var(--border)') + ';background:' + (isActive ? 'var(--v)' : 'none') + ';color:' + (isActive ? '#000' : 'var(--muted)') + ';padding:3px 7px;font-size:9px;cursor:pointer;border-radius:2px;font-family:monospace;font-weight:700;white-space:nowrap';
+      btn.textContent = label;
+      (function(s, art){ btn.addEventListener('click', function(){
+        setTopSlot(s, art);
+        renderArticlesTab(allArticles);
+      }); })(slot, a);
+      return btn;
+    }
 
     var editBtn = document.createElement('button');
-    editBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:4px 8px;font-size:10px;cursor:pointer;border-radius:2px;white-space:nowrap';
+    editBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:3px 7px;font-size:10px;cursor:pointer;border-radius:2px;white-space:nowrap';
     editBtn.textContent = 'Redigera';
     (function(art){ editBtn.addEventListener('click', function(){ openEdit(art); }); })(a);
 
     var delBtn = document.createElement('button');
-    delBtn.style.cssText = 'background:none;border:1px solid #333;color:#666;padding:4px 8px;font-size:10px;cursor:pointer;border-radius:2px';
+    delBtn.style.cssText = 'background:none;border:1px solid #333;color:#666;padding:3px 7px;font-size:10px;cursor:pointer;border-radius:2px';
     delBtn.textContent = 'X';
     (function(art){ delBtn.addEventListener('click', function(){
       if (!confirm('Ta bort?')) return;
@@ -2050,7 +2203,13 @@ function renderArticlesTab(arts) {
       renderArticlesTab(allArticles);
     }); })(a);
 
-    row.appendChild(posEl); row.appendChild(info); row.appendChild(featBtn); row.appendChild(editBtn); row.appendChild(delBtn);
+    row.appendChild(posEl);
+    row.appendChild(info);
+    row.appendChild(makeSlotBtn(1, 'HERO'));
+    row.appendChild(makeSlotBtn(2, 'P2'));
+    row.appendChild(makeSlotBtn(3, 'P3'));
+    row.appendChild(editBtn);
+    row.appendChild(delBtn);
     el.appendChild(row);
   });
   setTimeout(enableDragDrop, 0);
