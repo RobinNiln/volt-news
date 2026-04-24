@@ -2469,6 +2469,66 @@ function injectFeed(article) {
     artBody.appendChild(srcBox);
   }
 
+  // Share section
+  var shareBox = document.createElement('div');
+  shareBox.style.cssText = 'margin:24px 0 8px;padding:16px 0;border-top:1px solid var(--border)';
+  var shareLabel = document.createElement('div');
+  shareLabel.style.cssText = 'font-family:monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:12px';
+  shareLabel.textContent = 'DELA ARTIKEL';
+  shareBox.appendChild(shareLabel);
+
+  var shareBtns = document.createElement('div');
+  shareBtns.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap';
+
+  var shareUrl = window.location.href.split('#')[0] + '#' + pageId;
+  var shareTitle = article.title || '';
+
+  var platforms = [
+    { label: 'X', color: '#000', bg: '#fff', border: '#333',
+      url: 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareTitle) + '&url=' + encodeURIComponent(shareUrl) },
+    { label: 'Facebook', color: '#fff', bg: '#1877F2', border: '#1877F2',
+      url: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl) },
+    { label: 'LinkedIn', color: '#fff', bg: '#0A66C2', border: '#0A66C2',
+      url: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl) },
+    { label: 'WhatsApp', color: '#fff', bg: '#25D366', border: '#25D366',
+      url: 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTitle + ' ' + shareUrl) },
+  ];
+
+  platforms.forEach(function(p) {
+    var btn = document.createElement('a');
+    btn.href = p.url;
+    btn.target = '_blank';
+    btn.rel = 'noopener noreferrer';
+    btn.style.cssText = 'display:inline-flex;align-items:center;gap:5px;padding:7px 14px;font-size:11px;font-weight:700;font-family:monospace;text-decoration:none;border-radius:2px;border:1px solid ' + p.border + ';background:' + p.bg + ';color:' + p.color + ';cursor:pointer;transition:.15s';
+    btn.textContent = p.label;
+    shareBtns.appendChild(btn);
+  });
+
+  // Copy link button
+  var copyBtn = document.createElement('button');
+  copyBtn.style.cssText = 'display:inline-flex;align-items:center;gap:5px;padding:7px 14px;font-size:11px;font-weight:700;font-family:monospace;text-decoration:none;border-radius:2px;border:1px solid var(--border);background:none;color:var(--text);cursor:pointer;transition:.15s';
+  copyBtn.textContent = 'Kopiera länk';
+  (function(url, btn) {
+    btn.addEventListener('click', function() {
+      navigator.clipboard.writeText(url).then(function() {
+        btn.textContent = 'Kopierad!';
+        btn.style.borderColor = 'var(--v)';
+        btn.style.color = 'var(--v)';
+        setTimeout(function() {
+          btn.textContent = 'Kopiera länk';
+          btn.style.borderColor = 'var(--border)';
+          btn.style.color = 'var(--text)';
+        }, 2000);
+      }).catch(function() {
+        btn.textContent = 'Kopiera länk';
+      });
+    });
+  })(shareUrl, copyBtn);
+  shareBtns.appendChild(copyBtn);
+
+  shareBox.appendChild(shareBtns);
+  artBody.appendChild(shareBox);
+
   artPage.appendChild(artBody);
   pg.appendChild(artPage);
 
