@@ -364,13 +364,15 @@ app.post('/api/trends/:id/publish', async (req, res) => {
   const trend = trends.find(t => t.id === req.params.id);
   if (!trend || !trend.draft) return res.status(400).json({ error: 'No draft' });
   const id = 'art-' + Date.now();
+  const rawQuote = (trend.draft.quote || '').trim();
+  const badQ = !rawQuote || rawQuote.length < 10 || /tyvärr|kan inte|saknas|information/i.test(rawQuote);
   const art = {
     id,
     title: trend.draft.title || trend.headline,
     ingress: trend.draft.ingress || '',
     body: trend.draft.body || '',
-    quote: trend.draft.quote || '',
-    quoteAttr: trend.draft.quoteAttr || '',
+    quote: badQ ? '' : rawQuote,
+    quoteAttr: badQ ? '' : (trend.draft.quoteAttr || ''),
     cat: trend.category,
     type: 'ai',
     image: trend.image || '',
