@@ -333,6 +333,8 @@ body.light .logo-light{display:block}
 .top-slot .slot-content{position:absolute;bottom:0;left:0;right:0;padding:8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.8))}
 .top-slot .slot-cat{font-family:monospace;font-size:8px;letter-spacing:1px;color:var(--v);margin-bottom:3px}
 .top-slot .slot-title{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+
+.interlude-box a{color:inherit;text-decoration:none}
 </style>
 </head>
 <body class="dark">
@@ -491,7 +493,27 @@ body.light .logo-light{display:block}
     </div>
   </div>
 
-  <div class="card-h" onclick="showPage('riksmedia-ai')">
+  
+  <div class="interlude-box" style="border-top:3px solid var(--v);border-bottom:1px solid var(--border);margin:0;padding:20px 14px 24px">
+    <div style="font-family:monospace;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);margin-bottom:14px">INDUSTRI &amp; NÄRINGSLIV</div>
+    <div style="display:flex;gap:14px;align-items:flex-start">
+      <div style="flex-shrink:0">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--v);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#000;font-family:monospace">PL</div>
+      </div>
+      <div style="flex:1">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:2px">
+          <span style="background:var(--v);color:#000;font-family:monospace;font-size:9px;font-weight:700;padding:2px 6px;border-radius:1px;letter-spacing:.5px">KRÖNIKA</span>
+          <span style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.5px">INDUSTRI</span>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);line-height:1.2">Per Lindström</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Näringslivskommentator</div>
+        <div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.1;letter-spacing:-.3px;cursor:pointer" onclick="showPage('northvolt')">Northvolt var inte ett misstag. Det var ett nödvändigt experiment.</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px">17 apr</div>
+      </div>
+    </div>
+  </div>
+
+<div class="card-h" onclick="showPage('riksmedia-ai')">
     <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=200&q=80" alt="">
     <div class="cb">
       <div style="display:flex;gap:5px;margin-bottom:4px;align-items:center">
@@ -522,7 +544,14 @@ body.light .logo-light{display:block}
     <img src="https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">Politik</div><div class="ctitle">Oppositionens misstroendeförklaring avvisas med en rösts marginal</div><div class="cmeta"><span class="ab hu" style="font-size:8px;padding:1px 5px">✦ Journalist</span><span class="ctime">13:55</span></div></div>
   </div>
-  <div class="card-h" onclick="showPage('duplantis')">
+  
+  <div class="interlude-box" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:0;padding:20px 14px;background:var(--surface)">
+    <div style="font-family:monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">REKOMMENDERAT</div>
+    <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">Senaste från lokala källor</div>
+    <div style="font-size:12px;color:var(--muted)">Nyheter från NTM:s lokaltidningar runt om i Sverige.</div>
+  </div>
+
+<div class="card-h" onclick="showPage('duplantis')">
     <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=200&q=80" alt="">
     <div class="cb"><div class="cat" style="font-size:9px;padding:1px 5px;margin-bottom:4px">EU</div><div class="ctitle">EU-kommissionen kräver svar från Sverige om datalagring</div><div class="cmeta"><span class="ctime">14:30</span></div></div>
   </div>
