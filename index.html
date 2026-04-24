@@ -240,7 +240,7 @@ body.light .logo-light{display:block}
 .kronika-header{background:var(--surface);border-bottom:3px solid var(--v);padding:16px 14px}
 .kronika-label{font-family:sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--v);margin-bottom:12px}
 .kronika-author{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.kronika-avatar{width:40px;height:40px;border-radius:50%;background:var(--v);color:#000;font-family:sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kronika-avatar{width:56px;height:56px;border-radius:50%;background:var(--v);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#000;font-family:monospace;flex-shrink:0}
 .kronika-name{font-size:14px;font-weight:600;color:var(--text)}
 .kronika-role{font-size:11px;color:var(--muted);margin-top:1px}
 .kronika-date{font-family:monospace;font-size:10px;color:var(--muted);letter-spacing:.5px}
@@ -249,7 +249,7 @@ body.light .logo-light{display:block}
 .card.kronika-card{border-left:3px solid var(--v)}
 .kronika-card .cb{padding:12px 14px}
 .kronika-card .kronika-byline{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.kronika-card .kronika-mini-avatar{width:28px;height:28px;border-radius:50%;background:var(--v);color:#000;font-family:sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kronika-card .kronika-mini-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#000;font-family:monospace;flex-shrink:0}
 .kronika-card .kronika-byline-text{font-size:11px;color:var(--muted)}
 .kronika-card .kronika-byline-text strong{color:var(--text);font-size:12px;display:block}
 
@@ -467,7 +467,9 @@ body.light .logo-light{display:block}
     <div class="cb">
       <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:8px;background:var(--v);color:#000">Krönika · Industri</div>
       <div class="kronika-byline">
-        <div class="kronika-mini-avatar">PL</div>
+        <div class="kronika-mini-avatar" style="overflow:hidden;flex-shrink:0">
+          <img src="https://via.placeholder.com/44x44/1a1a1a/F5C500?text=PL" alt="Per Lindström" style="width:44px;height:44px;border-radius:50%;object-fit:cover;display:block">
+        </div>
         <div class="kronika-byline-text">
           <strong>Per Lindström</strong>
           Näringslivskommentator
@@ -1664,7 +1666,9 @@ body.light .logo-light{display:block}
   <div class="kronika-header">
     <div class="kronika-label">Krönika</div>
     <div class="kronika-author">
-      <div class="kronika-avatar">PL</div>
+      <div class="kronika-avatar" style="overflow:hidden;flex-shrink:0">
+          <img src="https://via.placeholder.com/56x56/1a1a1a/F5C500?text=PL" alt="Per Lindström" style="width:56px;height:56px;border-radius:50%;object-fit:cover;display:block">
+        </div>
       <div>
         <div class="kronika-name">Per Lindström</div>
         <div class="kronika-role">Näringslivskommentator, GRID</div>
@@ -1737,7 +1741,9 @@ body.light .logo-light{display:block}
     </div>
     <div class="kronika-footer">
       <div class="kronika-author" style="margin-bottom:0">
-        <div class="kronika-avatar">PL</div>
+        <div class="kronika-avatar" style="overflow:hidden;flex-shrink:0">
+          <img src="https://via.placeholder.com/56x56/1a1a1a/F5C500?text=PL" alt="Per Lindström" style="width:56px;height:56px;border-radius:50%;object-fit:cover;display:block">
+        </div>
         <div>
           <div class="kronika-name">Per Lindström</div>
           <div class="kronika-role">Skriver om industri, energi och svensk ekonomisk omvandling. Tidigare finansredaktör på Dagens Industri.</div>
