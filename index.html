@@ -2767,7 +2767,9 @@ function injectFeed(article) {
     });
   }
 
-  if (article.quote) {
+  var quoteText = (article.quote || '').trim();
+  var badQuote = !quoteText || quoteText.length < 10 || /tyvärr|kan inte|hittar inte|saknas|inga uppgifter|information saknas/i.test(quoteText);
+  if (quoteText && !badQuote) {
     var bq = document.createElement('blockquote');
     bq.className = 'art-quote';
     bq.textContent = article.quote;
