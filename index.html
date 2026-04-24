@@ -441,6 +441,25 @@ body.light .logo-light{display:block}
 
   <div class="ad"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Vattenfall</div><div class="atag">100% förnybar el</div></div></div></div>
 
+  <div class="grid-2" style="border-bottom:1px solid var(--border)">
+    <div class="card" onclick="showPage('eu-datalagring')" style="position:relative;overflow:hidden">
+      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700&q=80" alt="" style="width:100%;height:220px;object-fit:cover;display:block;filter:brightness(.6)">
+      <div style="background:#000;padding:12px 14px 14px">
+        <div style="display:inline-block;background:var(--v);color:#000;font-family:monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 7px;margin-bottom:8px">LULEÅ</div>
+        <div class="ctitle" style="font-size:clamp(18px,2.8vw,26px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:8px">Ny batterifabrik skapar 400 jobb — men bostadsbristen oroar</div>
+        <div class="cmeta" style="font-size:11px;color:#999">08:30 <span style="margin-left:6px">⊙ Luleå</span></div>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('elpriser')" style="position:relative;overflow:hidden">
+      <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=700&q=80" alt="" style="width:100%;height:220px;object-fit:cover;display:block;filter:brightness(.6)">
+      <div style="background:#000;padding:12px 14px 14px">
+        <div style="display:inline-block;background:var(--v);color:#000;font-family:monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 7px;margin-bottom:8px">NORRKÖPING</div>
+        <div class="ctitle" style="font-size:clamp(18px,2.8vw,26px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:8px">Stadsbyggnadsplanen för Inre hamnen godkänns efter år av debatt</div>
+        <div class="cmeta" style="font-size:11px;color:#999">09:00 <span style="margin-left:6px">⊙ Norrköping</span></div>
+      </div>
+    </div>
+  </div>
+
   <div id="dynamic-feed" style="border-bottom:1px solid var(--border)"></div>
 
   <div class="feed-label" style="border-top:2px solid var(--v)">Industri &amp; Näringsliv</div>
@@ -2468,29 +2487,26 @@ function injectFeed(article) {
     artBody.appendChild(srcBox);
   }
 
-  // Share section
+  // Share section — clean icon-style buttons
   var shareBox = document.createElement('div');
-  shareBox.style.cssText = 'margin:24px 0 8px;padding:16px 0;border-top:1px solid var(--border)';
+  shareBox.style.cssText = 'margin:28px 0 0;padding:20px 0 0;border-top:1px solid var(--border)';
+
   var shareLabel = document.createElement('div');
-  shareLabel.style.cssText = 'font-family:monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:12px';
-  shareLabel.textContent = 'DELA ARTIKEL';
+  shareLabel.style.cssText = 'font-family:monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;text-transform:uppercase';
+  shareLabel.textContent = 'Dela';
   shareBox.appendChild(shareLabel);
 
   var shareBtns = document.createElement('div');
-  shareBtns.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap';
+  shareBtns.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;align-items:center';
 
-  var shareUrl = window.location.href.split('#')[0] + '#' + pageId;
+  var shareUrl = window.location.origin + window.location.pathname + '#' + pageId;
   var shareTitle = article.title || '';
 
   var platforms = [
-    { label: 'X', color: '#000', bg: '#fff', border: '#333',
-      url: 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareTitle) + '&url=' + encodeURIComponent(shareUrl) },
-    { label: 'Facebook', color: '#fff', bg: '#1877F2', border: '#1877F2',
-      url: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl) },
-    { label: 'LinkedIn', color: '#fff', bg: '#0A66C2', border: '#0A66C2',
-      url: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl) },
-    { label: 'WhatsApp', color: '#fff', bg: '#25D366', border: '#25D366',
-      url: 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTitle + ' ' + shareUrl) },
+    { label: 'X / Twitter', icon: '𝕏', color: '#fff', bg: '#000', url: 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareTitle) + '&url=' + encodeURIComponent(shareUrl) },
+    { label: 'Facebook', icon: 'f', color: '#fff', bg: '#1877F2', url: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl) },
+    { label: 'LinkedIn', icon: 'in', color: '#fff', bg: '#0A66C2', url: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl) },
+    { label: 'WhatsApp', icon: '◎', color: '#fff', bg: '#25D366', url: 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTitle + ' ' + shareUrl) },
   ];
 
   platforms.forEach(function(p) {
@@ -2498,19 +2514,25 @@ function injectFeed(article) {
     btn.href = p.url;
     btn.target = '_blank';
     btn.rel = 'noopener noreferrer';
-    btn.style.cssText = 'display:inline-flex;align-items:center;gap:5px;padding:7px 14px;font-size:11px;font-weight:700;font-family:monospace;text-decoration:none;border-radius:2px;border:1px solid ' + p.border + ';background:' + p.bg + ';color:' + p.color + ';cursor:pointer;transition:.15s';
-    btn.textContent = p.label;
+    btn.title = p.label;
+    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:' + p.bg + ';color:' + p.color + ';font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;flex-shrink:0;font-family:sans-serif';
+    btn.textContent = p.icon;
     shareBtns.appendChild(btn);
   });
 
-  // Copy link button
+  // Divider
+  var div = document.createElement('div');
+  div.style.cssText = 'width:1px;height:24px;background:var(--border);margin:0 4px';
+  shareBtns.appendChild(div);
+
+  // Copy link
   var copyBtn = document.createElement('button');
-  copyBtn.style.cssText = 'display:inline-flex;align-items:center;gap:5px;padding:7px 14px;font-size:11px;font-weight:700;font-family:monospace;text-decoration:none;border-radius:2px;border:1px solid var(--border);background:none;color:var(--text);cursor:pointer;transition:.15s';
+  copyBtn.style.cssText = 'display:inline-flex;align-items:center;gap:6px;padding:7px 14px;height:36px;font-size:11px;font-weight:600;font-family:monospace;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text);cursor:pointer;white-space:nowrap;letter-spacing:.3px';
   copyBtn.textContent = 'Kopiera länk';
   (function(url, btn) {
     btn.addEventListener('click', function() {
       navigator.clipboard.writeText(url).then(function() {
-        btn.textContent = 'Kopierad!';
+        btn.textContent = '✓ Kopierad';
         btn.style.borderColor = 'var(--v)';
         btn.style.color = 'var(--v)';
         setTimeout(function() {
@@ -2518,9 +2540,7 @@ function injectFeed(article) {
           btn.style.borderColor = 'var(--border)';
           btn.style.color = 'var(--text)';
         }, 2000);
-      }).catch(function() {
-        btn.textContent = 'Kopiera länk';
-      });
+      }).catch(function(){});
     });
   })(shareUrl, copyBtn);
   shareBtns.appendChild(copyBtn);
