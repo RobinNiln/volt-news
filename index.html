@@ -2552,7 +2552,12 @@ function injectFeed(article) {
   card.appendChild(cardBody);
 
   var feed = document.getElementById('dynamic-feed') || document.querySelector('.dm');
-  if (feed) feed.appendChild(card);
+  if (feed) {
+    var existing = feed.querySelectorAll('.card-h, .card-v');
+    if (existing.length < 5) {
+      feed.appendChild(card);
+    }
+  }
 }
 function setFeaturedHero(article) {
   var hero = document.querySelector('.hero');
