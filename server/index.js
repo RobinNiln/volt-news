@@ -353,18 +353,30 @@ async function runSignalPipeline(categoryFilter) {
 }
 
 async function runTrendAnalysis(categoryFilter) {
-  const sigSource = categoryFilter ? (signalsByCategory[categoryFilter] || []) : signals;
-  if (!sigSource.length) await runSignalPipeline(categoryFilter);
-  const activeSignals = categoryFilter ? (signalsByCategory[categoryFilter] || signals) : signals;
+  // Get the right signal pool for this category
+  const activeSignals = categoryFilter
+    ? (signalsByCategory[categoryFilter] && signalsByCategory[categoryFilter].length
+        ? signalsByCategory[categoryFilter]
+        : await runSignalPipeline(categoryFilter).then(() => signalsByCategory[categoryFilter] || []))
+    : signals;
+
+  if (!activeSignals || !activeSignals.length) {
+    if (!categoryFilter) await runSignalPipeline();
+  }
+
+  const sigPool = categoryFilter ? (signalsByCategory[categoryFilter] || []) : signals;
+  if (!sigPool.length) { log('Inga signaler for ' + (categoryFilter || 'generellt')); return; }
+
   const catLabel = categoryFilter ? ' [' + categoryFilter + ']' : '';
-  log('Analyserar signaler med Claude' + catLabel + '...');
+  log('Analyserar ' + sigPool.length + ' signaler med Claude' + catLabel + '...');
   try {
-    const result = await analyzeSignals(activeSignals, categoryFilter);
-    trends = await Promise.all(result.trends.map(async (t, i) => {
-      var signal = signals.find(function(s){ return s.id === t.signalId; });
-      if (!signal) signal = signals[t.signalIndex] || signals[i] || signals[0];
+    const result = await analyzeSignals(sigPool, categoryFilter);
+    const newTrends = await Promise.all(result.trends.map(async (t, i) => {
+      // Match signal from the correct pool
+      var signal = sigPool.find(function(s){ return s.id === t.signalId; });
+      if (!signal) signal = sigPool[t.signalIndex] || sigPool[i] || sigPool[0];
       const image = await fetchUnsplashImage(t.imageQuery || t.category);
-      log('Bild för "' + t.headline + '": ' + (image ? 'OK' : 'saknas'));
+      log('Bild: ' + t.headline.slice(0,30) + ' — ' + (image ? 'OK' : 'saknas'));
       return {
         id: 'trend-' + Date.now() + '-' + i,
         headline: t.headline,
@@ -376,10 +388,14 @@ async function runTrendAnalysis(categoryFilter) {
         createdAt: new Date().toISOString(),
       };
     }));
+
     if (categoryFilter) {
-      trendsByCategory[categoryFilter] = trends.slice();
+      // Store category trends separately, don't overwrite global trends
+      trendsByCategory[categoryFilter] = newTrends;
+    } else {
+      trends = newTrends;
     }
-    log('Klar: ' + (categoryFilter || 'generella') + ' trender: ' + trends.length);
+    log('Klar: ' + (categoryFilter || 'generella') + ' trender: ' + newTrends.length);
   } catch(e) { log('Fel (trender): ' + e.message); }
 }
 
@@ -398,8 +414,8 @@ app.get('/api/signals', async (req, res) => {
 
 app.get('/api/trends', (req, res) => {
   const category = req.query.category || '';
-  if (category && trendsByCategory[category]) {
-    return res.json(trendsByCategory[category]);
+  if (category) {
+    return res.json(trendsByCategory[category] || []);
   }
   res.json(trends);
 });
@@ -417,7 +433,14 @@ app.post('/api/pipeline/trends', async (req, res) => {
 });
 
 app.post('/api/trends/:id/draft', async (req, res) => {
-  const trend = trends.find(t => t.id === req.params.id);
+  // Search in global trends and all category-specific trends
+  let trend = trends.find(t => t.id === req.params.id);
+  if (!trend) {
+    for (const cat of Object.keys(trendsByCategory)) {
+      trend = trendsByCategory[cat].find(t => t.id === req.params.id);
+      if (trend) break;
+    }
+  }
   if (!trend) return res.status(404).json({ error: 'Trend not found' });
   try {
     log('Genererar artikelutkast för: ' + trend.headline);
@@ -431,7 +454,13 @@ app.post('/api/trends/:id/draft', async (req, res) => {
 });
 
 app.post('/api/trends/:id/publish', async (req, res) => {
-  const trend = trends.find(t => t.id === req.params.id);
+  let trend = trends.find(t => t.id === req.params.id);
+  if (!trend) {
+    for (const cat of Object.keys(trendsByCategory)) {
+      trend = trendsByCategory[cat].find(t => t.id === req.params.id);
+      if (trend) break;
+    }
+  }
   if (!trend || !trend.draft) return res.status(400).json({ error: 'No draft' });
   const id = 'art-' + Date.now();
   const rawQuote = (trend.draft.quote || '').trim();
@@ -458,7 +487,13 @@ app.post('/api/trends/:id/publish', async (req, res) => {
 });
 
 app.post('/api/trends/:id/dismiss', (req, res) => {
-  const trend = trends.find(t => t.id === req.params.id);
+  let trend = trends.find(t => t.id === req.params.id);
+  if (!trend) {
+    for (const cat of Object.keys(trendsByCategory)) {
+      const found = trendsByCategory[cat].find(t => t.id === req.params.id);
+      if (found) { trend = found; break; }
+    }
+  }
   if (trend) trend.status = 'dismissed';
   res.json({ ok: true });
 });
