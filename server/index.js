@@ -48,6 +48,12 @@ const SOURCES = {
   sydsvenskan: { name:'Sydsvenskan', code:'SDS', color:'#D92B3A', type:'riks', url:'https://www.sydsvenskan.se/rss.xml' },
   barometern:  { name:'Barometern',  code:'BAR', color:'#2B6E3A', type:'riks', url:'https://www.barometern.se/rss/' },
   svt:         { name:'SVT Nyheter', code:'SVT', color:'#1A5276', type:'riks', url:'https://www.svt.se/nyheter/rss.xml' },
+  svt_sport:   { name:'SVT Sport',   code:'SVTs',color:'#1A5276', type:'riks', cat:'sport', url:'https://www.svt.se/sport/rss.xml' },
+  svt_noje:    { name:'SVT Nöje',    code:'SVTn',color:'#1A5276', type:'riks', cat:'noje', url:'https://www.svt.se/nyheter/inrikes/rss.xml' },
+  ab_sport:    { name:'AB Sport',    code:'ABs', color:'#e8001a', type:'riks', cat:'sport', url:'https://rss.aftonbladet.se/rss2/small/pages/sections/sportbladet/' },
+  ab_noje:     { name:'AB Nöje',     code:'ABn', color:'#e8001a', type:'riks', cat:'noje', url:'https://rss.aftonbladet.se/rss2/small/pages/sections/nojesbladet/' },
+  ex_sport:    { name:'EX Sport',    code:'EXs', color:'#006AA7', type:'riks', cat:'sport', url:'https://feeds.expressen.se/sport/' },
+  ex_noje:     { name:'EX Nöje',     code:'EXn', color:'#006AA7', type:'riks', cat:'noje', url:'https://feeds.expressen.se/noje/' },
   // NTM — Norr
   norran:      { name:'Norran',      code:'NOR', color:'#C0392B', type:'ntm', region:'norr', url:'https://www.norran.se/rss/' },
   nsd:         { name:'NSD',         code:'NSD', color:'#C0392B', type:'ntm', region:'norr', url:'https://www.nsd.se/rss/' },
@@ -87,6 +93,7 @@ async function fetchFeed(key, source) {
       sourceColor: source.color,
       sourceType: source.type,
       sourceRegion: source.region || 'riks',
+      sourceCat: source.cat || 'nyheter',
     }));
   } catch(e) {
     return [];
@@ -105,9 +112,29 @@ async function fetchAllFeeds() {
 
 // ── Signal Clustering ─────────────────────────────────────────
 // Groups articles by shared keywords to find overlapping stories
-function clusterItems(items) {
+function clusterItems(items, categoryFilter) {
   const cutoff = Date.now() - 10 * 60 * 60 * 1000; // 10h
-  const recent = items.filter(i => new Date(i.pubDate) > cutoff);
+  let recent = items.filter(i => new Date(i.pubDate) > cutoff);
+  if (categoryFilter) {
+    const catMap = {
+      sport: ['sport'],
+      naringsliv: ['naringsliv','ekonomi'],
+      ekonomi: ['naringsliv','ekonomi'],
+      noje: ['noje'],
+      nyheter: ['nyheter'],
+    };
+    const cats = catMap[categoryFilter.toLowerCase()] || [categoryFilter.toLowerCase()];
+    const sportKeywords = /\b(match|mål|serie|division|spelat|träning|lag|spel|vm|em|nhl|nfl|nba|fotboll|hockey|tennis|golf|friidrott|simning|cykel|löp|tävl|spelare|tränare|coach|transfer|säsong|final|semifinal|turnering|cup|liga|poäng|tabell|placering|vann|förlorade|oavgjort|rekord|guldmedalj|silvermedalj|bronsmeda|olymp)\b/i;
+    const bizKeywords = /\b(aktie|börsen|vinst|förlust|omsättning|resultat|rapport|kvartal|bokslut|vd|ceo|fusion|förvärv|börsnoterad|ipo|varslar|sparar|investering|fonder|ränta|inflation|kronkurs|exporterar|importerar|tillväxt|budget|skatt|tullar|moms|konjunktur|produktion|fabrik|leverantör|konkurs|rekonstruktion|omstrukturering)\b/i;
+    const nojeKeywords = /\b(film|musik|konsert|album|singel|spelfilm|dokumentär|serie|tv-serie|premiär|bio|teater|opera|festival|artist|band|skådespel|regissör|nominerad|oscar|grammi|pris|utmärkelse|turné|spelning|celebrity|kändis|reality|streaming|netflix|spotify|hbo|disney)\b/i;
+    if (cats.includes('sport')) {
+      recent = recent.filter(i => i.sourceCat === 'sport' || sportKeywords.test(i.title));
+    } else if (cats.includes('naringsliv') || cats.includes('ekonomi')) {
+      recent = recent.filter(i => i.sourceCat === 'naringsliv' || bizKeywords.test(i.title));
+    } else if (cats.includes('noje')) {
+      recent = recent.filter(i => i.sourceCat === 'noje' || nojeKeywords.test(i.title));
+    }
+  }
 
   // Extract significant words (4+ chars, not stopwords)
   const stopwords = new Set(['från','till','efter','under','över','utan','inte','eller','även','samt','enligt','detta','dessa','alla','många','vara','hade','kommer','sedan','innan','genom','deras','deras','sigsjälv','men','och','att','det','den','som','för','med','har','han','hon','när','var','vid','mot','hos','kring','bland','trots','inför','anser']);
@@ -276,6 +303,7 @@ async function generateDraft(signal, trend) {
 
 // ── Pipeline State ────────────────────────────────────────────
 let signals = [];
+let signalsByCategory = {};
 let trends = [];
 let trendsByCategory = {};
 let suggestions = [];
@@ -290,15 +318,21 @@ function log(msg) {
   console.log('[PIPELINE]', msg);
 }
 
-async function runSignalPipeline() {
+async function runSignalPipeline(categoryFilter) {
   if (isRunning) return;
   isRunning = true;
-  log('Hämtar RSS från ' + Object.keys(SOURCES).length + ' källor...');
+  const catLabel = categoryFilter ? ' [' + categoryFilter + ']' : '';
+  log('Hämtar RSS från ' + Object.keys(SOURCES).length + ' källor' + catLabel + '...');
   try {
     const items = await fetchAllFeeds();
     log('Hämtade ' + items.length + ' artiklar');
-    signals = clusterItems(items);
-    log('Identifierade ' + signals.length + ' signaler');
+    const clustered = clusterItems(items, categoryFilter);
+    if (categoryFilter) {
+      signalsByCategory[categoryFilter] = clustered;
+    } else {
+      signals = clustered;
+    }
+    log('Identifierade ' + clustered.length + ' signaler' + catLabel);
     cache.del('signals');
   } catch(e) { log('Fel (signaler): ' + e.message); }
   isRunning = false;
@@ -306,11 +340,13 @@ async function runSignalPipeline() {
 }
 
 async function runTrendAnalysis(categoryFilter) {
-  if (!signals.length) await runSignalPipeline();
+  const sigSource = categoryFilter ? (signalsByCategory[categoryFilter] || []) : signals;
+  if (!sigSource.length) await runSignalPipeline(categoryFilter);
+  const activeSignals = categoryFilter ? (signalsByCategory[categoryFilter] || signals) : signals;
   const catLabel = categoryFilter ? ' [' + categoryFilter + ']' : '';
   log('Analyserar signaler med Claude' + catLabel + '...');
   try {
-    const result = await analyzeSignals(signals, categoryFilter);
+    const result = await analyzeSignals(activeSignals, categoryFilter);
     trends = await Promise.all(result.trends.map(async (t, i) => {
       var signal = signals.find(function(s){ return s.id === t.signalId; });
       if (!signal) signal = signals[t.signalIndex] || signals[i] || signals[0];
@@ -338,6 +374,11 @@ async function runTrendAnalysis(categoryFilter) {
 app.get('/', (req, res) => res.json({ status: 'ok', sources: Object.keys(SOURCES).length }));
 
 app.get('/api/signals', async (req, res) => {
+  const cat = req.query.category || '';
+  if (cat) {
+    if (!signalsByCategory[cat]) await runSignalPipeline(cat);
+    return res.json(signalsByCategory[cat] || []);
+  }
   if (!signals.length) await runSignalPipeline();
   res.json(signals);
 });
@@ -351,8 +392,9 @@ app.get('/api/trends', (req, res) => {
 });
 
 app.post('/api/pipeline/signals', async (req, res) => {
+  const cat = req.query.category || '';
   res.json({ ok: true });
-  runSignalPipeline();
+  runSignalPipeline(cat);
 });
 
 app.post('/api/pipeline/trends', async (req, res) => {
