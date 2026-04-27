@@ -355,6 +355,16 @@ body.light .logo-light{display:block}
   .grid-2 .card .cb{padding:8px 10px 10px}
   .top-slot .slot-title{font-size:13px;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
 }
+
+@keyframes thinking-blink {
+  0%,80%,100%{opacity:0} 40%{opacity:1}
+}
+.thinking-dots span {
+  animation: thinking-blink 1.4s infinite both;
+  display:inline-block;
+}
+.thinking-dots span:nth-child(2){animation-delay:.2s}
+.thinking-dots span:nth-child(3){animation-delay:.4s}
 </style>
 </head>
 <body class="dark">
@@ -3143,7 +3153,8 @@ function renderTrends(ts) {
   }
   pending.forEach(function(trend) {
     var div = document.createElement('div');
-    div.style.cssText = 'background:var(--surface);border:1px solid var(--border);padding:12px;border-radius:2px;margin-bottom:8px';
+    div.style.cssText = 'background:var(--surface);border:1px solid var(--border);padding:12px;border-radius:2px;margin-bottom:8px;transition:border-color .3s,opacity .3s';
+    div.setAttribute('data-trend-id', trend.id);
 
     var catEl = document.createElement('div');
     catEl.style.cssText = 'font-family:monospace;font-size:9px;color:var(--v);letter-spacing:.5px;margin-bottom:4px';
@@ -3177,6 +3188,7 @@ function renderTrends(ts) {
       btns.appendChild(pubLabel);
     } else {
       var mainBtn = document.createElement('button');
+      mainBtn.className = 'trend-main-btn';
       mainBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;flex:1';
       mainBtn.textContent = trend.status === 'drafted' ? 'GRANSKA UTKAST' : 'GENERERA UTKAST';
       (function(tid, drafted){
@@ -3201,16 +3213,35 @@ function renderTrends(ts) {
 
 function cmsGenerateDraft(trendId) {
   if (!GRID_API) return;
+
+  // Add thinking indicator to the trend card button
+  var trendCard = document.querySelector('[data-trend-id="' + trendId + '"]');
+  if (trendCard) {
+    var mainBtn = trendCard.querySelector('.trend-main-btn');
+    if (mainBtn) {
+      mainBtn.disabled = true;
+      mainBtn.innerHTML = '<span class="thinking-dots">Genererar<span>.</span><span>.</span><span>.</span></span>';
+    }
+    trendCard.style.borderColor = 'var(--v)';
+    trendCard.style.opacity = '0.8';
+  }
+
   var statusEl = gid('draft-status');
-  if (statusEl) statusEl.textContent = 'Genererar med Claude Sonnet...';
+  if (statusEl) {
+    statusEl.innerHTML = '<span class="thinking-dots" style="color:var(--v)">Claude Sonnet skriver<span>.</span><span>.</span><span>.</span></span>';
+  }
+
   fetch(GRID_API + '/api/trends/' + trendId + '/draft', { method: 'POST' })
     .then(function(r){ return r.json(); })
     .then(function(draft){
-      if (statusEl) statusEl.textContent = '';
+      if (statusEl) statusEl.innerHTML = '';
       loadTrends();
       renderDraft(trendId, draft);
     })
-    .catch(function(){ if (statusEl) statusEl.textContent = 'Fel'; });
+    .catch(function(){
+      if (statusEl) statusEl.textContent = 'Fel';
+      if (trendCard) { trendCard.style.borderColor = 'var(--border)'; trendCard.style.opacity = '1'; }
+    });
 }
 
 function cmsDraftReview(trendId) {
