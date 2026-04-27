@@ -2679,19 +2679,14 @@ body.light .logo-light{display:block}
         <div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px">TRENDER</div>
         <button onclick="cmsRunTrends()" id="btn-trends" style="background:none;border:1px solid var(--border);color:var(--text);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px;font-family:monospace">ANALYSERA</button>
       </div>
+      
       <div id="trend-tabs" style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border);overflow-x:auto">
         <button onclick="setTrendTab('generellt')" id="ttab-generellt" style="background:var(--v);color:#000;border:none;border-bottom:2px solid var(--v);padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">GENERELLT</button>
         <button onclick="setTrendTab('sport')" id="ttab-sport" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">SPORT</button>
         <button onclick="setTrendTab('naringsliv')" id="ttab-naringsliv" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÄRINGSLIV</button>
         <button onclick="setTrendTab('ekonomi')" id="ttab-ekonomi" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">EKONOMI</button>
         <button onclick="setTrendTab('noje')" id="ttab-noje" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÖJE</button>
-      </div>
-      <div id="trend-tabs" style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border);overflow-x:auto">
-        <button onclick="setTrendTab('generellt')" id="ttab-generellt" style="background:var(--v);color:#000;border:none;border-bottom:2px solid var(--v);padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">GENERELLT</button>
-        <button onclick="setTrendTab('sport')" id="ttab-sport" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">SPORT</button>
-        <button onclick="setTrendTab('naringsliv')" id="ttab-naringsliv" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÄRINGSLIV</button>
-        <button onclick="setTrendTab('ekonomi')" id="ttab-ekonomi" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">EKONOMI</button>
-        <button onclick="setTrendTab('noje')" id="ttab-noje" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÖJE</button>
+        <button onclick="setTrendTab('internationellt')" id="ttab-internationellt" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">INTERNATIONELLT</button>
       </div>
       <div id="trends-list" style="display:flex;flex-direction:column;gap:8px"></div>
     </div>
@@ -2806,7 +2801,7 @@ function updateLogos(){
 </script>
 <script>
 var activeTrendTab = 'generellt';
-var trendsByTab = { generellt: [], sport: [], naringsliv: [], ekonomi: [], noje: [] };
+var trendsByTab = { generellt: [], sport: [], naringsliv: [], ekonomi: [], noje: [], internationellt: [] };
 
 var tabCategories = {
   generellt: null,
@@ -2818,7 +2813,7 @@ var tabCategories = {
 
 function setTrendTab(tab) {
   activeTrendTab = tab;
-  var tabs = ['generellt','sport','naringsliv','ekonomi','noje'];
+  var tabs = ['generellt','sport','naringsliv','ekonomi','noje','internationellt'];
   tabs.forEach(function(t) {
     var btn = document.getElementById('ttab-' + t);
     if (!btn) return;
