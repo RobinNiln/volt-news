@@ -3134,9 +3134,11 @@ function cmsRunTrends() {
 
 function loadTrends(cb) {
   if (!GRID_API) return;
-  fetch(GRID_API + '/api/trends').then(function(r){ return r.json(); }).then(function(ts){
-    trendsByTab['generellt'] = ts || [];
-    if (activeTrendTab === 'generellt') renderTrends(ts);
+  var cat = (activeTrendTab && activeTrendTab !== 'generellt') ? (tabCategories[activeTrendTab] || '') : '';
+  var url = GRID_API + '/api/trends' + (cat ? '?category=' + encodeURIComponent(cat) : '');
+  fetch(url).then(function(r){ return r.json(); }).then(function(ts){
+    trendsByTab[activeTrendTab] = ts || [];
+    renderTrends(ts);
     gid('stat-trends').textContent = ts.length;
     if (cb) cb(ts);
   }).catch(function(){});
