@@ -226,7 +226,7 @@ function stripJsonFences(s) {
   return r;
 }
 
-async function analyzeSignals(signals) {
+async function analyzeSignals(signals, categoryFilter) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
 
@@ -235,7 +235,10 @@ async function analyzeSignals(signals) {
     return 'ID:' + s.id + ' (' + (i+1) + '). "' + s.headline + '" — ' + s.sourceCount + ' kallor (' + s.riksCount + ' riksmedier, ' + s.ntmCount + ' lokala)' + (s.growing ? ' VAXER' : '') + '\n   Kallor: ' + s.sourceCodes.join(', ') + '\n   Regioner: ' + (s.regions.length ? s.regions.join(', ') : 'rikstackande') + '\n   Artiklar: ' + s.items.slice(0,3).map(function(x){ return '"' + x.title + '"'; }).join(' | ');
   }).join('\n\n');
 
-  const prompt = 'Du ar chefsredaktor pa GRID, en nationell nyhetstjanst. Nedan ar de starkaste nyhetssignalerna just nu baserade pa vad svenska medier skriver om.\n\n' + signalText + '\n\nValj de 5 mest varda att bevaka ur ett nationellt perspektiv. En lokal handelse som rapporteras i flera regioner ar en nationell historia.\n\nSvara ENDAST med JSON:\n{\n  "trends": [\n    {\n      "signalId": "ID-stringen fran signalen ovan",\n      "headline": "Konkret rubrik max 10 ord",\n      "angle": "Varfor detta ar en nationell nyhet i en mening",\n      "category": "Politik|Ekonomi|Samhalle|Industri|Klimat|Sport|Naringsliv|Kultur",\n      "imageQuery": "2-3 engelska ord for bildsokning"\n    }\n  ]\n}';
+  const catInstruction = categoryFilter
+    ? 'Fokusera ENBART pa amnen inom: ' + categoryFilter + '. Valj de 5 mest relevanta signalerna inom detta omrade.'
+    : 'Valj de 5 mest varda att bevaka ur ett nationellt perspektiv. En lokal handelse som rapporteras i flera regioner ar en nationell historia.';
+  const prompt = 'Du ar chefsredaktor pa GRID, en nationell nyhetstjanst. Nedan ar de starkaste nyhetssignalerna just nu baserade pa vad svenska medier skriver om.\n\n' + signalText + '\n\n' + catInstruction + '\n\nSvara ENDAST med JSON:\n{\n  "trends": [\n    {\n      "signalId": "ID-stringen fran signalen ovan",\n      "headline": "Konkret rubrik max 10 ord",\n      "angle": "Varfor detta ar en nationell nyhet i en mening",\n      "category": "Politik|Ekonomi|Samhalle|Industri|Klimat|Sport|Naringsliv|Kultur",\n      "imageQuery": "2-3 engelska ord for bildsokning"\n    }\n  ]\n}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -274,6 +277,7 @@ async function generateDraft(signal, trend) {
 // ── Pipeline State ────────────────────────────────────────────
 let signals = [];
 let trends = [];
+let trendsByCategory = {};
 let suggestions = [];
 let pipelineLog = [];
 let isRunning = false;
@@ -301,11 +305,12 @@ async function runSignalPipeline() {
   lastRun = new Date().toISOString();
 }
 
-async function runTrendAnalysis() {
+async function runTrendAnalysis(categoryFilter) {
   if (!signals.length) await runSignalPipeline();
-  log('Analyserar signaler med Claude...');
+  const catLabel = categoryFilter ? ' [' + categoryFilter + ']' : '';
+  log('Analyserar signaler med Claude' + catLabel + '...');
   try {
-    const result = await analyzeSignals(signals);
+    const result = await analyzeSignals(signals, categoryFilter);
     trends = await Promise.all(result.trends.map(async (t, i) => {
       var signal = signals.find(function(s){ return s.id === t.signalId; });
       if (!signal) signal = signals[t.signalIndex] || signals[i] || signals[0];
@@ -322,7 +327,10 @@ async function runTrendAnalysis() {
         createdAt: new Date().toISOString(),
       };
     }));
-    log('Klar: ' + trends.length + ' trender identifierade');
+    if (categoryFilter) {
+      trendsByCategory[categoryFilter] = trends.slice();
+    }
+    log('Klar: ' + (categoryFilter || 'generella') + ' trender: ' + trends.length);
   } catch(e) { log('Fel (trender): ' + e.message); }
 }
 
@@ -334,7 +342,13 @@ app.get('/api/signals', async (req, res) => {
   res.json(signals);
 });
 
-app.get('/api/trends', (req, res) => res.json(trends));
+app.get('/api/trends', (req, res) => {
+  const category = req.query.category || '';
+  if (category && trendsByCategory[category]) {
+    return res.json(trendsByCategory[category]);
+  }
+  res.json(trends);
+});
 
 app.post('/api/pipeline/signals', async (req, res) => {
   res.json({ ok: true });
@@ -342,8 +356,9 @@ app.post('/api/pipeline/signals', async (req, res) => {
 });
 
 app.post('/api/pipeline/trends', async (req, res) => {
+  const category = req.query.category || '';
   res.json({ ok: true });
-  runTrendAnalysis();
+  runTrendAnalysis(category);
 });
 
 app.post('/api/trends/:id/draft', async (req, res) => {
