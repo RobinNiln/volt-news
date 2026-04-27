@@ -54,6 +54,13 @@ const SOURCES = {
   ab_noje:     { name:'AB Nöje',     code:'ABn', color:'#e8001a', type:'riks', cat:'noje', url:'https://rss.aftonbladet.se/rss2/small/pages/sections/nojesbladet/' },
   ex_sport:    { name:'EX Sport',    code:'EXs', color:'#006AA7', type:'riks', cat:'sport', url:'https://feeds.expressen.se/sport/' },
   ex_noje:     { name:'EX Nöje',     code:'EXn', color:'#006AA7', type:'riks', cat:'noje', url:'https://feeds.expressen.se/noje/' },
+  // Internationella källor
+  nyt_world:   { name:'New York Times', code:'NYT', color:'#000', type:'intl', cat:'internationellt', url:'https://rss.nytimes.com/services/xml/rss/nyt/World.rss' },
+  nyt_politics:{ name:'NYT Politics',   code:'NYTp',color:'#000', type:'intl', cat:'internationellt', url:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.rss' },
+  guardian_int:{ name:'The Guardian',   code:'GRD', color:'#052962', type:'intl', cat:'internationellt', url:'https://www.theguardian.com/world/rss' },
+  guardian_eu: { name:'Guardian Europe',code:'GRDe',color:'#052962', type:'intl', cat:'internationellt', url:'https://www.theguardian.com/world/europe-news/rss' },
+  bbc_world:   { name:'BBC News',       code:'BBC', color:'#b80000', type:'intl', cat:'internationellt', url:'http://feeds.bbci.co.uk/news/world/rss.xml' },
+  reuters:     { name:'Reuters',        code:'REU', color:'#ff8000', type:'intl', cat:'internationellt', url:'https://feeds.reuters.com/reuters/worldNews' },
   // NTM — Norr
   norran:      { name:'Norran',      code:'NOR', color:'#C0392B', type:'ntm', region:'norr', url:'https://www.norran.se/rss/' },
   nsd:         { name:'NSD',         code:'NSD', color:'#C0392B', type:'ntm', region:'norr', url:'https://www.nsd.se/rss/' },
@@ -133,6 +140,8 @@ function clusterItems(items, categoryFilter) {
       recent = recent.filter(i => i.sourceCat === 'naringsliv' || bizKeywords.test(i.title));
     } else if (cats.includes('noje')) {
       recent = recent.filter(i => i.sourceCat === 'noje' || nojeKeywords.test(i.title));
+    } else if (cats.includes('internationellt')) {
+      recent = recent.filter(i => i.sourceCat === 'internationellt' || i.sourceType === 'intl');
     }
   }
 
@@ -262,9 +271,11 @@ async function analyzeSignals(signals, categoryFilter) {
     return 'ID:' + s.id + ' (' + (i+1) + '). "' + s.headline + '" — ' + s.sourceCount + ' kallor (' + s.riksCount + ' riksmedier, ' + s.ntmCount + ' lokala)' + (s.growing ? ' VAXER' : '') + '\n   Kallor: ' + s.sourceCodes.join(', ') + '\n   Regioner: ' + (s.regions.length ? s.regions.join(', ') : 'rikstackande') + '\n   Artiklar: ' + s.items.slice(0,3).map(function(x){ return '"' + x.title + '"'; }).join(' | ');
   }).join('\n\n');
 
-  const catInstruction = categoryFilter
-    ? 'Fokusera ENBART pa amnen inom: ' + categoryFilter + '. Valj de 5 mest relevanta signalerna inom detta omrade.'
-    : 'Valj de 5 mest varda att bevaka ur ett nationellt perspektiv. En lokal handelse som rapporteras i flera regioner ar en nationell historia.';
+  const catInstruction = categoryFilter === 'internationellt'
+    ? 'Fokusera ENBART pa internationella nyheter. Kallorna ar pa engelska men du ska skriva rubriker och vinklar pa svenska. Valj de 5 mest relevanta internationella nyheterna.'
+    : categoryFilter
+      ? 'Fokusera ENBART pa amnen inom: ' + categoryFilter + '. Valj de 5 mest relevanta signalerna inom detta omrade.'
+      : 'Valj de 5 mest varda att bevaka ur ett nationellt perspektiv. En lokal handelse som rapporteras i flera regioner ar en nationell historia.';
   const prompt = 'Du ar chefsredaktor pa GRID, en nationell nyhetstjanst. Nedan ar de starkaste nyhetssignalerna just nu baserade pa vad svenska medier skriver om.\n\n' + signalText + '\n\n' + catInstruction + '\n\nSvara ENDAST med JSON:\n{\n  "trends": [\n    {\n      "signalId": "ID-stringen fran signalen ovan",\n      "headline": "Konkret rubrik max 10 ord",\n      "angle": "Varfor detta ar en nationell nyhet i en mening",\n      "category": "Politik|Ekonomi|Samhalle|Industri|Klimat|Sport|Naringsliv|Kultur",\n      "imageQuery": "2-3 engelska ord for bildsokning"\n    }\n  ]\n}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -287,7 +298,9 @@ async function generateDraft(signal, trend) {
     return '[' + i.source + '] "' + i.title + '"' + (i.link ? '\n   Lank: ' + i.link : '');
   }).join('\n\n');
 
-  const prompt = 'Du ar erfaren nyhetsjournalist pa GRID, en svensk nationell nyhetssajt.\n\nHar ar vad svenska medier rapporterar just nu:\n\n' + sourceList + '\n\nDin uppgift: Skriv en nyhetsartikel baserad ENBART pa vad som faktiskt rapporteras ovan.\n- Anvand konkreta detaljer, namn, platser och siffror fran rubrikerna\n- Hittar du inte ett faktum i kallorna, skriv det inte\n- Rubriken ska vara specifik och nyhetsdriven, inte generell\n- Ingressen svarar pa: vad hande, vem ar inblandad, varfor spelar det roll\n- Varje stycke i brodtexten tillfor ny information\n- Citatpersonen ska vara specifik (namn + titel)\n\nSvara ENDAST med JSON utan kommentarer:\n{\n  "title": "Specifik nyhetrubrik max 12 ord",\n  "ingress": "2-3 meningar. Konkret, informativ, lockar till lasning.",\n  "body": "Stycke 1: Vad hande konkret (3-4 meningar med fakta).\\n\\nStycke 2: Bakgrund och varfor det spelar roll (2-3 meningar).\\n\\nStycke 3: Vad hander harnat eller reaktioner (1-2 meningar).",\n  "quote": "Konkret citat kopplat till handelsen",\n  "quoteAttr": "Fornamn Efternamn, titel"\n}';
+  const isIntl = signal.items && signal.items.some(function(i){ return i.sourceType === 'intl'; });
+  const langNote = isIntl ? ' Kallorna ar pa engelska - oversatt och skriv artikeln pa svenska.' : '';
+  const prompt = 'Du ar erfaren nyhetsjournalist pa GRID, en svensk nationell nyhetssajt.' + langNote + '\n\nHar ar vad medier rapporterar just nu:\n\n' + sourceList + '\n\nDin uppgift: Skriv en nyhetsartikel baserad ENBART pa vad som faktiskt rapporteras ovan.\n- Anvand konkreta detaljer, namn, platser och siffror fran rubrikerna\n- Hittar du inte ett faktum i kallorna, skriv det inte\n- Rubriken ska vara specifik och nyhetsdriven, inte generell\n- Ingressen svarar pa: vad hande, vem ar inblandad, varfor spelar det roll\n- Varje stycke i brodtexten tillfor ny information\n- Citatpersonen ska vara specifik (namn + titel)\n\nSvara ENDAST med JSON utan kommentarer:\n{\n  "title": "Specifik nyhetrubrik max 12 ord",\n  "ingress": "2-3 meningar. Konkret, informativ, lockar till lasning.",\n  "body": "Stycke 1: Vad hande konkret (3-4 meningar med fakta).\\n\\nStycke 2: Bakgrund och varfor det spelar roll (2-3 meningar).\\n\\nStycke 3: Vad hander harnat eller reaktioner (1-2 meningar).",\n  "quote": "Konkret citat kopplat till handelsen",\n  "quoteAttr": "Fornamn Efternamn, titel"\n}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
