@@ -2683,14 +2683,14 @@ body.light .logo-light{display:block}
         <button onclick="setTrendTab('generellt')" id="ttab-generellt" style="background:var(--v);color:#000;border:none;border-bottom:2px solid var(--v);padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">GENERELLT</button>
         <button onclick="setTrendTab('sport')" id="ttab-sport" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">SPORT</button>
         <button onclick="setTrendTab('naringsliv')" id="ttab-naringsliv" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÄRINGSLIV</button>
-        <button onclick="setTrendTab('vader')" id="ttab-vader" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">VÄDER</button>
+        <button onclick="setTrendTab('ekonomi')" id="ttab-ekonomi" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">EKONOMI</button>
         <button onclick="setTrendTab('noje')" id="ttab-noje" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÖJE</button>
       </div>
       <div id="trend-tabs" style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border);overflow-x:auto">
         <button onclick="setTrendTab('generellt')" id="ttab-generellt" style="background:var(--v);color:#000;border:none;border-bottom:2px solid var(--v);padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">GENERELLT</button>
         <button onclick="setTrendTab('sport')" id="ttab-sport" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">SPORT</button>
         <button onclick="setTrendTab('naringsliv')" id="ttab-naringsliv" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÄRINGSLIV</button>
-        <button onclick="setTrendTab('vader')" id="ttab-vader" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">VÄDER</button>
+        <button onclick="setTrendTab('ekonomi')" id="ttab-ekonomi" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">EKONOMI</button>
         <button onclick="setTrendTab('noje')" id="ttab-noje" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÖJE</button>
       </div>
       <div id="trends-list" style="display:flex;flex-direction:column;gap:8px"></div>
@@ -2806,7 +2806,7 @@ function updateLogos(){
 </script>
 <script>
 var activeTrendTab = 'generellt';
-var trendsByTab = { generellt: [], sport: [], naringsliv: [], vader: [], noje: [] };
+var trendsByTab = { generellt: [], sport: [], naringsliv: [], ekonomi: [], noje: [] };
 
 var tabCategories = {
   generellt: null,
@@ -2818,7 +2818,7 @@ var tabCategories = {
 
 function setTrendTab(tab) {
   activeTrendTab = tab;
-  var tabs = ['generellt','sport','naringsliv','vader','noje'];
+  var tabs = ['generellt','sport','naringsliv','ekonomi','noje'];
   tabs.forEach(function(t) {
     var btn = document.getElementById('ttab-' + t);
     if (!btn) return;
@@ -3031,15 +3031,18 @@ function cmsRunSignals() {
   if (!GRID_API) return;
   var btn = gid('btn-signals');
   btn.textContent = '...';
-  fetch(GRID_API + '/api/pipeline/signals', { method: 'POST' })
-    .then(function(){
-      setTimeout(function(){ loadSignals(); loadStats(); btn.textContent = 'UPPDATERA'; }, 8000);
-    });
+  var cat = (activeTrendTab && activeTrendTab !== 'generellt') ? (tabCategories[activeTrendTab] || '') : '';
+  var url = GRID_API + '/api/pipeline/signals' + (cat ? '?category=' + encodeURIComponent(cat) : '');
+  fetch(url, { method: 'POST' }).then(function(){
+    setTimeout(function(){ loadSignals(); loadStats(); btn.textContent = 'UPPDATERA'; }, 8000);
+  });
 }
 
 function loadSignals() {
   if (!GRID_API) return;
-  fetch(GRID_API + '/api/signals').then(function(r){ return r.json(); }).then(function(sigs){
+  var cat = (activeTrendTab && activeTrendTab !== 'generellt') ? (tabCategories[activeTrendTab] || '') : '';
+  var url = GRID_API + '/api/signals' + (cat ? '?category=' + encodeURIComponent(cat) : '');
+  fetch(url).then(function(r){ return r.json(); }).then(function(sigs){
     renderSignals(sigs);
     gid('stat-signals').textContent = sigs.length;
   }).catch(function(){});
