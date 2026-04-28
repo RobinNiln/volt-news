@@ -294,6 +294,9 @@ async function generateDraft(signal, trend) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
 
+  if (!signal || !signal.items || !signal.items.length) {
+    return res ? res.status(500).json({ error: 'Signal saknas' }) : null;
+  }
   const sourceList = signal.items.map(function(i) {
     return '[' + i.source + '] "' + i.title + '"' + (i.link ? '\n   Lank: ' + i.link : '');
   }).join('\n\n');
@@ -331,21 +334,27 @@ function log(msg) {
   console.log('[PIPELINE]', msg);
 }
 
+async function fetchAndCluster(categoryFilter) {
+  const items = await fetchAllFeeds();
+  log('Hämtade ' + items.length + ' artiklar');
+  const clustered = clusterItems(items, categoryFilter);
+  log('Identifierade ' + clustered.length + ' signaler' + (categoryFilter ? ' [' + categoryFilter + ']' : ''));
+  return clustered;
+}
+
 async function runSignalPipeline(categoryFilter) {
   if (isRunning) return;
   isRunning = true;
-  const catLabel = categoryFilter ? ' [' + categoryFilter + ']' : '';
-  log('Hämtar RSS från ' + Object.keys(SOURCES).length + ' källor' + catLabel + '...');
+  log('Hämtar RSS från ' + Object.keys(SOURCES).length + ' källor...');
   try {
-    const items = await fetchAllFeeds();
-    log('Hämtade ' + items.length + ' artiklar');
-    const clustered = clusterItems(items, categoryFilter);
+    const clustered = await fetchAndCluster(categoryFilter);
     if (categoryFilter) {
       signalsByCategory[categoryFilter] = clustered;
     } else {
       signals = clustered;
+      // Also reset all category caches so they refresh
+      signalsByCategory = {};
     }
-    log('Identifierade ' + clustered.length + ' signaler' + catLabel);
     cache.del('signals');
   } catch(e) { log('Fel (signaler): ' + e.message); }
   isRunning = false;
@@ -353,30 +362,41 @@ async function runSignalPipeline(categoryFilter) {
 }
 
 async function runTrendAnalysis(categoryFilter) {
-  // Get the right signal pool for this category
-  const activeSignals = categoryFilter
-    ? (signalsByCategory[categoryFilter] && signalsByCategory[categoryFilter].length
-        ? signalsByCategory[categoryFilter]
-        : await runSignalPipeline(categoryFilter).then(() => signalsByCategory[categoryFilter] || []))
-    : signals;
-
-  if (!activeSignals || !activeSignals.length) {
-    if (!categoryFilter) await runSignalPipeline();
+  // Ensure we have signals for this category
+  if (categoryFilter) {
+    if (!signalsByCategory[categoryFilter] || !signalsByCategory[categoryFilter].length) {
+      log('Hämtar signaler för [' + categoryFilter + ']...');
+      // Temporarily bypass isRunning for category pipeline
+      const items = await fetchAllFeeds();
+      signalsByCategory[categoryFilter] = clusterItems(items, categoryFilter);
+      log('Identifierade ' + signalsByCategory[categoryFilter].length + ' signaler [' + categoryFilter + ']');
+    }
+  } else {
+    if (!signals.length) await runSignalPipeline();
   }
 
   const sigPool = categoryFilter ? (signalsByCategory[categoryFilter] || []) : signals;
-  if (!sigPool.length) { log('Inga signaler for ' + (categoryFilter || 'generellt')); return; }
+
+  if (!sigPool.length) {
+    log('Inga signaler för ' + (categoryFilter || 'generellt') + ' — kör Uppdatera först');
+    return;
+  }
 
   const catLabel = categoryFilter ? ' [' + categoryFilter + ']' : '';
   log('Analyserar ' + sigPool.length + ' signaler med Claude' + catLabel + '...');
+
   try {
     const result = await analyzeSignals(sigPool, categoryFilter);
     const newTrends = await Promise.all(result.trends.map(async (t, i) => {
-      // Match signal from the correct pool
-      var signal = sigPool.find(function(s){ return s.id === t.signalId; });
-      if (!signal) signal = sigPool[t.signalIndex] || sigPool[i] || sigPool[0];
-      const image = await fetchUnsplashImage(t.imageQuery || t.category);
-      log('Bild: ' + t.headline.slice(0,30) + ' — ' + (image ? 'OK' : 'saknas'));
+      // Match signal from the correct pool using signalId first, then index
+      let signal = sigPool.find(s => s.id === t.signalId);
+      if (!signal && typeof t.signalIndex === 'number') signal = sigPool[t.signalIndex];
+      if (!signal) signal = sigPool[Math.min(i, sigPool.length - 1)];
+
+      const imageQuery = t.imageQuery || t.headline || t.category || 'news';
+      const image = await fetchUnsplashImage(imageQuery);
+      log('Trend: ' + t.headline.slice(0, 40) + ' | bild: ' + (image ? 'OK' : 'saknas'));
+
       return {
         id: 'trend-' + Date.now() + '-' + i,
         headline: t.headline,
@@ -390,13 +410,26 @@ async function runTrendAnalysis(categoryFilter) {
     }));
 
     if (categoryFilter) {
-      // Store category trends separately, don't overwrite global trends
       trendsByCategory[categoryFilter] = newTrends;
     } else {
       trends = newTrends;
     }
-    log('Klar: ' + (categoryFilter || 'generella') + ' trender: ' + newTrends.length);
-  } catch(e) { log('Fel (trender): ' + e.message); }
+    log('Klar: ' + newTrends.length + ' trender' + catLabel);
+  } catch(e) {
+    log('Fel (trender): ' + e.message);
+    console.error(e);
+  }
+}
+
+function findTrendById(id) {
+  let t = trends.find(x => x.id === id);
+  if (!t) {
+    for (const cat of Object.keys(trendsByCategory)) {
+      t = trendsByCategory[cat].find(x => x.id === id);
+      if (t) break;
+    }
+  }
+  return t;
 }
 
 // ── Routes ────────────────────────────────────────────────────
@@ -414,9 +447,7 @@ app.get('/api/signals', async (req, res) => {
 
 app.get('/api/trends', (req, res) => {
   const category = req.query.category || '';
-  if (category) {
-    return res.json(trendsByCategory[category] || []);
-  }
+  if (category) return res.json(trendsByCategory[category] || []);
   res.json(trends);
 });
 
@@ -433,14 +464,7 @@ app.post('/api/pipeline/trends', async (req, res) => {
 });
 
 app.post('/api/trends/:id/draft', async (req, res) => {
-  // Search in global trends and all category-specific trends
-  let trend = trends.find(t => t.id === req.params.id);
-  if (!trend) {
-    for (const cat of Object.keys(trendsByCategory)) {
-      trend = trendsByCategory[cat].find(t => t.id === req.params.id);
-      if (trend) break;
-    }
-  }
+  const trend = findTrendById(req.params.id);
   if (!trend) return res.status(404).json({ error: 'Trend not found' });
   try {
     log('Genererar artikelutkast för: ' + trend.headline);
@@ -454,13 +478,7 @@ app.post('/api/trends/:id/draft', async (req, res) => {
 });
 
 app.post('/api/trends/:id/publish', async (req, res) => {
-  let trend = trends.find(t => t.id === req.params.id);
-  if (!trend) {
-    for (const cat of Object.keys(trendsByCategory)) {
-      trend = trendsByCategory[cat].find(t => t.id === req.params.id);
-      if (trend) break;
-    }
-  }
+  const trend = findTrendById(req.params.id);
   if (!trend || !trend.draft) return res.status(400).json({ error: 'No draft' });
   const id = 'art-' + Date.now();
   const rawQuote = (trend.draft.quote || '').trim();
@@ -487,13 +505,7 @@ app.post('/api/trends/:id/publish', async (req, res) => {
 });
 
 app.post('/api/trends/:id/dismiss', (req, res) => {
-  let trend = trends.find(t => t.id === req.params.id);
-  if (!trend) {
-    for (const cat of Object.keys(trendsByCategory)) {
-      const found = trendsByCategory[cat].find(t => t.id === req.params.id);
-      if (found) { trend = found; break; }
-    }
-  }
+  const trend = findTrendById(req.params.id);
   if (trend) trend.status = 'dismissed';
   res.json({ ok: true });
 });
@@ -527,14 +539,17 @@ app.post('/api/articles/reorder', (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/api/pipeline/status', (req, res) => res.json({
-  lastRun,
-  running: isRunning,
-  signals: signals.length,
-  trends: trends.length,
-  pending: trends.filter(t => t.status === 'pending').length,
-  log: pipelineLog.slice(0, 20),
-}));
+app.get('/api/pipeline/status', (req, res) => {
+  const allTrends = trends.concat(Object.values(trendsByCategory).flat());
+  res.json({
+    lastRun,
+    running: isRunning,
+    signals: signals.length,
+    trends: allTrends.length,
+    pending: allTrends.filter(t => t.status === 'pending').length,
+    log: pipelineLog.slice(0, 20),
+  });
+});
 
 app.get('/api/feed', async (req, res) => {
   const cached = cache.get('feed');
