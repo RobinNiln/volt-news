@@ -241,10 +241,18 @@ async function fetchUnsplashImage(query) {
       '&orientation=landscape&content_filter=high',
       { headers: { 'Authorization': 'Client-ID ' + key } }
     );
-    if (!r.ok) return '';
+    if (!r.ok) {
+      console.error('[UNSPLASH] HTTP', r.status, 'for query:', query);
+      return '';
+    }
     const d = await r.json();
-    return d.urls?.regular || '';
-  } catch(e) { return ''; }
+    const url = d.urls?.regular || '';
+    if (!url) console.error('[UNSPLASH] No urls.regular in response for:', query);
+    return url;
+  } catch(e) {
+    console.error('[UNSPLASH] Exception:', e.message, 'query:', query);
+    return '';
+  }
 }
 
 // ── Claude ────────────────────────────────────────────────────
@@ -276,7 +284,7 @@ async function analyzeSignals(signals, categoryFilter) {
     : categoryFilter
       ? 'Fokusera ENBART pa amnen inom: ' + categoryFilter + '. Valj de 5 mest relevanta signalerna inom detta omrade.'
       : 'Valj de 5 mest varda att bevaka ur ett nationellt perspektiv. En lokal handelse som rapporteras i flera regioner ar en nationell historia.';
-  const prompt = 'Du ar chefsredaktor pa GRID, en nationell nyhetstjanst. Nedan ar de starkaste nyhetssignalerna just nu baserade pa vad svenska medier skriver om.\n\n' + signalText + '\n\n' + catInstruction + '\n\nSvara ENDAST med JSON:\n{\n  "trends": [\n    {\n      "signalId": "ID-stringen fran signalen ovan",\n      "headline": "Konkret rubrik max 10 ord",\n      "angle": "Varfor detta ar en nationell nyhet i en mening",\n      "category": "Politik|Ekonomi|Samhalle|Industri|Klimat|Sport|Naringsliv|Kultur",\n      "imageQuery": "2-3 engelska ord for bildsokning"\n    }\n  ]\n}';
+  const prompt = 'Du ar chefsredaktor pa GRID, en nationell nyhetstjanst. Nedan ar de starkaste nyhetssignalerna just nu baserade pa vad svenska medier skriver om.\n\n' + signalText + '\n\n' + catInstruction + '\n\nSvara ENDAST med JSON:\n{\n  "trends": [\n    {\n      "signalId": "ID-stringen fran signalen ovan",\n      "headline": "Konkret rubrik max 10 ord",\n      "angle": "Varfor detta ar en nationell nyhet i en mening",\n      "category": "Politik|Ekonomi|Samhalle|Industri|Klimat|Sport|Naringsliv|Kultur",\n      "imageQuery": "2-4 specific English words for image search, e.g: football match, stock market, parliament building, solar panels"\n    }\n  ]\n}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -394,20 +402,33 @@ async function runTrendAnalysis(categoryFilter) {
       if (!signal && typeof t.signalIndex === 'number') signal = sigPool[t.signalIndex];
       if (!signal) signal = sigPool[Math.min(i, sigPool.length - 1)];
 
-      // Validate imageQuery - reject template-like strings from Claude
+      // Build a specific imageQuery from category + headline keywords
       let imageQuery = t.imageQuery || '';
-      if (!imageQuery || imageQuery.length > 50 || /ord|bildsokning|engelska|exempel/i.test(imageQuery)) {
-        // Derive from category or headline instead
+      // Reject template strings or too-long queries
+      const badQuery = !imageQuery || imageQuery.length > 40 || /ord|bildsokning|engelska|exempel|query|search/i.test(imageQuery);
+      if (badQuery) {
+        // Use specific category searches that give relevant sports/business/etc images
         const catImageMap = {
-          'Sport': 'sports stadium', 'Ekonomi': 'economy finance', 'Politik': 'parliament politics',
-          'Klimat': 'climate nature', 'Industri': 'industry factory', 'Samhalle': 'society city',
-          'Naringsliv': 'business office', 'Kultur': 'culture art', 'Noje': 'entertainment music'
+          'Sport': 'football match stadium crowd',
+          'Ekonomi': 'stock exchange finance',
+          'Politik': 'parliament government politics',
+          'Klimat': 'climate environment nature',
+          'Industri': 'factory manufacturing industry',
+          'Samhalle': 'stockholm sweden city',
+          'Samhälle': 'stockholm sweden city',
+          'Naringsliv': 'business meeting office',
+          'Näringsliv': 'business meeting office',
+          'Kultur': 'concert music culture',
+          'Noje': 'entertainment show music',
+          'Nöje': 'entertainment show music',
         };
-        imageQuery = catImageMap[t.category] || t.headline.split(' ').slice(0,3).join(' ') || 'sweden news';
+        imageQuery = catImageMap[t.category] || 'sweden news';
       }
-      log('Unsplash query: ' + imageQuery);
+      // Ensure query is in English and specific
+      log('Unsplash query: "' + imageQuery + '" (category: ' + t.category + ')');
       const image = await fetchUnsplashImage(imageQuery);
-      log('Unsplash: ' + (image ? image.slice(0,60) : 'INGEN BILD - kolla UNSPLASH_ACCESS_KEY'));
+      if (!image) log('VARNING: Ingen bild returnerad — kontrollera UNSPLASH_ACCESS_KEY i Railway Variables');
+      else log('Unsplash OK: ' + image.slice(0,60));
       log('Trend: ' + t.headline.slice(0, 40) + ' | bild: ' + (image ? 'OK' : 'saknas'));
 
       return {
