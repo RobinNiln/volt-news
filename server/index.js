@@ -295,7 +295,7 @@ async function generateDraft(signal, trend) {
   if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
 
   if (!signal || !signal.items || !signal.items.length) {
-    return res ? res.status(500).json({ error: 'Signal saknas' }) : null;
+    throw new Error('Signal saknas — kör Uppdatera och Analysera igen');
   }
   const sourceList = signal.items.map(function(i) {
     return '[' + i.source + '] "' + i.title + '"' + (i.link ? '\n   Lank: ' + i.link : '');
@@ -303,7 +303,8 @@ async function generateDraft(signal, trend) {
 
   const isIntl = signal.items && signal.items.some(function(i){ return i.sourceType === 'intl'; });
   const langNote = isIntl ? ' Kallorna ar pa engelska - oversatt och skriv artikeln pa svenska.' : '';
-  const prompt = 'Du ar erfaren nyhetsjournalist pa GRID, en svensk nationell nyhetssajt.' + langNote + '\n\nHar ar vad medier rapporterar just nu:\n\n' + sourceList + '\n\nDin uppgift: Skriv en nyhetsartikel baserad ENBART pa vad som faktiskt rapporteras ovan.\n- Anvand konkreta detaljer, namn, platser och siffror fran rubrikerna\n- Hittar du inte ett faktum i kallorna, skriv det inte\n- Rubriken ska vara specifik och nyhetsdriven, inte generell\n- Ingressen svarar pa: vad hande, vem ar inblandad, varfor spelar det roll\n- Varje stycke i brodtexten tillfor ny information\n- Citatpersonen ska vara specifik (namn + titel)\n\nSvara ENDAST med JSON utan kommentarer:\n{\n  "title": "Specifik nyhetrubrik max 12 ord",\n  "ingress": "2-3 meningar. Konkret, informativ, lockar till lasning.",\n  "body": "Stycke 1: Vad hande konkret (3-4 meningar med fakta).\\n\\nStycke 2: Bakgrund och varfor det spelar roll (2-3 meningar).\\n\\nStycke 3: Vad hander harnat eller reaktioner (1-2 meningar).",\n  "quote": "Konkret citat kopplat till handelsen",\n  "quoteAttr": "Fornamn Efternamn, titel"\n}';
+  const trendContext = trend ? '\nVald trend: ' + trend.headline + '\nVinkel: ' + (trend.angle || '') + '\nKategori: ' + (trend.category || '') + '\n' : '';
+  const prompt = 'Du ar erfaren nyhetsjournalist pa GRID, en svensk nationell nyhetssajt.' + langNote + trendContext + '\n\nHar ar vad medier rapporterar just nu om detta amne:\n\n' + sourceList + '\n\nDin uppgift: Skriv en nyhetsartikel om EXAKT detta amne baserad pa kallorna ovan.\n- Anvand konkreta detaljer, namn, platser och siffror fran rubrikerna\n- Hittar du inte ett faktum i kallorna, skriv det inte\n- Rubriken ska vara specifik och nyhetsdriven, inte generell\n- Ingressen svarar pa: vad hande, vem ar inblandad, varfor spelar det roll\n- Varje stycke i brodtexten tillfor ny information\n- Citatpersonen ska vara specifik (namn + titel)\n\nSvara ENDAST med JSON utan kommentarer:\n{\n  "title": "Specifik nyhetrubrik max 12 ord",\n  "ingress": "2-3 meningar. Konkret, informativ, lockar till lasning.",\n  "body": "Stycke 1: Vad hande konkret (3-4 meningar med fakta).\\n\\nStycke 2: Bakgrund och varfor det spelar roll (2-3 meningar).\\n\\nStycke 3: Vad hander harnat eller reaktioner (1-2 meningar).",\n  "quote": "Konkret citat kopplat till handelsen",\n  "quoteAttr": "Fornamn Efternamn, titel"\n}';
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -393,8 +394,20 @@ async function runTrendAnalysis(categoryFilter) {
       if (!signal && typeof t.signalIndex === 'number') signal = sigPool[t.signalIndex];
       if (!signal) signal = sigPool[Math.min(i, sigPool.length - 1)];
 
-      const imageQuery = t.imageQuery || t.headline || t.category || 'news';
+      // Validate imageQuery - reject template-like strings from Claude
+      let imageQuery = t.imageQuery || '';
+      if (!imageQuery || imageQuery.length > 50 || /ord|bildsokning|engelska|exempel/i.test(imageQuery)) {
+        // Derive from category or headline instead
+        const catImageMap = {
+          'Sport': 'sports stadium', 'Ekonomi': 'economy finance', 'Politik': 'parliament politics',
+          'Klimat': 'climate nature', 'Industri': 'industry factory', 'Samhalle': 'society city',
+          'Naringsliv': 'business office', 'Kultur': 'culture art', 'Noje': 'entertainment music'
+        };
+        imageQuery = catImageMap[t.category] || t.headline.split(' ').slice(0,3).join(' ') || 'sweden news';
+      }
+      log('Unsplash query: ' + imageQuery);
       const image = await fetchUnsplashImage(imageQuery);
+      log('Unsplash: ' + (image ? image.slice(0,60) : 'INGEN BILD - kolla UNSPLASH_ACCESS_KEY'));
       log('Trend: ' + t.headline.slice(0, 40) + ' | bild: ' + (image ? 'OK' : 'saknas'));
 
       return {
@@ -547,6 +560,7 @@ app.get('/api/pipeline/status', (req, res) => {
     signals: signals.length,
     trends: allTrends.length,
     pending: allTrends.filter(t => t.status === 'pending').length,
+    drafted: allTrends.filter(t => t.status === 'drafted').length,
     log: pipelineLog.slice(0, 20),
   });
 });
