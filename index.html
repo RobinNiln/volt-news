@@ -3039,11 +3039,26 @@ function renderLog(logs) {
 function cmsRunSignals() {
   if (!GRID_API) return;
   var btn = gid('btn-signals');
-  btn.textContent = '...';
+  btn.disabled = true;
+  btn.innerHTML = '<span class="thinking-dots">Hämtar<span>.</span><span>.</span><span>.</span></span>';
   var cat = (activeTrendTab && activeTrendTab !== 'generellt') ? (tabCategories[activeTrendTab] || '') : '';
   var url = GRID_API + '/api/pipeline/signals' + (cat ? '?category=' + encodeURIComponent(cat) : '');
   fetch(url, { method: 'POST' }).then(function(){
-    setTimeout(function(){ loadSignals(); loadStats(); btn.textContent = 'UPPDATERA'; }, 8000);
+    var attempts = 0;
+    var poll = setInterval(function(){
+      attempts++;
+      loadSignals();
+      loadLog();
+      if (attempts >= 4) {
+        clearInterval(poll);
+        btn.textContent = 'UPPDATERA';
+        btn.disabled = false;
+        loadStats();
+      }
+    }, 2500);
+  }).catch(function(){
+    btn.textContent = 'UPPDATERA';
+    btn.disabled = false;
   });
 }
 
