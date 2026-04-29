@@ -365,6 +365,7 @@ body.light .logo-light{display:block}
 }
 .thinking-dots span:nth-child(2){animation-delay:.2s}
 .thinking-dots span:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 </style>
 </head>
 <body class="dark">
@@ -2715,7 +2716,7 @@ body.light .logo-light{display:block}
   <!-- Log -->
   <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:14px">
     <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">PIPELINE LOG</div>
-    <div id="pipeline-log" style="font-family:monospace;font-size:11px;color:var(--muted);max-height:120px;overflow-y:auto"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px">PIPELINE LOG</div><span id="pipeline-running" style="display:none;width:6px;height:6px;border-radius:50%;background:var(--v);animation:pulse 1s infinite"></span></div><div id="pipeline-log" style="font-family:monospace;font-size:11px;color:var(--muted);max-height:120px;overflow-y:auto"></div>
   </div>
 </div>
 
@@ -3020,6 +3021,9 @@ function loadLog() {
   if (!GRID_API) return;
   fetch(GRID_API + '/api/pipeline/status').then(function(r){ return r.json(); }).then(function(d){
     renderLog(d.log || []);
+    // Update running indicator
+    var runningEl = gid('pipeline-running');
+    if (runningEl) runningEl.style.display = d.running ? 'inline' : 'none';
   }).catch(function(){});
 }
 
@@ -3109,26 +3113,40 @@ function renderSignals(sigs) {
 function cmsRunTrends() {
   if (!GRID_API) return;
   var btn = gid('btn-trends');
-  btn.textContent = '...';
+  var statusEl = gid('draft-status');
+
   btn.disabled = true;
-  if (activeTrendTab !== 'generellt') {
-    runCategoryTrends(activeTrendTab);
-    return;
+  btn.innerHTML = '<span class="thinking-dots">Analyserar<span>.</span><span>.</span><span>.</span></span>';
+  if (statusEl) statusEl.innerHTML = '<span class="thinking-dots" style="color:var(--v);font-size:10px">Claude Haiku analyserar signaler<span>.</span><span>.</span><span>.</span></span>';
+
+  var cat = (activeTrendTab && activeTrendTab !== 'generellt') ? (tabCategories[activeTrendTab] || '') : '';
+  var url = GRID_API + '/api/pipeline/trends' + (cat ? '?category=' + encodeURIComponent(cat) : '');
+
+  // Also trigger signal refresh for this category
+  if (cat) {
+    fetch(GRID_API + '/api/pipeline/signals?category=' + encodeURIComponent(cat), { method: 'POST' }).catch(function(){});
   }
-  fetch(GRID_API + '/api/pipeline/trends', { method: 'POST' })
+
+  fetch(url, { method: 'POST' })
     .then(function(){
       var attempts = 0;
       var poll = setInterval(function(){
         attempts++;
-        loadTrends(function(ts){ 
-          if (ts && ts.length || attempts > 20) { 
+        loadTrends(function(ts){
+          if ((ts && ts.length) || attempts > 25) {
             clearInterval(poll);
             btn.textContent = 'ANALYSERA';
             btn.disabled = false;
+            if (statusEl) statusEl.innerHTML = '';
             loadStats();
           }
         });
+        // Update log while waiting
+        loadLog();
       }, 3000);
+    }).catch(function(){
+      btn.textContent = 'ANALYSERA';
+      btn.disabled = false;
     });
 }
 
