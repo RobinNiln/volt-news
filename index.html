@@ -366,6 +366,58 @@ body.light .logo-light{display:block}
 .thinking-dots span:nth-child(2){animation-delay:.2s}
 .thinking-dots span:nth-child(3){animation-delay:.4s}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── DESIGN 2: BRITTISK TABLOID ─────────────────────────── */
+body.theme-tabloid{--bg:#fff;--surface:#f4f4f2;--card:#fff;--text:#111;--mid:#444;--muted:#888;--border:#ddd;--v:#cc0000;--red:#cc0000}
+body.theme-tabloid header{background:#cc0000!important;border-bottom:none}
+body.theme-tabloid .logo{color:#fff!important}
+body.theme-tabloid .logo-dark{filter:brightness(0) invert(1)!important}
+body.theme-tabloid nav{background:#cc0000;border-top:1px solid rgba(0,0,0,.2)}
+body.theme-tabloid .ni{color:#fff!important}
+body.theme-tabloid .ni.on{color:#fff!important;border-top-color:#fff!important}
+body.theme-tabloid .ticker{background:#111;color:#fff}
+body.theme-tabloid .ticker-label{background:#cc0000}
+body.theme-tabloid .cat{background:#cc0000!important;color:#fff!important;border-radius:0}
+body.theme-tabloid .art-title{font-family:Georgia,serif}
+body.theme-tabloid .hero-title{font-family:Georgia,serif}
+body.theme-tabloid .ctitle{font-family:Georgia,serif}
+body.theme-tabloid .ingress{font-family:Georgia,serif;font-style:italic}
+body.theme-tabloid .art-quote{border-left-color:#cc0000;color:#cc0000}
+body.theme-tabloid #theme-btn{color:#fff!important;border-color:rgba(255,255,255,.4)!important}
+body.theme-tabloid .feed-label{color:#cc0000;border-top-color:#cc0000}
+body.theme-tabloid .art-ab.ai{background:#cc0000;color:#fff}
+
+/* ── DESIGN 3: MODERN SPARTAN ────────────────────────────── */
+body.theme-spartan{--bg:#f9f9f7;--surface:#fff;--card:#fff;--text:#111;--mid:#555;--muted:#aaa;--border:#e8e8e4;--v:#111;--red:#e24b4a}
+body.theme-spartan header{background:#fff!important;border-bottom:1px solid #e8e8e4}
+body.theme-spartan .logo{color:#111!important;letter-spacing:-1px}
+body.theme-spartan .logo-dark{filter:brightness(0)!important}
+body.theme-spartan nav{background:#fff;border-top:1px solid #e8e8e4}
+body.theme-spartan .ni{color:#888!important;font-size:10px;letter-spacing:.5px}
+body.theme-spartan .ni.on{color:#111!important;border-top-color:#111!important}
+body.theme-spartan .ticker{background:#f9f9f7;border-bottom:1px solid #e8e8e4}
+body.theme-spartan .ticker-label{background:#111;color:#fff}
+body.theme-spartan .cat{background:transparent!important;color:#aaa!important;font-size:9px!important;letter-spacing:1.5px!important;border-radius:0!important;padding:0!important;border:none!important}
+body.theme-spartan .art-title{font-weight:700;letter-spacing:-.5px}
+body.theme-spartan .ctitle{font-weight:600;letter-spacing:-.2px}
+body.theme-spartan .card-h{border-bottom:1px solid #e8e8e4}
+body.theme-spartan .grid-2{gap:1px;background:#e8e8e4}
+body.theme-spartan .grid-2 .card{background:#fff}
+body.theme-spartan .feed-label{color:#aaa;font-size:9px;letter-spacing:2px;border-top:1px solid #e8e8e4}
+body.theme-spartan .ingress{font-size:15px}
+body.theme-spartan .art-quote{border-left:2px solid #111;color:#444;font-style:normal;font-weight:600}
+body.theme-spartan .art-ab.ai{background:#111;color:#fff;border-radius:0}
+body.theme-spartan .atext{font-size:15px;line-height:1.9;color:#333}
+body.theme-spartan .live-dot{background:#e24b4a}
+
+/* Theme modal */
+#theme-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+#theme-modal.open{display:flex}
+.theme-modal-box{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:20px;width:100%;max-width:380px}
+.theme-opt{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--border);border-radius:4px;cursor:pointer;margin-bottom:8px;transition:.15s}
+.theme-opt:hover{background:var(--surface)}
+.theme-opt.active{border-color:var(--v)}
+.theme-prev{width:48px;height:34px;border-radius:3px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);overflow:hidden}
 </style>
 </head>
 <body class="dark">
@@ -381,7 +433,7 @@ body.light .logo-light{display:block}
     </nav>
     <div class="live"><div class="ldot"></div>LIVE</div>
     <button onclick="showPage('cms')" style="display:none" id="admin-btn" class="admin-desktop-btn">✎ Admin</button>
-    <button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s">☀ Ljust</button>
+    <button onclick="openThemePicker()" style="background:none;border:1px solid var(--border);color:var(--text);padding:4px 10px;font-size:10px;font-family:monospace;letter-spacing:.3px;cursor:pointer;border-radius:2px;margin-right:6px" title="Välj design">◑ DESIGN</button><button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s">☀ Ljust</button>
   </div>
 </header>
 
@@ -2784,6 +2836,43 @@ function updateShareLinks(pageId, title) {
   var li = pg.querySelector('.share-btn-li'); if(li) li.href='https://www.linkedin.com/sharing/share-offsite/?url='+u;
   var wa = pg.querySelector('.share-btn-wa'); if(wa) wa.href='https://api.whatsapp.com/send?text='+t+'%20'+u;
 }
+
+function openThemePicker() {
+  var modal = document.getElementById('theme-modal');
+  if (modal) modal.classList.add('open');
+}
+function closeThemePicker() {
+  var modal = document.getElementById('theme-modal');
+  if (modal) modal.classList.remove('open');
+}
+function setTheme(theme) {
+  var body = document.body;
+  body.classList.remove('theme-tabloid', 'theme-spartan');
+  // Also handle dark/light for default
+  if (theme === 'default') {
+    var saved = localStorage.getItem('grid-theme') || 'dark';
+    body.classList.remove('light', 'dark');
+    body.classList.add(saved);
+  } else if (theme === 'tabloid') {
+    body.classList.remove('dark', 'light');
+    body.classList.add('light', 'theme-tabloid');
+  } else if (theme === 'spartan') {
+    body.classList.remove('dark', 'light');
+    body.classList.add('light', 'theme-spartan');
+  }
+  localStorage.setItem('grid-design', theme);
+  // Update checkmarks
+  ['default','tabloid','spartan'].forEach(function(t) {
+    var chk = document.getElementById('tcheck-' + t);
+    if (chk) chk.style.display = t === theme ? 'block' : 'none';
+  });
+  closeThemePicker();
+}
+// Apply saved design on load
+(function(){
+  var saved = localStorage.getItem('grid-design') || 'default';
+  if (saved !== 'default') setTheme(saved);
+})();
 </script>
 
 <script>
