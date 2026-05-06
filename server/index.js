@@ -594,5 +594,76 @@ app.get('/api/feed', async (req, res) => {
   res.json(items);
 });
 
+// ── Metadata Generation ───────────────────────────────────────
+async function generateMetadata(article) {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
+
+  const prompt = 'Du ar SEO-expert och annonsstrategist for GRID, en svensk nyhetssajt. Analysera denna artikel och returnera metadata.' +
+    '\n\nRubrik: ' + article.title +
+    '\nIngress: ' + article.ingress +
+    '\nBrodtext: ' + (article.body || '').slice(0, 500) +
+    '\nKategori: ' + article.cat +
+    '\n\nSvara ENDAST med JSON:' +
+    '\n{' +
+    '\n  "seoTitle": "SEO-rubrik max 60 tecken",' +
+    '\n  "metaDescription": "Beskrivning 120-155 tecken som lockar klick",' +
+    '\n  "keywords": ["nyckelord1", "nyckelord2", "nyckelord3", "nyckelord4", "nyckelord5"],' +
+    '\n  "geoTag": "Stad eller region om lokalt relevant, annars tom strang",' +
+    '\n  "audienceSegments": ["Segment1", "Segment2"],' +
+    '\n  "ogTitle": "Open Graph-rubrik for sociala medier",' +
+    '\n  "ogDescription": "OG-beskrivning 1-2 meningar",' +
+    '\n  "headlineSuggestions": ["Alternativ rubrik 1", "Alternativ rubrik 2", "Alternativ rubrik 3"],' +
+    '\n  "editorialTips": ["Konkret forslag 1 pa hur artikeln kan forbattras", "Konkret forslag 2"]' +
+    '\n}' +
+    '\n\nAudience segments ska vara ett eller flera av: Bostad & Fastighet, Arbetsmarknad, Transport & Infrastruktur, Energi & Klimat, Konsumentpriser, Halsa & Sjukvard, Politik & Samhalle, Naringsliv & Finans, Sport & Fritid, Kultur & Noje, Lokalt Norrland, Lokalt Mellansverige, Lokalt Syd, Internationellt.';
+
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!r.ok) throw new Error('Claude API ' + r.status);
+  const d = await r.json();
+  return JSON.parse(stripJsonFences(d.content[0].text));
+}
+
+async function improveText(text, instruction) {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error('ANTHROPIC_API_KEY saknas');
+  const prompt = 'Du ar redaktor pa GRID. ' + instruction + '\n\nText:\n' + text + '\n\nReturnera ENBART den forbattrade texten, inga kommentarer.';
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 500, messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!r.ok) throw new Error('Claude API ' + r.status);
+  const d = await r.json();
+  return d.content[0].text.trim();
+}
+
+app.post('/api/articles/:id/metadata', async (req, res) => {
+  const articles = readArticles();
+  const article = articles.find(a => a.id === req.params.id);
+  if (!article) return res.status(404).json({ error: 'Not found' });
+  try {
+    const meta = await generateMetadata(article);
+    updateArticle(req.params.id, { meta });
+    res.json(meta);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/articles/:id/improve', async (req, res) => {
+  const { field, instruction } = req.body;
+  const articles = readArticles();
+  const article = articles.find(a => a.id === req.params.id);
+  if (!article) return res.status(404).json({ error: 'Not found' });
+  try {
+    const text = article[field] || '';
+    const improved = await improveText(text, instruction);
+    res.json({ improved });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('GRID backend på port ' + PORT));
