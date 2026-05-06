@@ -3500,49 +3500,341 @@ function enableDragDrop() {
 
 function openEdit(a) {
   var m = document.createElement('div');
-  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
+  m.id = 'edit-modal';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto';
+
   var box = document.createElement('div');
-  box.style.cssText = 'background:var(--surface);border:1px solid var(--border);padding:20px;width:100%;max-width:540px;max-height:80vh;overflow-y:auto;border-radius:4px';
-  
-  function field(label, id, val, tag) {
+  box.style.cssText = 'background:var(--surface);border:1px solid var(--border);width:100%;max-width:760px;border-radius:4px;margin:auto';
+
+  // Header
+  var hdr = document.createElement('div');
+  hdr.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:2';
+  var hdrTitle = document.createElement('div');
+  hdrTitle.style.cssText = 'font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1px';
+  hdrTitle.textContent = 'REDIGERA ARTIKEL';
+  var closeBtn = document.createElement('button');
+  closeBtn.style.cssText = 'background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px';
+  closeBtn.textContent = '×';
+  closeBtn.addEventListener('click', function(){ m.remove(); });
+  hdr.appendChild(hdrTitle);
+  hdr.appendChild(closeBtn);
+  box.appendChild(hdr);
+
+  // Tab nav
+  var tabNav = document.createElement('div');
+  tabNav.style.cssText = 'display:flex;border-bottom:1px solid var(--border)';
+  var tabs = [{id:'edit-tab-content', label:'INNEHÅLL'}, {id:'edit-tab-meta', label:'SEO & META'}, {id:'edit-tab-ai', label:'AI-TIPS'}];
+  tabs.forEach(function(t, i) {
+    var btn = document.createElement('button');
+    btn.id = t.id + '-btn';
+    btn.style.cssText = 'border:none;padding:10px 16px;font-size:10px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;transition:.15s;' + (i === 0 ? 'background:var(--v);color:#000;border-bottom:2px solid var(--v)' : 'background:none;color:var(--muted);border-bottom:2px solid transparent');
+    btn.textContent = t.label;
+    (function(tabId) {
+      btn.addEventListener('click', function(){
+        ['edit-tab-content','edit-tab-meta','edit-tab-ai'].forEach(function(id){
+          var el = document.getElementById(id);
+          var b = document.getElementById(id + '-btn');
+          if (el) el.style.display = 'none';
+          if (b) { b.style.background='none'; b.style.color='var(--muted)'; b.style.borderBottom='2px solid transparent'; }
+        });
+        var el = document.getElementById(tabId);
+        var b = document.getElementById(tabId + '-btn');
+        if (el) el.style.display = 'block';
+        if (b) { b.style.background='var(--v)'; b.style.color='#000'; b.style.borderBottom='2px solid var(--v)'; }
+      });
+    })(t.id);
+    tabNav.appendChild(btn);
+  });
+  box.appendChild(tabNav);
+
+  // ── TAB 1: INNEHÅLL ──
+  var tabContent = document.createElement('div');
+  tabContent.id = 'edit-tab-content';
+  tabContent.style.cssText = 'padding:20px';
+
+  function mkField(label, id, val, type, height) {
     var wrap = document.createElement('div');
-    wrap.style.marginBottom = '8px';
+    wrap.style.marginBottom = '14px';
     var lbl = document.createElement('div');
-    lbl.style.cssText = 'font-size:10px;color:var(--muted);margin-bottom:3px';
+    lbl.style.cssText = 'font-size:10px;color:var(--muted);margin-bottom:4px;font-family:monospace;letter-spacing:.5px';
     lbl.textContent = label;
-    var inp = document.createElement(tag || 'input');
+    var inp = document.createElement(type === 'textarea' ? 'textarea' : 'input');
     inp.id = id;
-    inp.style.cssText = 'width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-size:12px;border-radius:2px;outline:none;box-sizing:border-box';
-    if (tag === 'textarea') { inp.style.height = '100px'; inp.style.resize = 'vertical'; inp.textContent = val || ''; }
+    inp.style.cssText = 'width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;box-sizing:border-box;resize:vertical';
+    if (type === 'textarea') { inp.style.height = (height || 100) + 'px'; inp.value = val || ''; }
     else inp.value = val || '';
+    wrap.appendChild(lbl);
+    wrap.appendChild(inp);
+
+    // AI improve button for text fields
+    if (type === 'textarea') {
+      var aiRow = document.createElement('div');
+      aiRow.style.cssText = 'display:flex;gap:6px;margin-top:4px;flex-wrap:wrap';
+      var improveOpts = [
+        {label:'Skärp texten', instruction:'Gör texten skarpare och mer nyhetsdriven utan att ändra fakta'},
+        {label:'Korta ner', instruction:'Korta ner texten med 30% utan att tappa viktig information'},
+        {label:'Förbättra flödet', instruction:'Förbättra meningsbyggnad och textflöde'}
+      ];
+      improveOpts.forEach(function(opt) {
+        var btn = document.createElement('button');
+        btn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:3px 8px;font-size:9px;cursor:pointer;border-radius:2px;font-family:monospace';
+        btn.textContent = opt.label;
+        (function(fieldId, instruction, b) {
+          b.addEventListener('click', function(){
+            var el = document.getElementById(fieldId);
+            if (!el || !GRID_API) return;
+            b.textContent = '...';
+            b.disabled = true;
+            fetch(GRID_API + '/api/articles/' + a.id + '/improve', {
+              method: 'POST',
+              headers: {'Content-Type':'application/json'},
+              body: JSON.stringify({ field: fieldId.replace('e-',''), instruction: instruction })
+            }).then(function(r){ return r.json(); }).then(function(d){
+              if (d.improved) { el.value = d.improved; el.style.borderColor='var(--v)'; setTimeout(function(){ el.style.borderColor='var(--border)'; }, 2000); }
+              b.textContent = instruction.split(' ').slice(0,2).join(' ').replace('Gör','Skärp');
+              b.disabled = false;
+            }).catch(function(){ b.textContent = opt.label; b.disabled = false; });
+          });
+        })(id, opt.instruction, btn);
+        aiRow.appendChild(btn);
+      });
+      wrap.appendChild(aiRow);
+    }
+    return wrap;
+  }
+
+  tabContent.appendChild(mkField('RUBRIK', 'e-title', a.title));
+  tabContent.appendChild(mkField('INGRESS', 'e-ingress', a.ingress, 'textarea', 90));
+  tabContent.appendChild(mkField('BRÖDTEXT', 'e-body', a.body, 'textarea', 180));
+  tabContent.appendChild(mkField('CITAT', 'e-quote', a.quote));
+  tabContent.appendChild(mkField('CITATKÄLLA', 'e-quoteAttr', a.quoteAttr));
+  tabContent.appendChild(mkField('KATEGORI', 'e-cat', a.cat));
+  tabContent.appendChild(mkField('BILD-URL', 'e-image', a.image));
+
+  // Save button
+  var saveBtn = document.createElement('button');
+  saveBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:10px 24px;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;margin-top:4px;width:100%';
+  saveBtn.textContent = 'SPARA ÄNDRINGAR';
+  saveBtn.addEventListener('click', function(){
+    var upd = {
+      title: document.getElementById('e-title').value,
+      ingress: document.getElementById('e-ingress').value,
+      body: document.getElementById('e-body').value,
+      quote: document.getElementById('e-quote').value,
+      quoteAttr: document.getElementById('e-quoteAttr').value,
+      cat: document.getElementById('e-cat').value,
+      image: document.getElementById('e-image').value,
+    };
+    if (!GRID_API) return;
+    saveBtn.textContent = 'Sparar...';
+    fetch(GRID_API + '/api/articles/' + a.id, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(upd)})
+      .then(function(){ Object.assign(a, upd); m.remove(); renderArticlesTab(allArticles); })
+      .catch(function(){ saveBtn.textContent = 'SPARA ÄNDRINGAR'; });
+  });
+  tabContent.appendChild(saveBtn);
+  box.appendChild(tabContent);
+
+  // ── TAB 2: SEO & META ──
+  var tabMeta = document.createElement('div');
+  tabMeta.id = 'edit-tab-meta';
+  tabMeta.style.cssText = 'padding:20px;display:none';
+
+  var metaData = a.meta || {};
+
+  function mkMetaField(label, key, val, type) {
+    var wrap = document.createElement('div');
+    wrap.style.marginBottom = '14px';
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'font-size:10px;color:var(--muted);margin-bottom:4px;font-family:monospace;letter-spacing:.5px';
+    lbl.textContent = label;
+    var inp = document.createElement(type === 'textarea' ? 'textarea' : 'input');
+    inp.id = 'meta-' + key;
+    inp.style.cssText = 'width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-size:13px;border-radius:2px;outline:none;box-sizing:border-box;resize:vertical';
+    if (type === 'textarea') { inp.style.height = '70px'; inp.value = val || ''; }
+    else inp.value = val || '';
+    // Character count for SEO fields
+    if (label.includes('SEO') || label.includes('Meta')) {
+      var cnt = document.createElement('div');
+      cnt.style.cssText = 'font-size:9px;color:var(--muted);margin-top:2px;text-align:right';
+      cnt.textContent = (val || '').length + ' tecken';
+      inp.addEventListener('input', function(){ cnt.textContent = inp.value.length + ' tecken'; });
+      wrap.appendChild(lbl); wrap.appendChild(inp); wrap.appendChild(cnt);
+      return wrap;
+    }
     wrap.appendChild(lbl); wrap.appendChild(inp);
     return wrap;
   }
 
-  box.appendChild(field('Rubrik', 'e-title', a.title));
-  box.appendChild(field('Ingress', 'e-ingress', a.ingress, 'textarea'));
-  box.appendChild(field('Brodtext', 'e-body', a.body, 'textarea'));
-  box.appendChild(field('Kategori', 'e-cat', a.cat));
-  box.querySelector('#e-body').style.height = '140px';
+  tabMeta.appendChild(mkMetaField('SEO-RUBRIK (max 60 tecken)', 'seoTitle', metaData.seoTitle || a.title));
+  tabMeta.appendChild(mkMetaField('META DESCRIPTION (120-155 tecken)', 'metaDescription', metaData.metaDescription, 'textarea'));
+  tabMeta.appendChild(mkMetaField('NYCKELORD (kommaseparerat)', 'keywords', (metaData.keywords || []).join(', ')));
+  tabMeta.appendChild(mkMetaField('OG-RUBRIK (sociala medier)', 'ogTitle', metaData.ogTitle || a.title));
+  tabMeta.appendChild(mkMetaField('OG-BESKRIVNING', 'ogDescription', metaData.ogDescription, 'textarea'));
+  tabMeta.appendChild(mkMetaField('GEO-TAGG (stad/region)', 'geoTag', metaData.geoTag));
+  tabMeta.appendChild(mkMetaField('ANNONSSEGMENT (kommaseparerat)', 'audienceSegments', (metaData.audienceSegments || []).join(', ')));
 
-  var btns = document.createElement('div');
-  btns.style.cssText = 'display:flex;gap:8px;margin-top:6px';
-  var save = document.createElement('button');
-  save.style.cssText = 'background:var(--v);color:#000;border:none;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px;flex:1';
-  save.textContent = 'SPARA';
-  save.addEventListener('click', function(){
-    var upd = { title: gid('e-title').value, ingress: gid('e-ingress').value, body: gid('e-body').value, cat: gid('e-cat').value };
-    if (GRID_API) fetch(GRID_API + '/api/articles/' + a.id, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(upd)})
-      .then(function(){ Object.assign(a, upd); m.remove(); renderArticlesTab(allArticles); });
+  var aiMetaBtn = document.createElement('button');
+  aiMetaBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:10px 24px;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;width:100%;margin-bottom:8px';
+  aiMetaBtn.textContent = 'GENERERA MED AI';
+  aiMetaBtn.addEventListener('click', function(){
+    if (!GRID_API) return;
+    aiMetaBtn.innerHTML = '<span class="thinking-dots">Claude genererar<span>.</span><span>.</span><span>.</span></span>';
+    aiMetaBtn.disabled = true;
+    fetch(GRID_API + '/api/articles/' + a.id + '/metadata', { method: 'POST' })
+      .then(function(r){ return r.json(); })
+      .then(function(meta){
+        a.meta = meta;
+        ['seoTitle','metaDescription','ogTitle','ogDescription','geoTag'].forEach(function(k){
+          var el = document.getElementById('meta-' + k);
+          if (el && meta[k]) { el.value = meta[k]; el.style.borderColor='var(--v)'; setTimeout(function(){ el.style.borderColor='var(--border)'; }, 2000); }
+        });
+        var kw = document.getElementById('meta-keywords');
+        if (kw && meta.keywords) kw.value = meta.keywords.join(', ');
+        var seg = document.getElementById('meta-audienceSegments');
+        if (seg && meta.audienceSegments) seg.value = meta.audienceSegments.join(', ');
+        aiMetaBtn.textContent = 'GENERERA MED AI';
+        aiMetaBtn.disabled = false;
+      }).catch(function(){ aiMetaBtn.textContent = 'GENERERA MED AI'; aiMetaBtn.disabled = false; });
   });
-  var cancel = document.createElement('button');
-  cancel.style.cssText = 'background:none;border:1px solid var(--border);color:var(--muted);padding:8px 14px;font-size:12px;cursor:pointer;border-radius:2px';
-  cancel.textContent = 'Avbryt';
-  cancel.addEventListener('click', function(){ m.remove(); });
-  btns.appendChild(save); btns.appendChild(cancel);
-  box.appendChild(btns);
+  tabMeta.appendChild(aiMetaBtn);
+
+  var saveMetaBtn = document.createElement('button');
+  saveMetaBtn.style.cssText = 'background:none;border:1px solid var(--border);color:var(--text);padding:10px 24px;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;width:100%';
+  saveMetaBtn.textContent = 'SPARA METADATA';
+  saveMetaBtn.addEventListener('click', function(){
+    var meta = {
+      seoTitle: document.getElementById('meta-seoTitle').value,
+      metaDescription: document.getElementById('meta-metaDescription').value,
+      keywords: document.getElementById('meta-keywords').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+      ogTitle: document.getElementById('meta-ogTitle').value,
+      ogDescription: document.getElementById('meta-ogDescription').value,
+      geoTag: document.getElementById('meta-geoTag').value,
+      audienceSegments: document.getElementById('meta-audienceSegments').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    };
+    if (!GRID_API) return;
+    fetch(GRID_API + '/api/articles/' + a.id, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({ meta: meta })})
+      .then(function(){ Object.assign(a, { meta: meta }); saveMetaBtn.textContent = '✓ Sparat'; setTimeout(function(){ saveMetaBtn.textContent = 'SPARA METADATA'; }, 2000); });
+  });
+  tabMeta.appendChild(saveMetaBtn);
+  box.appendChild(tabMeta);
+
+  // ── TAB 3: AI-TIPS ──
+  var tabAI = document.createElement('div');
+  tabAI.id = 'edit-tab-ai';
+  tabAI.style.cssText = 'padding:20px;display:none';
+
+  var tipsIntro = document.createElement('div');
+  tipsIntro.style.cssText = 'font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6';
+  tipsIntro.textContent = 'Klicka för att hämta redaktionella tips och alternativa rubriker från Claude.';
+  tabAI.appendChild(tipsIntro);
+
+  var getTipsBtn = document.createElement('button');
+  getTipsBtn.style.cssText = 'background:var(--v);color:#000;border:none;padding:10px 24px;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;width:100%;margin-bottom:16px';
+  getTipsBtn.textContent = 'HÄMTA AI-TIPS';
+
+  var tipsContainer = document.createElement('div');
+  tipsContainer.id = 'ai-tips-container';
+
+  // Show existing tips if available
+  if (a.meta && a.meta.editorialTips) {
+    renderAITips(a.meta, tipsContainer, a);
+  }
+
+  getTipsBtn.addEventListener('click', function(){
+    if (!GRID_API) return;
+    getTipsBtn.innerHTML = '<span class="thinking-dots">Claude analyserar<span>.</span><span>.</span><span>.</span></span>';
+    getTipsBtn.disabled = true;
+    fetch(GRID_API + '/api/articles/' + a.id + '/metadata', { method: 'POST' })
+      .then(function(r){ return r.json(); })
+      .then(function(meta){
+        a.meta = meta;
+        renderAITips(meta, tipsContainer, a);
+        getTipsBtn.textContent = 'UPPDATERA TIPS';
+        getTipsBtn.disabled = false;
+      }).catch(function(){ getTipsBtn.textContent = 'HÄMTA AI-TIPS'; getTipsBtn.disabled = false; });
+  });
+
+  tabAI.appendChild(getTipsBtn);
+  tabAI.appendChild(tipsContainer);
+  box.appendChild(tabAI);
+
   m.appendChild(box);
   document.body.appendChild(m);
+}
+
+function renderAITips(meta, container, article) {
+  container.innerHTML = '';
+
+  // Headline suggestions
+  if (meta.headlineSuggestions && meta.headlineSuggestions.length) {
+    var hSection = document.createElement('div');
+    hSection.style.cssText = 'margin-bottom:20px';
+    var hLabel = document.createElement('div');
+    hLabel.style.cssText = 'font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--v);margin-bottom:10px';
+    hLabel.textContent = 'ALTERNATIVA RUBRIKER';
+    hSection.appendChild(hLabel);
+    meta.headlineSuggestions.forEach(function(h) {
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:2px;margin-bottom:6px';
+      var txt = document.createElement('div');
+      txt.style.cssText = 'font-size:13px;font-weight:600;color:var(--text);flex:1';
+      txt.textContent = h;
+      var useBtn = document.createElement('button');
+      useBtn.style.cssText = 'background:none;border:1px solid var(--v);color:var(--v);padding:3px 10px;font-size:10px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;flex-shrink:0';
+      useBtn.textContent = 'ANVÄND';
+      (function(headline){ useBtn.addEventListener('click', function(){
+        var titleField = document.getElementById('e-title');
+        if (titleField) { titleField.value = headline; titleField.style.borderColor='var(--v)'; setTimeout(function(){ titleField.style.borderColor='var(--border)'; }, 2000); }
+        // Switch to content tab
+        document.getElementById('edit-tab-content-btn').click();
+      }); })(h);
+      row.appendChild(txt); row.appendChild(useBtn);
+      hSection.appendChild(row);
+    });
+    container.appendChild(hSection);
+  }
+
+  // Editorial tips
+  if (meta.editorialTips && meta.editorialTips.length) {
+    var tSection = document.createElement('div');
+    tSection.style.cssText = 'margin-bottom:20px';
+    var tLabel = document.createElement('div');
+    tLabel.style.cssText = 'font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--v);margin-bottom:10px';
+    tLabel.textContent = 'REDAKTIONELLA TIPS';
+    tSection.appendChild(tLabel);
+    meta.editorialTips.forEach(function(tip) {
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;gap:10px;padding:10px 12px;background:var(--card);border-left:3px solid var(--v);margin-bottom:6px';
+      var icon = document.createElement('div');
+      icon.style.cssText = 'font-size:14px;flex-shrink:0';
+      icon.textContent = '💡';
+      var txt = document.createElement('div');
+      txt.style.cssText = 'font-size:12px;color:var(--text);line-height:1.5';
+      txt.textContent = tip;
+      row.appendChild(icon); row.appendChild(txt);
+      tSection.appendChild(row);
+    });
+    container.appendChild(tSection);
+  }
+
+  // Audience segments
+  if (meta.audienceSegments && meta.audienceSegments.length) {
+    var sSection = document.createElement('div');
+    var sLabel = document.createElement('div');
+    sLabel.style.cssText = 'font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--v);margin-bottom:10px';
+    sLabel.textContent = 'ANNONSSEGMENT';
+    sSection.appendChild(sLabel);
+    var tags = document.createElement('div');
+    tags.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap';
+    meta.audienceSegments.forEach(function(seg) {
+      var tag = document.createElement('div');
+      tag.style.cssText = 'background:var(--surface);border:1px solid var(--v);color:var(--v);padding:4px 10px;font-size:10px;font-family:monospace;border-radius:2px';
+      tag.textContent = seg;
+      tags.appendChild(tag);
+    });
+    sSection.appendChild(tags);
+    container.appendChild(sSection);
+  }
 }
 
 function openNewArticle() {
