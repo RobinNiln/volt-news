@@ -444,7 +444,7 @@ body.design-2 {
 /* Header — röd band */
 body.design-2 header { background: #cc0000 !important; border-bottom: none !important; }
 body.design-2 .hbar { background: #cc0000 !important; }
-body.design-2 .logo-dark { filter: brightness(0) invert(1) !important; }
+body.design-2 .logo-dark { filter: none !important; opacity: 1 !important; }
 body.design-2 #design-btn { border-color: rgba(255,255,255,.5) !important; color: #fff !important; background: rgba(0,0,0,.2) !important; }
 body.design-2 #theme-btn { display: none !important; }
 body.design-2 #live-label, body.design-2 .live-dot { color: #fff !important; background: #fff !important; }
@@ -667,17 +667,48 @@ body.design-2 .slot-placeholder { color: #fff !important; }
 
 /* Design 2 header — all white */
 body.design-2 .hbar * { color: #ffffff !important; }
+body.design-2 .logo-light { display: none !important; }
+body.design-2 .logo-dark { filter: none !important; opacity: 1 !important; }
 body.design-2 .hbar button { border-color: rgba(255,255,255,.4) !important; color: #fff !important; }
 body.design-2 #design-slogan { color: rgba(255,255,255,.8) !important; }
 body.design-2 #live-label { color: #fff !important; }
 body.design-2 .live-dot { background: #fff !important; }
 body.design-2 #design-btn { background: rgba(0,0,0,.2) !important; border-color: rgba(255,255,255,.4) !important; color: #fff !important; }
 body.design-2 #theme-btn { display: none !important; }
-body.design-2 .logo-dark { filter: brightness(0) invert(1) !important; }
+body.design-2 .logo-dark { filter: none !important; opacity: 1 !important; }
 /* Design 3 slogan */
 body.design-3 #design-slogan { color: #777 !important; }
 /* Design 1 slogan */
 #design-slogan { color: var(--muted); }
+
+/* Design 2 — all news cards get top image layout */
+body.design-2 .card-h {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+body.design-2 .card-h > img {
+  width: 100% !important;
+  height: 160px !important;
+  object-fit: cover !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+}
+body.design-2 .card-h .cb {
+  padding: 8px 12px 12px !important;
+  flex: 1 !important;
+}
+body.design-2 .card-h .ctitle {
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+  -webkit-line-clamp: 3 !important;
+}
+/* Limit to 25 cards visible in design-2 */
+body.design-2 .dm .card-h:nth-child(n+26),
+body.design-2 .dm .card-v:nth-child(n+26) {
+  display: none !important;
+}
 </style>
 </head>
 <body class="dark">
@@ -3185,6 +3216,11 @@ function applyDesign(n) {
   document.querySelectorAll('.design-opt').forEach(function(el, i) {
     el.style.background = (i + 1 === n) ? 'rgba(245,197,0,.15)' : '';
     el.style.borderLeft = (i + 1 === n) ? '3px solid var(--v)' : '3px solid transparent';
+  });
+  // Limit cards in design-2
+  var cards = document.querySelectorAll('.dm .card-h, .dm .card-v');
+  cards.forEach(function(c, i) {
+    c.style.display = (n === 2 && i >= 25) ? 'none' : '';
   });
 }
 
