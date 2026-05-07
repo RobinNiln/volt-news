@@ -418,66 +418,153 @@ body.theme-spartan .live-dot{background:#e24b4a}
 .theme-opt:hover{background:var(--surface)}
 .theme-opt.active{border-color:var(--v)}
 .theme-prev{width:48px;height:34px;border-radius:3px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);overflow:hidden}
+/* ═══════════════════════════════════════════════════════
+   DESIGN SWITCHER
+═══════════════════════════════════════════════════════ */
+.design-opt:hover { background: rgba(245,197,0,.1) !important; }
+.design-opt { border-left: 3px solid transparent; transition: .15s; }
 
-/* ── DESIGN SWITCHER ─────────────────────────────────── */
-.design-opt:hover { background: var(--card) !important; }
+/* ═══════════════════════════════════════════════════════
+   DESIGN 2 — TABLOID
+   Röd/vit, tät, British tabloid-känsla
+═══════════════════════════════════════════════════════ */
+body.design-2 {
+  --v: #cc0000;
+  --bg: #f4f4f2;
+  --surface: #ffffff;
+  --card: #f9f9f7;
+  --text: #111111;
+  --mid: #333333;
+  --muted: #666666;
+  --border: #dddddd;
+  background: #f4f4f2 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
 
-/* ── DESIGN 2: TABLOID ───────────────────────────────── */
-body.design-2 { background: #f4f4f2 !important; }
-body.design-2, body.design-2 * { --v:#cc0000; }
-body.design-2 { --bg:#ffffff; --surface:#f4f4f2; --card:#ffffff; --text:#111; --mid:#333; --muted:#777; --border:#e0e0e0; }
-body.design-2 header { background: #cc0000 !important; border-bottom: 3px solid #900 !important; }
+/* Header — röd band */
+body.design-2 header { background: #cc0000 !important; border-bottom: none !important; }
 body.design-2 .hbar { background: #cc0000 !important; }
-body.design-2 .logo-dark { filter: brightness(10) !important; }
-body.design-2 .ticker { background: #900 !important; }
-body.design-2 .ticker-inner { color: #fff !important; }
-body.design-2 .nav-bar { background: #111 !important; border: none !important; }
-body.design-2 .ni { color: #ccc !important; border: none !important; font-size: 11px !important; letter-spacing: .5px !important; }
-body.design-2 .ni.on, body.design-2 .ni:hover { background: #cc0000 !important; color: #fff !important; border-radius: 0 !important; }
-body.design-2 .feed-label { border-top: 3px solid #cc0000 !important; color: #111 !important; }
-body.design-2 .cat { background: #cc0000 !important; color: #fff !important; border-radius: 0 !important; }
-body.design-2 .ctitle { font-family: 'Arial Black', Arial, sans-serif !important; color: #111 !important; }
-body.design-2 .card-h { background: #fff !important; border-bottom: 1px solid #e5e5e5 !important; }
-body.design-2 .card-h:hover { background: #f9f9f9 !important; }
-body.design-2 .page { background: #fff !important; color: #111 !important; }
-body.design-2 .art-title { font-family: 'Arial Black', Arial, sans-serif !important; color: #111 !important; }
-body.design-2 .ingress { color: #333 !important; border-color: #cc0000 !important; }
-body.design-2 .atext { color: #333 !important; }
-body.design-2 .art-quote { border-left-color: #cc0000 !important; color: #333 !important; }
-body.design-2 .hero-content .cat { background: #cc0000 !important; }
-body.design-2 #design-btn { border-color: rgba(255,255,255,.4) !important; color: #fff !important; }
+body.design-2 .logo-dark { filter: brightness(0) invert(1) !important; }
+body.design-2 #design-btn { border-color: rgba(255,255,255,.5) !important; color: #fff !important; background: rgba(0,0,0,.2) !important; }
 body.design-2 #theme-btn { display: none !important; }
-body.design-2 .sidebar { background: #f4f4f2 !important; border-left: 1px solid #e0e0e0 !important; }
-body.design-2 .sn-item { border-bottom-color: #e5e5e5 !important; color: #111 !important; }
+body.design-2 #live-label, body.design-2 .live-dot { color: #fff !important; background: #fff !important; }
 
-/* ── DESIGN 3: SPARTAN ───────────────────────────────── */
-body.design-3 { background: #fafaf8 !important; }
-body.design-3 { --bg:#fafaf8; --surface:#f5f5f3; --card:#ffffff; --text:#111; --mid:#444; --muted:#888; --border:#e8e8e4; --v:#111; }
-body.design-3 header { background: #fafaf8 !important; border-bottom: 2px solid #111 !important; }
-body.design-3 .hbar { background: #fafaf8 !important; }
+/* Ticker — mörkröd */
+body.design-2 .ticker { background: #990000 !important; border: none !important; }
+body.design-2 .ticker-inner, body.design-2 .ticker span { color: #ffffff !important; }
+
+/* Nav — svart med vita länkar */
+body.design-2 .nav-bar { background: #1a1a1a !important; border: none !important; padding: 0 !important; }
+body.design-2 .ni { color: #cccccc !important; border: none !important; font-size: 11px !important; font-weight: 700 !important; letter-spacing: .5px !important; padding: 9px 12px !important; border-radius: 0 !important; }
+body.design-2 .ni.on, body.design-2 .ni:hover { background: #cc0000 !important; color: #ffffff !important; }
+
+/* Kategoribadgar — röd bakgrund vit text */
+body.design-2 .cat { background: #cc0000 !important; color: #ffffff !important; border-radius: 0 !important; font-size: 9px !important; letter-spacing: .5px !important; }
+body.design-2 .cat.red { background: #cc0000 !important; color: #fff !important; }
+
+/* Feed-labels */
+body.design-2 .feed-label { border-top: 3px solid #cc0000 !important; color: #cc0000 !important; background: transparent !important; font-family: Arial, sans-serif !important; letter-spacing: 1px !important; }
+
+/* Kort */
+body.design-2 .card-h { background: #ffffff !important; border-bottom: 1px solid #e0e0e0 !important; }
+body.design-2 .card-h:hover { background: #f5f5f5 !important; }
+body.design-2 .ctitle { font-family: "Arial Black", Arial, sans-serif !important; color: #111111 !important; font-size: 14px !important; }
+body.design-2 .ctime { color: #888 !important; font-size: 10px !important; }
+
+/* Hero */
+body.design-2 .hero { border-bottom: 3px solid #cc0000 !important; }
+
+/* Sidebar */
+body.design-2 .sidebar { background: #f9f9f7 !important; border-left: 1px solid #e0e0e0 !important; }
+body.design-2 .sn-item, body.design-2 .sn-title { color: #111 !important; }
+body.design-2 .sn-cat { color: #cc0000 !important; }
+
+/* Artikelsidor */
+body.design-2 .page { background: #ffffff !important; }
+body.design-2 .art-page { background: #ffffff !important; }
+body.design-2 .art-title { font-family: "Arial Black", Arial, sans-serif !important; color: #111111 !important; font-size: clamp(22px,4vw,38px) !important; }
+body.design-2 .ingress { color: #333333 !important; border-color: #cc0000 !important; font-family: Arial, sans-serif !important; }
+body.design-2 .atext { color: #333333 !important; font-family: Arial, sans-serif !important; }
+body.design-2 .art-quote { border-left: 4px solid #cc0000 !important; color: #cc0000 !important; font-style: italic !important; }
+body.design-2 .art-byline .art-ab { background: #cc0000 !important; color: #fff !important; }
+body.design-2 .art-time { color: #888 !important; }
+
+/* ═══════════════════════════════════════════════════════
+   DESIGN 3 — SPARTAN
+   Cremevit, serif, Financial Times-känsla, inga bilder i flöde
+═══════════════════════════════════════════════════════ */
+body.design-3 {
+  --v: #1a1a1a;
+  --bg: #f8f6f0;
+  --surface: #f8f6f0;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --mid: #444444;
+  --muted: #888888;
+  --border: #ddd8cc;
+  background: #f8f6f0 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+}
+
+/* Header — crème med svart understrykning */
+body.design-3 header { background: #f8f6f0 !important; border-bottom: 2px solid #1a1a1a !important; }
+body.design-3 .hbar { background: #f8f6f0 !important; }
 body.design-3 .logo-dark { display: none !important; }
-body.design-3 .logo-light { display: block !important; filter: invert(1) !important; }
+body.design-3 .logo-light { display: block !important; filter: invert(1) brightness(.15) !important; }
+body.design-3 #design-btn { border-color: #999 !important; color: #444 !important; background: transparent !important; }
 body.design-3 #theme-btn { display: none !important; }
-body.design-3 #design-btn { border-color: #ccc !important; color: #444 !important; }
-body.design-3 .ticker { background: #fafaf8 !important; border-color: #e8e8e4 !important; }
-body.design-3 .ticker-inner { color: #666 !important; }
-body.design-3 .nav-bar { background: #fafaf8 !important; border-color: #e8e8e4 !important; }
-body.design-3 .ni { color: #666 !important; font-family: Georgia, serif !important; font-size: 13px !important; border: none !important; }
-body.design-3 .ni.on, body.design-3 .ni:hover { color: #111 !important; background: none !important; border-bottom: 2px solid #111 !important; border-radius: 0 !important; }
-body.design-3 .cat { background: transparent !important; color: #888 !important; font-size: 9px !important; letter-spacing: 1.5px !important; padding: 0 !important; border-radius: 0 !important; }
-body.design-3 .ctitle { font-family: Georgia, serif !important; color: #111 !important; }
-body.design-3 .card-h { background: #fafaf8 !important; border-bottom: 1px solid #ece9e4 !important; }
-body.design-3 .card-h:hover { background: #f0ede8 !important; }
-body.design-3 .card-h img { display: none !important; }
+body.design-3 .live-dot { background: #1a1a1a !important; }
+body.design-3 #live-label { color: #555 !important; font-family: monospace !important; }
+
+/* Ticker — subtil */
+body.design-3 .ticker { background: #f8f6f0 !important; border-top: 1px solid #ddd8cc !important; border-bottom: 1px solid #ddd8cc !important; }
+body.design-3 .ticker-inner, body.design-3 .ticker span { color: #555555 !important; font-family: Georgia, serif !important; font-style: italic !important; }
+
+/* Nav — serif, minimal */
+body.design-3 .nav-bar { background: #f8f6f0 !important; border-top: 1px solid #ddd8cc !important; border-bottom: 1px solid #ddd8cc !important; }
+body.design-3 .ni { color: #555555 !important; font-family: Georgia, serif !important; font-size: 13px !important; font-weight: 400 !important; border: none !important; letter-spacing: 0 !important; }
+body.design-3 .ni.on, body.design-3 .ni:hover { color: #1a1a1a !important; background: none !important; border-bottom: 2px solid #1a1a1a !important; border-radius: 0 !important; font-weight: 700 !important; }
+
+/* Kategorier — monospace caps, ingen bakgrund */
+body.design-3 .cat { background: transparent !important; color: #888888 !important; font-family: monospace !important; font-size: 9px !important; font-weight: 700 !important; letter-spacing: 1.5px !important; padding: 0 !important; border-radius: 0 !important; }
+body.design-3 .cat.red { background: transparent !important; color: #888 !important; }
+
+/* Feed-labels */
+body.design-3 .feed-label { color: #888888 !important; border-color: #ddd8cc !important; font-family: monospace !important; font-size: 9px !important; letter-spacing: 2px !important; }
+
+/* Kort — ingen bild, ren text */
+body.design-3 .card-h { background: #f8f6f0 !important; border-bottom: 1px solid #e8e4dc !important; }
+body.design-3 .card-h:hover { background: #f0ece4 !important; }
+body.design-3 .card-h > img, body.design-3 .card-h img { display: none !important; }
 body.design-3 .card-h .cb { padding-left: 0 !important; }
-body.design-3 .feed-label { color: #888 !important; border-color: #e8e8e4 !important; font-family: monospace !important; }
-body.design-3 .page { background: #fafaf8 !important; }
-body.design-3 .art-title { font-family: Georgia, serif !important; color: #111 !important; }
-body.design-3 .ingress { font-family: Georgia, serif !important; color: #333 !important; font-size: 16px !important; }
-body.design-3 .atext { font-family: Georgia, serif !important; color: #444 !important; font-size: 15px !important; line-height: 1.9 !important; }
-body.design-3 .art-quote { border-left: 3px solid #111 !important; color: #333 !important; font-family: Georgia, serif !important; font-style: italic !important; }
-body.design-3 .sidebar { background: #fafaf8 !important; border-left: 1px solid #e8e8e4 !important; }
-body.design-3 .dl { background: #fafaf8 !important; }
+body.design-3 .ctitle { font-family: Georgia, serif !important; color: #1a1a1a !important; font-weight: 700 !important; font-size: clamp(14px,2vw,17px) !important; line-height: 1.35 !important; }
+body.design-3 .ctime { color: #aaa !important; font-family: monospace !important; font-size: 10px !important; }
+
+/* Grid-2 kort */
+body.design-3 .grid-2 .ctitle { font-size: clamp(16px,2.5vw,22px) !important; }
+
+/* Hero */
+body.design-3 .hero-title { font-family: Georgia, serif !important; }
+
+/* Sidebar */
+body.design-3 .sidebar { background: #f8f6f0 !important; border-left: 1px solid #ddd8cc !important; }
+body.design-3 .sn-item { border-color: #e8e4dc !important; }
+body.design-3 .sn-title { color: #1a1a1a !important; font-family: Georgia, serif !important; }
+body.design-3 .sn-cat { color: #888 !important; font-family: monospace !important; }
+
+/* Artikelsidor */
+body.design-3 .page { background: #f8f6f0 !important; }
+body.design-3 .art-page { background: #f8f6f0 !important; }
+body.design-3 .art-title { font-family: Georgia, serif !important; color: #1a1a1a !important; font-size: clamp(24px,5vw,46px) !important; font-weight: 700 !important; letter-spacing: -.5px !important; }
+body.design-3 .ingress { font-family: Georgia, serif !important; color: #333333 !important; font-size: 17px !important; line-height: 1.7 !important; border-color: #1a1a1a !important; }
+body.design-3 .atext { font-family: Georgia, serif !important; color: #444444 !important; font-size: 16px !important; line-height: 1.9 !important; }
+body.design-3 .art-quote { border-left: 3px solid #1a1a1a !important; color: #444 !important; font-family: Georgia, serif !important; font-style: italic !important; font-size: 18px !important; }
+body.design-3 .art-byline .art-ab { background: #1a1a1a !important; color: #f8f6f0 !important; }
+body.design-3 .art-byline .art-ab.ai { background: #555 !important; }
+body.design-3 .art-time { color: #888 !important; font-family: monospace !important; }
+body.design-3 .art-body { background: #f8f6f0 !important; }
+body.design-3 .dl { background: #f8f6f0 !important; }
+body.design-3 .dm { background: #f8f6f0 !important; }
 </style>
 </head>
 <body class="dark">
