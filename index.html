@@ -681,34 +681,107 @@ body.design-3 #design-slogan { color: #777 !important; }
 /* Design 1 slogan */
 #design-slogan { color: var(--muted); }
 
-/* Design 2 — all news cards get top image layout */
+/* ═══════════════════════════════════════════
+   DESIGN 2 — MAIN FEED LAYOUT
+   Two-column grid, image top, text below
+═══════════════════════════════════════════ */
+
+/* Override the default dm layout for design-2 */
+body.design-2 .dm {
+  background: #f4f4f2 !important;
+}
+
+/* Hide default card-h layout, replace with grid cards */
 body.design-2 .card-h {
   display: flex !important;
   flex-direction: column !important;
-  padding: 0 !important;
+  background: #ffffff !important;
+  border: 1px solid #e0e0e0 !important;
   border-bottom: 1px solid #e0e0e0 !important;
+  padding: 0 !important;
+  cursor: pointer;
+  transition: box-shadow .15s !important;
 }
+body.design-2 .card-h:hover { box-shadow: 0 2px 8px rgba(0,0,0,.12) !important; background: #fff !important; }
 body.design-2 .card-h > img {
   width: 100% !important;
-  height: 160px !important;
+  height: 150px !important;
   object-fit: cover !important;
   display: block !important;
   flex-shrink: 0 !important;
+  filter: none !important;
 }
 body.design-2 .card-h .cb {
-  padding: 8px 12px 12px !important;
-  flex: 1 !important;
+  padding: 8px 10px 12px !important;
+  background: #fff !important;
+}
+body.design-2 .card-h .cat {
+  display: inline-block !important;
+  margin-bottom: 5px !important;
+  background: #cc0000 !important;
+  color: #ffffff !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  padding: 2px 6px !important;
+  letter-spacing: .5px !important;
 }
 body.design-2 .card-h .ctitle {
-  font-size: 14px !important;
+  font-family: "Arial Black", Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #111111 !important;
   line-height: 1.25 !important;
   -webkit-line-clamp: 3 !important;
+  margin-bottom: 4px !important;
 }
-/* Limit to 25 cards visible in design-2 */
-body.design-2 .dm .card-h:nth-child(n+26),
-body.design-2 .dm .card-v:nth-child(n+26) {
-  display: none !important;
+body.design-2 .card-h .ctime {
+  color: #888888 !important;
+  font-size: 10px !important;
 }
+
+/* Wrap every pair of cards in a 2-col grid row */
+body.design-2 #dynamic-feed,
+body.design-2 .dm > .card-h {
+  /* handled by JS wrapper below */
+}
+
+/* Feed labels in design-2 */
+body.design-2 .feed-label {
+  border-top: 3px solid #cc0000 !important;
+  color: #cc0000 !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: 1.5px !important;
+  background: transparent !important;
+  padding: 8px 0 !important;
+}
+
+/* Contrast fixes across all designs */
+
+/* Design 1 — ensure readable contrast */
+body.dark .cat { color: #000000 !important; }
+body.dark .art-ab.ai { background: #F5C500 !important; color: #000 !important; }
+body.dark .art-ab.hu { background: #333 !important; color: #fff !important; }
+
+/* Design 2 — all text contrast */
+body.design-2 .atext { color: #333333 !important; }
+body.design-2 .ingress { color: #222222 !important; }
+body.design-2 .art-title { color: #111111 !important; }
+body.design-2 .art-quote { color: #cc0000 !important; font-style: italic !important; }
+body.design-2 .art-ab.ai { background: #cc0000 !important; color: #ffffff !important; }
+body.design-2 .art-ab.hu { background: #333 !important; color: #fff !important; }
+body.design-2 .feed-label { color: #cc0000 !important; }
+body.design-2 .art-time { color: #666 !important; }
+
+/* Design 3 — all text contrast */  
+body.design-3 .atext { color: #333333 !important; }
+body.design-3 .ingress { color: #222222 !important; }
+body.design-3 .art-title { color: #1a1a1a !important; }
+body.design-3 .art-time { color: #888 !important; }
+body.design-3 .cat { color: #777777 !important; background: transparent !important; }
+body.design-3 .ctitle { color: #1a1a1a !important; }
+body.design-3 .ctime { color: #aaaaaa !important; }
+.d2-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 </style>
 </head>
 <body class="dark">
@@ -3189,6 +3262,64 @@ function setTheme(theme) {
 
 var currentDesign = parseInt(localStorage.getItem('grid-design') || '1');
 
+
+function applyDesign2Layout() {
+  var dm = document.querySelector('.dm');
+  if (!dm) return;
+
+  // Remove existing wrappers
+  var existing = dm.querySelectorAll('.d2-row');
+  existing.forEach(function(r) {
+    var parent = r.parentNode;
+    while (r.firstChild) parent.insertBefore(r.firstChild, r);
+    parent.removeChild(r);
+  });
+
+  if (!document.body.classList.contains('design-2')) return;
+
+  // Group consecutive card-h elements into pairs
+  var nodes = Array.from(dm.childNodes);
+  var i = 0;
+  while (i < nodes.length) {
+    var node = nodes[i];
+    if (node.classList && node.classList.contains('card-h')) {
+      var row = document.createElement('div');
+      row.className = 'd2-row';
+      row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px';
+      // Insert row before this card
+      dm.insertBefore(row, node);
+      row.appendChild(node);
+      // Check next sibling
+      var next = nodes[i + 1];
+      if (next && next.classList && next.classList.contains('card-h')) {
+        row.appendChild(next);
+        i += 2;
+      } else {
+        i += 1;
+      }
+      // Refresh nodes list
+      nodes = Array.from(dm.childNodes);
+      i = dm.childNodes.length; // restart safe
+      // Re-run from beginning
+      nodes = Array.from(dm.childNodes);
+      i = 0;
+      // Find first ungrouped card
+      var found = false;
+      for (var j = 0; j < nodes.length; j++) {
+        var n = nodes[j];
+        if (n.classList && n.classList.contains('card-h') && !n.parentNode.classList.contains('d2-row')) {
+          i = j;
+          found = true;
+          break;
+        }
+      }
+      if (!found) break;
+    } else {
+      i++;
+    }
+  }
+}
+
 function applyDesign(n) {
   currentDesign = n;
   localStorage.setItem('grid-design', n);
@@ -3217,11 +3348,14 @@ function applyDesign(n) {
     el.style.background = (i + 1 === n) ? 'rgba(245,197,0,.15)' : '';
     el.style.borderLeft = (i + 1 === n) ? '3px solid var(--v)' : '3px solid transparent';
   });
-  // Limit cards in design-2
-  var cards = document.querySelectorAll('.dm .card-h, .dm .card-v');
-  cards.forEach(function(c, i) {
-    c.style.display = (n === 2 && i >= 25) ? 'none' : '';
-  });
+  // Limit cards in design-2 and apply grid layout
+  setTimeout(function() {
+    applyDesign2Layout();
+    var cards = document.querySelectorAll('.dm .card-h, .dm .card-v');
+    cards.forEach(function(c, idx) {
+      c.style.display = (n === 2 && idx >= 25) ? 'none' : '';
+    });
+  }, 50);
 }
 
 function setDesign(n) {
