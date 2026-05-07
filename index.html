@@ -418,12 +418,150 @@ body.theme-spartan .live-dot{background:#e24b4a}
 .theme-opt:hover{background:var(--surface)}
 .theme-opt.active{border-color:var(--v)}
 .theme-prev{width:48px;height:34px;border-radius:3px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);overflow:hidden}
+
+/* ── DESIGN SWITCHER ─────────────────────────────────── */
+.design-opt:hover { background: var(--card); }
+
+/* ── DESIGN 2: TABLOID ───────────────────────────────── */
+body.design-2 {
+  --bg: #ffffff;
+  --surface: #f4f4f2;
+  --card: #ffffff;
+  --text: #111111;
+  --mid: #333333;
+  --muted: #777777;
+  --border: #e0e0e0;
+  --v: #cc0000;
+  background: #f4f4f2;
+  font-family: Arial, sans-serif;
+}
+body.design-2 header {
+  background: #cc0000;
+  border-bottom: none;
+}
+body.design-2 .logo-dark { display: none !important; }
+body.design-2 .logo-light { display: block !important; filter: brightness(10); }
+body.design-2 #theme-btn { display: none; }
+body.design-2 .hbar { border-bottom: none; }
+body.design-2 .live-dot { background: #fff; }
+body.design-2 #live-label { color: #fff; }
+body.design-2 .ticker { background: #900; color: #fff; border: none; }
+body.design-2 .ticker-inner { color: #fff; }
+body.design-2 .nav-bar {
+  background: #111;
+  border-top: none;
+}
+body.design-2 .ni {
+  color: #ccc;
+  border: none;
+}
+body.design-2 .ni.on, body.design-2 .ni:hover {
+  background: #cc0000;
+  color: #fff;
+  border-radius: 0;
+}
+body.design-2 .dl {
+  max-width: 1200px;
+}
+body.design-2 .feed-label {
+  border-top: 3px solid #cc0000;
+  color: #111;
+  letter-spacing: 1px;
+}
+body.design-2 .cat {
+  background: #cc0000;
+  color: #fff;
+  border-radius: 0;
+}
+body.design-2 .card-h {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+body.design-2 .card-h:hover { background: #f9f9f9; }
+body.design-2 .ctitle { font-family: Arial Black, sans-serif; color: #111; }
+body.design-2 .card-h img { border-radius: 0; }
+body.design-2 .hero { border-bottom: 3px solid #cc0000; }
+body.design-2 .hero-content .cat { background: #cc0000; }
+body.design-2 .sidebar { border-left: 1px solid #e0e0e0; }
+body.design-2 .art-title { font-family: Arial Black, sans-serif; color: #111; }
+body.design-2 .ingress { color: #333; border-color: #cc0000; }
+body.design-2 .atext { color: #333; }
+body.design-2 .art-quote { border-left-color: #cc0000; color: #111; }
+body.design-2 .page { background: #fff; }
+
+/* ── DESIGN 3: SPARTAN ───────────────────────────────── */
+body.design-3 {
+  --bg: #fafaf8;
+  --surface: #f5f5f3;
+  --card: #ffffff;
+  --text: #111111;
+  --mid: #444444;
+  --muted: #888888;
+  --border: #e8e8e4;
+  --v: #111111;
+  background: #fafaf8;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+body.design-3 header {
+  background: #fafaf8;
+  border-bottom: 2px solid #111;
+}
+body.design-3 .logo-dark { display: none !important; }
+body.design-3 .logo-light { display: none !important; }
+body.design-3 #d3-logo { display: block !important; }
+body.design-3 #theme-btn { display: none; }
+body.design-3 .live-dot { background: #111; }
+body.design-3 .ticker { background: #fafaf8; border-top: 1px solid #e8e8e4; border-bottom: 1px solid #e8e8e4; }
+body.design-3 .ticker-inner { color: #555; }
+body.design-3 .nav-bar { background: #fafaf8; border-top: 1px solid #e8e8e4; border-bottom: 1px solid #e8e8e4; }
+body.design-3 .ni { color: #555; font-family: Georgia, serif; font-size: 13px; letter-spacing: 0; }
+body.design-3 .ni.on, body.design-3 .ni:hover { color: #111; background: none; border-bottom: 2px solid #111; border-radius: 0; }
+body.design-3 .cat {
+  background: none;
+  color: #888;
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  padding: 0;
+  border-radius: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+body.design-3 .ctitle {
+  font-family: Georgia, serif;
+  font-weight: 700;
+  color: #111;
+  font-size: clamp(14px, 2.5vw, 20px);
+}
+body.design-3 .card-h {
+  background: #fafaf8;
+  border-bottom: 1px solid #e8e8e4;
+  padding: 12px 0;
+}
+body.design-3 .card-h img { display: none; }
+body.design-3 .card-h .cb { padding-left: 0; }
+body.design-3 .ctime { color: #aaa; font-family: monospace; font-size: 10px; }
+body.design-3 .hero-title { font-family: Georgia, serif; }
+body.design-3 .feed-label {
+  font-family: monospace;
+  color: #888;
+  border-top: 1px solid #e8e8e4;
+}
+body.design-3 .art-title { font-family: Georgia, serif; color: #111; }
+body.design-3 .ingress { font-family: Georgia, serif; color: #333; font-size: 16px; }
+body.design-3 .atext { font-family: Georgia, serif; color: #333; font-size: 15px; line-height: 1.9; }
+body.design-3 .art-quote { font-family: Georgia, serif; border-left: 2px solid #111; color: #333; }
+body.design-3 .page { background: #fafaf8; }
+body.design-3 .sidebar { border-left: 1px solid #e8e8e4; }
+body.design-3 #d2-design-header { display: none; }
+
 </style>
 </head>
 <body class="dark">
 
 <header>
   <div class="hbar">
+    <div id="d3-logo" style="display:none;font-size:26px;font-weight:900;letter-spacing:-2px;color:#111;font-family:Georgia,serif">GRID</div>
     <div class="logo" onclick="showPage('start')" style="cursor:pointer">
     <img class="logo-dark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODUgNDgiIHdpZHRoPSIxODUiIGhlaWdodD0iNDgiPgogIDx0ZXh0IHg9IjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDYiIGZpbGw9IndoaXRlIiBsZXR0ZXItc3BhY2luZz0iLTIiPkdSSUQ8L3RleHQ+CiAgPHJlY3QgeD0iMCIgeT0iNDMiIHdpZHRoPSIxNDgiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgogIDxyZWN0IHg9IjE1NSIgeT0iNDMiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNGNUM1MDAiLz4KICA8cmVjdCB4PSIxNjMiIHk9IjQzIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+CiAgPHJlY3QgeD0iMTcxIiB5PSI0MyIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgo8L3N2Zz4=" alt="GRID">
     <img class="logo-light" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODUgNDgiIHdpZHRoPSIxODUiIGhlaWdodD0iNDgiPgogIDx0ZXh0IHg9IjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDYiIGZpbGw9IiMwRDBEMEQiIGxldHRlci1zcGFjaW5nPSItMiI+R1JJRDwvdGV4dD4KICA8cmVjdCB4PSIwIiB5PSI0MyIgd2lkdGg9IjE0OCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+CiAgPHJlY3QgeD0iMTU1IiB5PSI0MyIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI0Y1QzUwMCIvPgogIDxyZWN0IHg9IjE2MyIgeT0iNDMiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNGNUM1MDAiLz4KICA8cmVjdCB4PSIxNzEiIHk9IjQzIiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVDNTAwIi8+Cjwvc3ZnPg==" alt="GRID" style="display:none">
@@ -433,7 +571,27 @@ body.theme-spartan .live-dot{background:#e24b4a}
     </nav>
     <div class="live"><div class="ldot"></div>LIVE</div>
     <button onclick="showPage('cms')" style="display:none" id="admin-btn" class="admin-desktop-btn">✎ Admin</button>
-    <button onclick="openThemePicker()" style="background:none;border:1px solid var(--border);color:var(--text);padding:4px 10px;font-size:10px;font-family:monospace;letter-spacing:.3px;cursor:pointer;border-radius:2px;margin-right:6px" title="Välj design">◑ DESIGN</button><button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s">☀ Ljust</button>
+    <div style="position:relative;display:inline-block" id="design-switcher">
+    <button onclick="toggleDesignMenu()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:monospace;font-size:9px;letter-spacing:.5px;padding:5px 10px;cursor:pointer;border-radius:2px;margin-right:6px" id="design-btn">◑ DESIGN 1</button>
+    <div id="design-menu" style="display:none;position:absolute;right:0;top:100%;margin-top:4px;background:var(--surface);border:1px solid var(--border);border-radius:2px;z-index:500;min-width:200px;box-shadow:0 4px 20px rgba(0,0,0,.4)">
+      <div style="padding:10px 14px 8px;border-bottom:1px solid var(--border)">
+        <div style="font-family:monospace;font-size:9px;color:var(--v);font-weight:700;letter-spacing:.5px;margin-bottom:3px">VÄLJ DIN DESIGN</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.4">Hur vill du ha dina nyheter? Testa olika varianter.</div>
+      </div>
+      <div onclick="setDesign(1)" class="design-opt" style="padding:10px 14px;cursor:pointer;font-family:monospace;font-size:10px;border-bottom:1px solid var(--border)">
+        <div style="font-weight:700;margin-bottom:2px">DESIGN 1</div>
+        <div style="color:var(--muted);font-size:9px">Befintlig — mörk redaktionell</div>
+      </div>
+      <div onclick="setDesign(2)" class="design-opt" style="padding:10px 14px;cursor:pointer;font-family:monospace;font-size:10px;border-bottom:1px solid var(--border)">
+        <div style="font-weight:700;margin-bottom:2px">DESIGN 2</div>
+        <div style="color:var(--muted);font-size:9px">Tabloid — tät nyhetskänsla</div>
+      </div>
+      <div onclick="setDesign(3)" class="design-opt" style="padding:10px 14px;cursor:pointer;font-family:monospace;font-size:10px">
+        <div style="font-weight:700;margin-bottom:2px">DESIGN 3</div>
+        <div style="color:var(--muted);font-size:9px">Spartan — ren och snabb</div>
+      </div>
+    </div>
+  </div><button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid var(--border);color:var(--text);font-family:monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;cursor:pointer;text-transform:uppercase;transition:.2s">☀ Ljust</button>
   </div>
 </header>
 
@@ -2873,6 +3031,49 @@ function setTheme(theme) {
   var saved = localStorage.getItem('grid-design') || 'default';
   if (saved !== 'default') setTheme(saved);
 })();
+
+var currentDesign = parseInt(localStorage.getItem('grid-design') || '1');
+
+function applyDesign(n) {
+  currentDesign = n;
+  localStorage.setItem('grid-design', n);
+  document.body.classList.remove('design-1','design-2','design-3');
+  if (n > 1) document.body.classList.add('design-' + n);
+  var btn = document.getElementById('design-btn');
+  if (btn) btn.textContent = '◑ DESIGN ' + n;
+  // Close menu
+  var menu = document.getElementById('design-menu');
+  if (menu) menu.style.display = 'none';
+  // Update active state in menu
+  document.querySelectorAll('.design-opt').forEach(function(el, i) {
+    el.style.fontWeight = (i + 1 === n) ? '900' : '400';
+    el.style.background = (i + 1 === n) ? 'var(--card)' : '';
+  });
+}
+
+function setDesign(n) {
+  applyDesign(n);
+}
+
+function toggleDesignMenu() {
+  var menu = document.getElementById('design-menu');
+  if (!menu) return;
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  var sw = document.getElementById('design-switcher');
+  if (sw && !sw.contains(e.target)) {
+    var menu = document.getElementById('design-menu');
+    if (menu) menu.style.display = 'none';
+  }
+});
+
+// Apply saved design on load
+window.addEventListener('DOMContentLoaded', function() {
+  applyDesign(currentDesign);
+});
 </script>
 
 <script>
