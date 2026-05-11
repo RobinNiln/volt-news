@@ -424,364 +424,311 @@ body.theme-spartan .live-dot{background:#e24b4a}
 .design-opt:hover { background: rgba(245,197,0,.1) !important; }
 .design-opt { border-left: 3px solid transparent; transition: .15s; }
 
-/* ═══════════════════════════════════════════════════════
-   DESIGN 2 — TABLOID
-   Röd/vit, tät, British tabloid-känsla
-═══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   DESIGN SWITCHER
+════════════════════════════════════════════════════════════ */
+.design-opt { border-left:3px solid transparent;transition:.15s; }
+.design-opt:hover { background:rgba(245,197,0,.08) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   DESIGN 1 — KVALITETSTIDNING
+   Vit/mörk, serif rubriker, klassisk nyhetshierarki
+   Behåller befintlig design med förbättrad kontrast
+════════════════════════════════════════════════════════════ */
+/* Light mode override for design-1 */
+body.design-1.light { --bg:#ffffff;--surface:#f5f5f5;--card:#ffffff;--text:#111;--mid:#333;--muted:#666;--border:#e0e0e0; }
+body.design-1.light header { background:#ffffff !important; border-bottom:2px solid #F5C500 !important; }
+body.design-1.light .hbar { background:#fff !important; }
+body.design-1.light .logo-dark { display:none !important; }
+body.design-1.light .logo-light { display:block !important; filter:invert(1) brightness(.1) !important; }
+body.design-1.light .nav-bar { background:#fff !important; border-color:#e0e0e0 !important; }
+body.design-1.light .ni { color:#444 !important; }
+body.design-1.light .ni.on,body.design-1.light .ni:hover { background:#F5C500 !important;color:#000 !important; }
+body.design-1.light .ticker { background:#111 !important; }
+body.design-1.light .art-title { color:#111 !important;font-family:Georgia,serif !important; }
+body.design-1.light .ingress { color:#333 !important; }
+body.design-1.light .atext { color:#333 !important; }
+body.design-1.light .ctitle { color:#111 !important; }
+body.design-1.light .page { background:#fff !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   DESIGN 2 — DIGITAL-FIRST / YNGRE
+   Vit bakgrund, sans-serif, feed-format, inga stora bilder
+   Kategorier som vänster-accent (gul), rubrik i fokus
+════════════════════════════════════════════════════════════ */
 body.design-2 {
-  --v: #cc0000;
-  --bg: #f4f4f2;
-  --surface: #ffffff;
-  --card: #f9f9f7;
-  --text: #111111;
-  --mid: #333333;
-  --muted: #666666;
-  --border: #dddddd;
-  background: #f4f4f2 !important;
-  font-family: Arial, Helvetica, sans-serif !important;
+  --bg:#ffffff;
+  --surface:#f8f8f8;
+  --card:#ffffff;
+  --text:#111111;
+  --mid:#444444;
+  --muted:#888888;
+  --border:#eeeeee;
+  --v:#111111;
+  background:#ffffff !important;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif !important;
 }
 
-/* Header — röd band */
-body.design-2 header { background: #cc0000 !important; border-bottom: none !important; }
-body.design-2 .hbar { background: #cc0000 !important; }
-body.design-2 .logo-dark { filter: none !important; opacity: 1 !important; }
-body.design-2 #design-btn { border-color: rgba(255,255,255,.5) !important; color: #fff !important; background: rgba(0,0,0,.2) !important; }
-body.design-2 #theme-btn { display: none !important; }
-body.design-2 #live-label, body.design-2 .live-dot { color: #fff !important; background: #fff !important; }
+/* Header */
+body.design-2 header { background:#ffffff !important;border-bottom:1px solid #111 !important; }
+body.design-2 .hbar { background:#fff !important; }
+body.design-2 .logo-dark { filter:brightness(0) !important; }
+body.design-2 .logo-light { display:none !important; }
+body.design-2 #design-btn { border-color:#ccc !important;color:#444 !important; }
+body.design-2 #theme-btn { display:none !important; }
+body.design-2 #design-slogan { color:#888 !important; }
+body.design-2 .live-dot { background:#111 !important; }
+body.design-2 #live-label { color:#111 !important; }
 
-/* Ticker — mörkröd */
-body.design-2 .ticker { background: #990000 !important; border: none !important; }
-body.design-2 .ticker-inner, body.design-2 .ticker span { color: #ffffff !important; }
+/* Ticker */
+body.design-2 .ticker { background:#111 !important;border:none !important; }
+body.design-2 .ticker-inner,body.design-2 .ticker span { color:#fff !important;font-family:inherit !important; }
 
-/* Nav — svart med vita länkar */
-body.design-2 .nav-bar { background: #1a1a1a !important; border: none !important; padding: 0 !important; }
-body.design-2 .ni { color: #cccccc !important; border: none !important; font-size: 11px !important; font-weight: 700 !important; letter-spacing: .5px !important; padding: 9px 12px !important; border-radius: 0 !important; }
-body.design-2 .ni.on, body.design-2 .ni:hover { background: #cc0000 !important; color: #ffffff !important; }
+/* Nav */
+body.design-2 .nav-bar { background:#f8f8f8 !important;border-top:none !important;border-bottom:1px solid #eee !important;padding:0 !important; }
+body.design-2 .ni { color:#555 !important;border:none !important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;font-size:13px !important;font-weight:500 !important;padding:10px 14px !important;letter-spacing:0 !important;border-radius:0 !important; }
+body.design-2 .ni.on,body.design-2 .ni:hover { color:#111 !important;background:#fff !important;border-bottom:2px solid #111 !important; }
 
-/* Kategoribadgar — röd bakgrund vit text */
-body.design-2 .cat { background: #cc0000 !important; color: #ffffff !important; border-radius: 0 !important; font-size: 9px !important; letter-spacing: .5px !important; }
-body.design-2 .cat.red { background: #cc0000 !important; color: #fff !important; }
-
-/* Feed-labels */
-body.design-2 .feed-label { border-top: 3px solid #cc0000 !important; color: #cc0000 !important; background: transparent !important; font-family: Arial, sans-serif !important; letter-spacing: 1px !important; }
-
-/* Kort */
-body.design-2 .card-h { background: #ffffff !important; border-bottom: 1px solid #e0e0e0 !important; }
-body.design-2 .card-h:hover { background: #f5f5f5 !important; }
-body.design-2 .ctitle { font-family: "Arial Black", Arial, sans-serif !important; color: #111111 !important; font-size: 14px !important; }
-body.design-2 .ctime { color: #888 !important; font-size: 10px !important; }
-
-/* Hero */
-body.design-2 .hero { border-bottom: 3px solid #cc0000 !important; }
-
-/* Sidebar */
-body.design-2 .sidebar { background: #f9f9f7 !important; border-left: 1px solid #e0e0e0 !important; }
-body.design-2 .sn-item, body.design-2 .sn-title { color: #111 !important; }
-body.design-2 .sn-cat { color: #cc0000 !important; }
-
-/* Artikelsidor */
-body.design-2 .page { background: #ffffff !important; }
-body.design-2 .art-page { background: #ffffff !important; }
-body.design-2 .art-title { font-family: "Arial Black", Arial, sans-serif !important; color: #111111 !important; font-size: clamp(22px,4vw,38px) !important; }
-body.design-2 .ingress { color: #333333 !important; border-color: #cc0000 !important; font-family: Arial, sans-serif !important; }
-body.design-2 .atext { color: #333333 !important; font-family: Arial, sans-serif !important; }
-body.design-2 .art-quote { border-left: 4px solid #cc0000 !important; color: #cc0000 !important; font-style: italic !important; }
-body.design-2 .art-byline .art-ab { background: #cc0000 !important; color: #fff !important; }
-body.design-2 .art-time { color: #888 !important; }
-
-/* ═══════════════════════════════════════════════════════
-   DESIGN 3 — SPARTAN
-   Cremevit, serif, Financial Times-känsla, inga bilder i flöde
-═══════════════════════════════════════════════════════ */
-body.design-3 {
-  --v: #1a1a1a;
-  --bg: #f8f6f0;
-  --surface: #f8f6f0;
-  --card: #ffffff;
-  --text: #1a1a1a;
-  --mid: #444444;
-  --muted: #888888;
-  --border: #ddd8cc;
-  background: #f8f6f0 !important;
-  font-family: Georgia, "Times New Roman", serif !important;
-}
-
-/* Header — crème med svart understrykning */
-body.design-3 header { background: #f8f6f0 !important; border-bottom: 2px solid #1a1a1a !important; }
-body.design-3 .hbar { background: #f8f6f0 !important; }
-body.design-3 .logo-dark { display: none !important; }
-body.design-3 .logo-light { display: block !important; filter: invert(1) brightness(.15) !important; }
-body.design-3 #design-btn { border-color: #999 !important; color: #444 !important; background: transparent !important; }
-body.design-3 #theme-btn { display: none !important; }
-body.design-3 .live-dot { background: #1a1a1a !important; }
-body.design-3 #live-label { color: #555 !important; font-family: monospace !important; }
-
-/* Ticker — subtil */
-body.design-3 .ticker { background: #f8f6f0 !important; border-top: 1px solid #ddd8cc !important; border-bottom: 1px solid #ddd8cc !important; }
-body.design-3 .ticker-inner, body.design-3 .ticker span { color: #555555 !important; font-family: Georgia, serif !important; font-style: italic !important; }
-
-/* Nav — serif, minimal */
-body.design-3 .nav-bar { background: #f8f6f0 !important; border-top: 1px solid #ddd8cc !important; border-bottom: 1px solid #ddd8cc !important; }
-body.design-3 .ni { color: #555555 !important; font-family: Georgia, serif !important; font-size: 13px !important; font-weight: 400 !important; border: none !important; letter-spacing: 0 !important; }
-body.design-3 .ni.on, body.design-3 .ni:hover { color: #1a1a1a !important; background: none !important; border-bottom: 2px solid #1a1a1a !important; border-radius: 0 !important; font-weight: 700 !important; }
-
-/* Kategorier — monospace caps, ingen bakgrund */
-body.design-3 .cat { background: transparent !important; color: #888888 !important; font-family: monospace !important; font-size: 9px !important; font-weight: 700 !important; letter-spacing: 1.5px !important; padding: 0 !important; border-radius: 0 !important; }
-body.design-3 .cat.red { background: transparent !important; color: #888 !important; }
-
-/* Feed-labels */
-body.design-3 .feed-label { color: #888888 !important; border-color: #ddd8cc !important; font-family: monospace !important; font-size: 9px !important; letter-spacing: 2px !important; }
-
-/* Kort — ingen bild, ren text */
-body.design-3 .card-h { background: #f8f6f0 !important; border-bottom: 1px solid #e8e4dc !important; }
-body.design-3 .card-h:hover { background: #f0ece4 !important; }
-body.design-3 .card-h > img, body.design-3 .card-h img { display: none !important; }
-body.design-3 .card-h .cb { padding-left: 0 !important; }
-body.design-3 .ctitle { font-family: Georgia, serif !important; color: #1a1a1a !important; font-weight: 700 !important; font-size: clamp(14px,2vw,17px) !important; line-height: 1.35 !important; }
-body.design-3 .ctime { color: #aaa !important; font-family: monospace !important; font-size: 10px !important; }
-
-/* Grid-2 kort */
-body.design-3 .grid-2 .ctitle { font-size: clamp(16px,2.5vw,22px) !important; }
-
-/* Hero */
-body.design-3 .hero-title { font-family: Georgia, serif !important; }
-
-/* Sidebar */
-body.design-3 .sidebar { background: #f8f6f0 !important; border-left: 1px solid #ddd8cc !important; }
-body.design-3 .sn-item { border-color: #e8e4dc !important; }
-body.design-3 .sn-title { color: #1a1a1a !important; font-family: Georgia, serif !important; }
-body.design-3 .sn-cat { color: #888 !important; font-family: monospace !important; }
-
-/* Artikelsidor */
-body.design-3 .page { background: #f8f6f0 !important; }
-body.design-3 .art-page { background: #f8f6f0 !important; }
-body.design-3 .art-title { font-family: Georgia, serif !important; color: #1a1a1a !important; font-size: clamp(24px,5vw,46px) !important; font-weight: 700 !important; letter-spacing: -.5px !important; }
-body.design-3 .ingress { font-family: Georgia, serif !important; color: #333333 !important; font-size: 17px !important; line-height: 1.7 !important; border-color: #1a1a1a !important; }
-body.design-3 .atext { font-family: Georgia, serif !important; color: #444444 !important; font-size: 16px !important; line-height: 1.9 !important; }
-body.design-3 .art-quote { border-left: 3px solid #1a1a1a !important; color: #444 !important; font-family: Georgia, serif !important; font-style: italic !important; font-size: 18px !important; }
-body.design-3 .art-byline .art-ab { background: #1a1a1a !important; color: #f8f6f0 !important; }
-body.design-3 .art-byline .art-ab.ai { background: #555 !important; }
-body.design-3 .art-time { color: #888 !important; font-family: monospace !important; }
-body.design-3 .art-body { background: #f8f6f0 !important; }
-body.design-3 .dl { background: #f8f6f0 !important; }
-body.design-3 .dm { background: #f8f6f0 !important; }
-
-/* Design 3 — Hero: compact, text-forward, small image */
-body.design-3 .hero {
-  display: grid !important;
-  grid-template-columns: 180px 1fr !important;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  border-bottom: 2px solid #1a1a1a !important;
-  background: #f8f6f0 !important;
-  cursor: pointer;
-}
-body.design-3 .hero > img {
-  width: 180px !important;
-  height: 140px !important;
-  object-fit: cover !important;
-  display: block !important;
-  filter: none !important;
-  flex-shrink: 0 !important;
-}
-body.design-3 .hero-content {
-  position: static !important;
-  background: none !important;
-  padding: 14px 16px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-}
-body.design-3 .hero-title {
-  font-family: Georgia, serif !important;
-  font-size: clamp(18px, 2.5vw, 26px) !important;
-  font-weight: 700 !important;
-  color: #1a1a1a !important;
-  letter-spacing: -.3px !important;
-  line-height: 1.2 !important;
-  text-shadow: none !important;
-}
-body.design-3 .hero-meta { margin-top: 8px !important; }
-body.design-3 .hero-meta .ab { background: #555 !important; color: #fff !important; font-size: 9px !important; }
-body.design-3 .hero-meta .time, body.design-3 .hero-meta .loc { color: #888 !important; font-family: monospace !important; font-size: 10px !important; }
-
-/* Design 3 — Puff 2+3: horizontal, small image left */
-body.design-3 #top-puffs {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 0 !important;
-  border-bottom: 1px solid #ddd8cc !important;
-}
-body.design-3 .top-slot {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  min-height: 0 !important;
-  padding: 12px !important;
-  gap: 12px !important;
-}
-body.design-3 .top-slot img {
-  width: 80px !important;
-  height: 64px !important;
-  object-fit: cover !important;
-  flex-shrink: 0 !important;
-  filter: none !important;
-  display: block !important;
-}
-body.design-3 .top-slot .slot-content {
-  position: static !important;
-  background: none !important;
-  padding: 0 !important;
-}
-body.design-3 .top-slot .slot-cat {
-  font-family: monospace !important;
-  font-size: 9px !important;
-  letter-spacing: 1px !important;
-  color: #888 !important;
-  margin-bottom: 4px !important;
-}
-body.design-3 .top-slot .slot-title {
-  font-family: Georgia, serif !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  color: #1a1a1a !important;
-  line-height: 1.3 !important;
-}
-
-/* Design 3 — Trends chip bar */
-body.design-3 .trends { border-bottom: 1px solid #ddd8cc !important; background: #f8f6f0 !important; }
-body.design-3 .chip { border-color: #ccc !important; color: #555 !important; font-family: Georgia, serif !important; font-size: 12px !important; }
-body.design-3 .chip.on { background: #1a1a1a !important; color: #f8f6f0 !important; border-color: #1a1a1a !important; }
-
-/* Design 2 — Hero stays full-width but with red overlay */
-body.design-2 .hero { border-bottom: 3px solid #cc0000 !important; }
-body.design-2 .hero-content { background: linear-gradient(transparent, rgba(0,0,0,.85)) !important; }
-body.design-2 .hero-title { color: #ffffff !important; font-family: "Arial Black", Arial, sans-serif !important; }
-body.design-2 .hero-content .cat { background: #cc0000 !important; color: #fff !important; }
-
-/* Design 2 — Puff 2+3 with red category overlay */
-body.design-2 .top-slot .slot-cat { color: #cc0000 !important; font-family: monospace !important; font-size: 9px !important; font-weight: 700 !important; letter-spacing: .5px !important; }
-body.design-2 .top-slot .slot-title { font-family: "Arial Black", Arial, sans-serif !important; color: #ffffff !important; font-size: 14px !important; }
-body.design-2 .slot-placeholder { color: #fff !important; }
-
-/* Design 2 header — all white */
-body.design-2 .hbar * { color: #ffffff !important; }
-body.design-2 .logo-light { display: none !important; }
-body.design-2 .logo-dark { filter: none !important; opacity: 1 !important; }
-body.design-2 .hbar button { border-color: rgba(255,255,255,.4) !important; color: #fff !important; }
-body.design-2 #design-slogan { color: rgba(255,255,255,.8) !important; }
-body.design-2 #live-label { color: #fff !important; }
-body.design-2 .live-dot { background: #fff !important; }
-body.design-2 #design-btn { background: rgba(0,0,0,.2) !important; border-color: rgba(255,255,255,.4) !important; color: #fff !important; }
-body.design-2 #theme-btn { display: none !important; }
-body.design-2 .logo-dark { filter: none !important; opacity: 1 !important; }
-/* Design 3 slogan */
-body.design-3 #design-slogan { color: #777 !important; }
-/* Design 1 slogan */
-#design-slogan { color: var(--muted); }
-
-/* ═══════════════════════════════════════════
-   DESIGN 2 — MAIN FEED LAYOUT
-   Two-column grid, image top, text below
-═══════════════════════════════════════════ */
-
-/* Override the default dm layout for design-2 */
-body.design-2 .dm {
-  background: #f4f4f2 !important;
-}
-
-/* Hide default card-h layout, replace with grid cards */
+/* Feed cards — no image, left-accent bar */
 body.design-2 .card-h {
-  display: flex !important;
-  flex-direction: column !important;
-  background: #ffffff !important;
-  border: 1px solid #e0e0e0 !important;
-  border-bottom: 1px solid #e0e0e0 !important;
-  padding: 0 !important;
-  cursor: pointer;
-  transition: box-shadow .15s !important;
+  display:flex !important;
+  flex-direction:row !important;
+  padding:14px 0 !important;
+  border-bottom:1px solid #eee !important;
+  border-left:3px solid #F5C500 !important;
+  padding-left:12px !important;
+  background:#fff !important;
+  gap:0 !important;
 }
-body.design-2 .card-h:hover { box-shadow: 0 2px 8px rgba(0,0,0,.12) !important; background: #fff !important; }
-body.design-2 .card-h > img {
-  width: 100% !important;
-  height: 150px !important;
-  object-fit: cover !important;
-  display: block !important;
-  flex-shrink: 0 !important;
-  filter: none !important;
-}
-body.design-2 .card-h .cb {
-  padding: 8px 10px 12px !important;
-  background: #fff !important;
-}
+body.design-2 .card-h:hover { background:#fafafa !important;border-left-color:#111 !important; }
+body.design-2 .card-h > img { display:none !important; }
+body.design-2 .card-h .cb { padding:0 !important;flex:1 !important; }
 body.design-2 .card-h .cat {
-  display: inline-block !important;
-  margin-bottom: 5px !important;
-  background: #cc0000 !important;
-  color: #ffffff !important;
-  font-size: 9px !important;
-  font-weight: 700 !important;
-  padding: 2px 6px !important;
-  letter-spacing: .5px !important;
+  background:none !important;
+  color:#888 !important;
+  font-size:10px !important;
+  font-weight:600 !important;
+  letter-spacing:.5px !important;
+  padding:0 !important;
+  margin-bottom:4px !important;
+  display:block !important;
+  border-radius:0 !important;
 }
 body.design-2 .card-h .ctitle {
-  font-family: "Arial Black", Arial, sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 800 !important;
-  color: #111111 !important;
-  line-height: 1.25 !important;
-  -webkit-line-clamp: 3 !important;
-  margin-bottom: 4px !important;
+  font-size:16px !important;
+  font-weight:600 !important;
+  color:#111 !important;
+  line-height:1.3 !important;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;
+  -webkit-line-clamp:2 !important;
 }
-body.design-2 .card-h .ctime {
-  color: #888888 !important;
-  font-size: 10px !important;
+body.design-2 .card-h .ctime { color:#aaa !important;font-size:11px !important; }
+
+/* Hero in design-2 — compact, image left */
+body.design-2 .hero {
+  display:grid !important;
+  grid-template-columns:200px 1fr !important;
+  height:auto !important;
+  max-height:none !important;
+  border-bottom:1px solid #eee !important;
+  border-left:none !important;
+  background:#fff !important;
+}
+body.design-2 .hero > img {
+  width:200px !important;
+  height:150px !important;
+  object-fit:cover !important;
+  filter:none !important;
+}
+body.design-2 .hero-content {
+  position:static !important;
+  background:none !important;
+  padding:14px 16px !important;
+}
+body.design-2 .hero-content .cat { background:#111 !important;color:#F5C500 !important;font-size:9px !important;letter-spacing:1px !important; }
+body.design-2 .hero-title { color:#111 !important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;font-size:clamp(16px,2.5vw,22px) !important;font-weight:700 !important;text-shadow:none !important;line-height:1.25 !important; }
+body.design-2 .hero-meta { margin-top:8px !important; }
+
+/* Top puffs in design-2 */
+body.design-2 #top-puffs { border-bottom:1px solid #eee !important; }
+body.design-2 .top-slot { background:#f8f8f8 !important; }
+body.design-2 .top-slot .slot-title { color:#111 !important;font-family:-apple-system,sans-serif !important;font-size:13px !important; }
+body.design-2 .top-slot .slot-cat { color:#888 !important; }
+
+/* Feed label */
+body.design-2 .feed-label { color:#111 !important;border-top:2px solid #111 !important;font-family:inherit !important;letter-spacing:1px !important;background:transparent !important; }
+
+/* Article pages */
+body.design-2 .page { background:#fff !important; }
+body.design-2 .art-title { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;color:#111 !important;font-size:clamp(22px,4vw,36px) !important;font-weight:700 !important; }
+body.design-2 .ingress { color:#333 !important;font-family:-apple-system,sans-serif !important;font-size:16px !important;border-color:#111 !important; }
+body.design-2 .atext { color:#333 !important;font-family:-apple-system,sans-serif !important;font-size:15px !important;line-height:1.75 !important; }
+body.design-2 .art-quote { border-left:3px solid #111 !important;color:#333 !important;font-style:italic !important; }
+body.design-2 .art-ab.ai { background:#111 !important;color:#F5C500 !important; }
+body.design-2 .art-ab.hu { background:#555 !important;color:#fff !important; }
+body.design-2 .art-time { color:#888 !important; }
+body.design-2 .sidebar { background:#f8f8f8 !important;border-left:1px solid #eee !important; }
+body.design-2 .sn-title { color:#111 !important; }
+body.design-2 .sn-cat { color:#888 !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   DESIGN 3 — SNABBNYHETER
+   Bildlöst, monospace, numrerad lista, maximal läshastighet
+════════════════════════════════════════════════════════════ */
+body.design-3 {
+  --bg:#ffffff;
+  --surface:#ffffff;
+  --card:#ffffff;
+  --text:#111111;
+  --mid:#444444;
+  --muted:#999999;
+  --border:#e8e8e8;
+  --v:#111111;
+  background:#ffffff !important;
+  font-family:'Courier New',Courier,monospace !important;
 }
 
-/* Wrap every pair of cards in a 2-col grid row */
-body.design-2 #dynamic-feed,
-body.design-2 .dm > .card-h {
-  /* handled by JS wrapper below */
+/* Header */
+body.design-3 header { background:#fff !important;border-bottom:3px solid #111 !important; }
+body.design-3 .hbar { background:#fff !important; }
+body.design-3 .logo-dark { filter:brightness(0) !important; }
+body.design-3 .logo-light { display:none !important; }
+body.design-3 #design-btn { border-color:#ccc !important;color:#444 !important;font-family:monospace !important; }
+body.design-3 #theme-btn { display:none !important; }
+body.design-3 #design-slogan { color:#888 !important;font-family:monospace !important; }
+body.design-3 .live-dot { background:#111 !important; }
+body.design-3 #live-label { color:#111 !important;font-family:monospace !important; }
+
+/* Ticker */
+body.design-3 .ticker { background:#fff !important;border-top:1px solid #ddd !important;border-bottom:1px solid #ddd !important; }
+body.design-3 .ticker-inner,body.design-3 .ticker span { color:#555 !important;font-family:'Courier New',monospace !important;font-size:11px !important; }
+
+/* Nav */
+body.design-3 .nav-bar { background:#fff !important;border-color:#ddd !important;padding:0 !important; }
+body.design-3 .ni { color:#555 !important;border:none !important;font-family:'Courier New',monospace !important;font-size:11px !important;font-weight:400 !important;padding:8px 14px !important;letter-spacing:.5px !important;border-radius:0 !important;text-transform:uppercase !important; }
+body.design-3 .ni.on,body.design-3 .ni:hover { color:#111 !important;background:none !important;border-bottom:2px solid #111 !important;font-weight:700 !important; }
+
+/* Hero — no image, pure text */
+body.design-3 .hero {
+  display:block !important;
+  height:auto !important;
+  max-height:none !important;
+  background:#fff !important;
+  border-bottom:2px solid #111 !important;
+  padding:16px 0 !important;
 }
-
-/* Feed labels in design-2 */
-body.design-2 .feed-label {
-  border-top: 3px solid #cc0000 !important;
-  color: #cc0000 !important;
-  font-family: Arial, sans-serif !important;
-  font-size: 10px !important;
-  letter-spacing: 1.5px !important;
-  background: transparent !important;
-  padding: 8px 0 !important;
+body.design-3 .hero > img { display:none !important; }
+body.design-3 .hero-content {
+  position:static !important;
+  background:none !important;
+  padding:0 !important;
 }
+body.design-3 .hero-content .cat { background:none !important;color:#999 !important;font-family:monospace !important;font-size:10px !important;letter-spacing:1.5px !important;padding:0 !important;border-radius:0 !important; }
+body.design-3 .hero-title { color:#111 !important;font-family:'Courier New',monospace !important;font-size:clamp(18px,3vw,26px) !important;font-weight:700 !important;text-shadow:none !important;line-height:1.3 !important; }
 
-/* Contrast fixes across all designs */
+/* Top puffs — hidden, saves space */
+body.design-3 #top-puffs { display:none !important; }
 
-/* Design 1 — ensure readable contrast */
-body.dark .cat { color: #000000 !important; }
-body.dark .art-ab.ai { background: #F5C500 !important; color: #000 !important; }
-body.dark .art-ab.hu { background: #333 !important; color: #fff !important; }
+/* Cards — no image, minimal */
+body.design-3 .card-h {
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:baseline !important;
+  padding:8px 0 !important;
+  border-bottom:1px solid #e8e8e8 !important;
+  background:#fff !important;
+  gap:12px !important;
+}
+body.design-3 .card-h:hover { background:#f9f9f9 !important; }
+body.design-3 .card-h > img { display:none !important; }
+body.design-3 .card-h .cb { padding:0 !important; }
+body.design-3 .card-h .cat {
+  background:none !important;
+  color:#999 !important;
+  font-family:'Courier New',monospace !important;
+  font-size:9px !important;
+  font-weight:400 !important;
+  letter-spacing:1px !important;
+  padding:0 !important;
+  margin-bottom:2px !important;
+  display:block !important;
+  border-radius:0 !important;
+  text-transform:uppercase !important;
+  white-space:nowrap !important;
+}
+body.design-3 .card-h .ctitle {
+  font-size:13px !important;
+  font-weight:700 !important;
+  color:#111 !important;
+  line-height:1.3 !important;
+  font-family:'Courier New',monospace !important;
+  -webkit-line-clamp:2 !important;
+}
+body.design-3 .card-h .ctime { color:#bbb !important;font-size:10px !important;font-family:monospace !important; }
 
-/* Design 2 — all text contrast */
-body.design-2 .atext { color: #333333 !important; }
-body.design-2 .ingress { color: #222222 !important; }
-body.design-2 .art-title { color: #111111 !important; }
-body.design-2 .art-quote { color: #cc0000 !important; font-style: italic !important; }
-body.design-2 .art-ab.ai { background: #cc0000 !important; color: #ffffff !important; }
-body.design-2 .art-ab.hu { background: #333 !important; color: #fff !important; }
-body.design-2 .feed-label { color: #cc0000 !important; }
-body.design-2 .art-time { color: #666 !important; }
+/* Feed label */
+body.design-3 .feed-label { color:#999 !important;border-top:1px solid #ddd !important;font-family:monospace !important;letter-spacing:2px !important;font-size:9px !important;background:transparent !important;padding:8px 0 4px !important; }
 
-/* Design 3 — all text contrast */  
-body.design-3 .atext { color: #333333 !important; }
-body.design-3 .ingress { color: #222222 !important; }
-body.design-3 .art-title { color: #1a1a1a !important; }
-body.design-3 .art-time { color: #888 !important; }
-body.design-3 .cat { color: #777777 !important; background: transparent !important; }
-body.design-3 .ctitle { color: #1a1a1a !important; }
-body.design-3 .ctime { color: #aaaaaa !important; }
-.d2-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+/* Article pages */
+body.design-3 .page { background:#fff !important; }
+body.design-3 .art-title { font-family:'Courier New',monospace !important;color:#111 !important;font-size:clamp(20px,3.5vw,34px) !important;font-weight:700 !important; }
+body.design-3 .ingress { color:#333 !important;font-family:'Courier New',monospace !important;font-size:15px !important;line-height:1.7 !important;border-color:#ddd !important; }
+body.design-3 .atext { color:#333 !important;font-family:'Courier New',monospace !important;font-size:14px !important;line-height:1.8 !important; }
+body.design-3 .art-quote { border-left:2px solid #111 !important;color:#444 !important;font-family:'Courier New',monospace !important;font-style:normal !important;font-size:15px !important; }
+body.design-3 .art-ab.ai { background:#111 !important;color:#fff !important;font-family:monospace !important; }
+body.design-3 .art-ab.hu { background:#666 !important;color:#fff !important; }
+body.design-3 .art-time { color:#999 !important;font-family:monospace !important; }
+body.design-3 .sidebar { background:#fff !important;border-left:1px solid #e8e8e8 !important; }
+body.design-3 .sn-title { color:#111 !important;font-family:monospace !important;font-size:12px !important; }
+body.design-3 .sn-cat { color:#999 !important;font-family:monospace !important;font-size:9px !important; }
+
+/* Grid-2 puffs — hidden in design-3 */
+body.design-3 .grid-2 { display:none !important; }
+body.design-3 .interlude-box { display:none !important; }
+
+/* ── Dark mode support for all designs ────────────────── */
+body.design-2.dark { --bg:#0f0f0f;--surface:#1a1a1a;--card:#1a1a1a;--text:#f0f0f0;--mid:#ccc;--muted:#777;--border:#2a2a2a; background:#0f0f0f !important; }
+body.design-2.dark .card-h { background:#0f0f0f !important;border-color:#2a2a2a !important; }
+body.design-2.dark .card-h .ctitle { color:#f0f0f0 !important; }
+body.design-2.dark .card-h .cat { color:#777 !important; }
+body.design-2.dark header,body.design-2.dark .hbar { background:#0f0f0f !important;border-color:#333 !important; }
+body.design-2.dark .logo-dark { filter:brightness(10) !important; }
+body.design-2.dark .nav-bar { background:#0f0f0f !important;border-color:#2a2a2a !important; }
+body.design-2.dark .ni { color:#888 !important; }
+body.design-2.dark .ni.on { color:#fff !important;border-color:#fff !important; }
+body.design-2.dark .feed-label { color:#f0f0f0 !important;border-color:#f0f0f0 !important; }
+body.design-2.dark .page { background:#0f0f0f !important; }
+body.design-2.dark .art-title { color:#f0f0f0 !important; }
+body.design-2.dark .ingress { color:#ccc !important; }
+body.design-2.dark .atext { color:#ccc !important; }
+body.design-2.dark #design-btn { color:#aaa !important;border-color:#444 !important; }
+body.design-2.dark #design-slogan { color:#666 !important; }
+body.design-2.dark .sidebar { background:#111 !important;border-color:#2a2a2a !important; }
+body.design-2.dark .sn-title { color:#ddd !important; }
+body.design-2.dark .hero { border-color:#2a2a2a !important; }
+body.design-2.dark .hero-title { color:#f0f0f0 !important; }
+
+body.design-3.dark { --bg:#0f0f0f;--surface:#0f0f0f;--card:#0f0f0f;--text:#e0e0e0;--mid:#bbb;--muted:#666;--border:#222; background:#0f0f0f !important; }
+body.design-3.dark header,body.design-3.dark .hbar { background:#0f0f0f !important;border-color:#444 !important; }
+body.design-3.dark .logo-dark { filter:brightness(10) !important; }
+body.design-3.dark .nav-bar { background:#0f0f0f !important;border-color:#222 !important; }
+body.design-3.dark .ni { color:#666 !important; }
+body.design-3.dark .ni.on { color:#e0e0e0 !important;border-color:#e0e0e0 !important; }
+body.design-3.dark .card-h { background:#0f0f0f !important;border-color:#222 !important; }
+body.design-3.dark .card-h .ctitle { color:#e0e0e0 !important; }
+body.design-3.dark .card-h .cat { color:#555 !important; }
+body.design-3.dark .ticker { background:#0f0f0f !important;border-color:#222 !important; }
+body.design-3.dark .ticker-inner { color:#666 !important; }
+body.design-3.dark .feed-label { color:#555 !important;border-color:#333 !important; }
+body.design-3.dark .page { background:#0f0f0f !important; }
+body.design-3.dark .art-title { color:#e0e0e0 !important; }
+body.design-3.dark .ingress { color:#bbb !important;border-color:#333 !important; }
+body.design-3.dark .atext { color:#aaa !important; }
+body.design-3.dark .hero { border-color:#333 !important; }
+body.design-3.dark .hero-title { color:#e0e0e0 !important; }
+body.design-3.dark .sidebar { background:#0f0f0f !important;border-color:#222 !important; }
+body.design-3.dark .sn-title { color:#ccc !important; }
+body.design-3.dark #design-btn { color:#888 !important;border-color:#333 !important; }
 </style>
 </head>
 <body class="dark">
@@ -3323,39 +3270,63 @@ function applyDesign2Layout() {
 function applyDesign(n) {
   currentDesign = n;
   localStorage.setItem('grid-design', n);
-  document.body.classList.remove('design-2','design-3');
-  if (n === 2) {
-    document.body.classList.add('design-2');
-    // Design 2 always light
-    document.body.classList.remove('dark');
-    document.body.classList.add('light');
+
+  // Remove all design classes
+  document.body.classList.remove('design-1','design-2','design-3');
+
+  // Add new design class
+  document.body.classList.add('design-' + n);
+
+  // Handle dark/light mode per design
+  var savedTheme = localStorage.getItem('grid-theme') || 'dark';
+  document.body.classList.remove('dark','light');
+
+  if (n === 1) {
+    // Design 1: respect user's saved preference
+    document.body.classList.add(savedTheme);
+    var themeBtn = document.getElementById('theme-btn');
+    if (themeBtn) {
+      themeBtn.style.display = '';
+      themeBtn.textContent = savedTheme === 'dark' ? '☀ Ljust' : '● Mörkt';
+    }
+  } else if (n === 2) {
+    // Design 2: default light, user can toggle
+    var d2theme = localStorage.getItem('grid-design-2-theme') || 'light';
+    document.body.classList.add(d2theme);
+    var themeBtn = document.getElementById('theme-btn');
+    if (themeBtn) {
+      themeBtn.style.display = '';
+      themeBtn.textContent = d2theme === 'dark' ? '☀ Ljust' : '● Mörkt';
+    }
   } else if (n === 3) {
-    document.body.classList.add('design-3');
-    // Design 3 always light
-    document.body.classList.remove('dark');
-    document.body.classList.add('light');
-  } else {
-    // Design 1 — restore saved dark/light preference
-    var saved = localStorage.getItem('grid-theme') || 'dark';
-    document.body.classList.remove('dark','light');
-    document.body.classList.add(saved);
+    // Design 3: default light, user can toggle
+    var d3theme = localStorage.getItem('grid-design-3-theme') || 'light';
+    document.body.classList.add(d3theme);
+    var themeBtn = document.getElementById('theme-btn');
+    if (themeBtn) {
+      themeBtn.style.display = '';
+      themeBtn.textContent = d3theme === 'dark' ? '☀ Ljust' : '● Mörkt';
+    }
   }
+
+  // Update button label
   var btn = document.getElementById('design-btn');
   if (btn) btn.textContent = '◑ DESIGN ' + n;
+
+  // Close menu
   var menu = document.getElementById('design-menu');
   if (menu) menu.style.display = 'none';
+
+  // Update active indicator in menu
   document.querySelectorAll('.design-opt').forEach(function(el, i) {
-    el.style.background = (i + 1 === n) ? 'rgba(245,197,0,.15)' : '';
-    el.style.borderLeft = (i + 1 === n) ? '3px solid var(--v)' : '3px solid transparent';
+    el.style.background = (i + 1 === n) ? 'rgba(245,197,0,.12)' : '';
+    el.style.borderLeft = (i + 1 === n) ? '3px solid #F5C500' : '3px solid transparent';
   });
-  // Limit cards in design-2 and apply grid layout
+
+  // Apply layout tweaks
   setTimeout(function() {
     applyDesign2Layout();
-    var cards = document.querySelectorAll('.dm .card-h, .dm .card-v');
-    cards.forEach(function(c, idx) {
-      c.style.display = (n === 2 && idx >= 25) ? 'none' : '';
-    });
-  }, 50);
+  }, 100);
 }
 
 function setDesign(n) {
