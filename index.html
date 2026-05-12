@@ -524,36 +524,9 @@ body.design-2 .card-h .ctitle {
 }
 body.design-2 .card-h .ctime { color:#aaa !important;font-size:11px !important; }
 
-/* Hero in design-2 — compact, image left */
-body.design-2 .hero {
-  display:grid !important;
-  grid-template-columns:200px 1fr !important;
-  height:auto !important;
-  max-height:none !important;
-  border-bottom:1px solid #eee !important;
-  border-left:none !important;
-  background:#fff !important;
-}
-body.design-2 .hero > img {
-  width:200px !important;
-  height:150px !important;
-  object-fit:cover !important;
-  filter:none !important;
-}
-body.design-2 .hero-content {
-  position:static !important;
-  background:none !important;
-  padding:14px 16px !important;
-}
-body.design-2 .hero-content .cat { background:#111 !important;color:#F5C500 !important;font-size:9px !important;letter-spacing:1px !important; }
-body.design-2 .hero-title { color:#111 !important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;font-size:clamp(16px,2.5vw,22px) !important;font-weight:700 !important;text-shadow:none !important;line-height:1.25 !important; }
-body.design-2 .hero-meta { margin-top:8px !important; }
 
-/* Top puffs in design-2 */
-body.design-2 #top-puffs { border-bottom:1px solid #eee !important; }
-body.design-2 .top-slot { background:#f8f8f8 !important; }
-body.design-2 .top-slot .slot-title { color:#111 !important;font-family:-apple-system,sans-serif !important;font-size:13px !important; }
-body.design-2 .top-slot .slot-cat { color:#888 !important; }
+
+
 
 /* Feed label */
 body.design-2 .feed-label { color:#111 !important;border-top:2px solid #111 !important;font-family:inherit !important;letter-spacing:1px !important;background:transparent !important; }
@@ -585,7 +558,7 @@ body.design-3 {
   --border:#e8e8e8;
   --v:#111111;
   background:#ffffff !important;
-  font-family:'Courier New',Courier,monospace !important;
+  font-family:'IBM Plex Serif','Georgia',serif !important;
 }
 
 /* Header */
@@ -601,11 +574,11 @@ body.design-3 #live-label { color:#111 !important;font-family:monospace !importa
 
 /* Ticker */
 body.design-3 .ticker { background:#fff !important;border-top:1px solid #ddd !important;border-bottom:1px solid #ddd !important; }
-body.design-3 .ticker-inner,body.design-3 .ticker span { color:#555 !important;font-family:'Courier New',monospace !important;font-size:11px !important; }
+body.design-3 .ticker-inner,body.design-3 .ticker span { color:#555 !important;font-family:'IBM Plex Mono','Courier New',monospace !important;font-size:11px !important; }
 
 /* Nav */
 body.design-3 .nav-bar { background:#fff !important;border-color:#ddd !important;padding:0 !important; }
-body.design-3 .ni { color:#555 !important;border:none !important;font-family:'Courier New',monospace !important;font-size:11px !important;font-weight:400 !important;padding:8px 14px !important;letter-spacing:.5px !important;border-radius:0 !important;text-transform:uppercase !important; }
+body.design-3 .ni { color:#555 !important;border:none !important;font-family:'IBM Plex Mono','Courier New',monospace !important;font-size:11px !important;font-weight:400 !important;padding:8px 14px !important;letter-spacing:.5px !important;border-radius:0 !important;text-transform:uppercase !important; }
 body.design-3 .ni.on,body.design-3 .ni:hover { color:#111 !important;background:none !important;border-bottom:2px solid #111 !important;font-weight:700 !important; }
 
 /* Hero — no image, pure text */
@@ -624,7 +597,7 @@ body.design-3 .hero-content {
   padding:0 !important;
 }
 body.design-3 .hero-content .cat { background:none !important;color:#999 !important;font-family:monospace !important;font-size:10px !important;letter-spacing:1.5px !important;padding:0 !important;border-radius:0 !important; }
-body.design-3 .hero-title { color:#111 !important;font-family:'Courier New',monospace !important;font-size:clamp(18px,3vw,26px) !important;font-weight:700 !important;text-shadow:none !important;line-height:1.3 !important; }
+body.design-3 .hero-title { color:#111 !important;font-family:'IBM Plex Mono','Courier New',monospace !important;font-size:clamp(18px,3vw,26px) !important;font-weight:700 !important;text-shadow:none !important;line-height:1.3 !important; }
 
 /* Top puffs — hidden, saves space */
 body.design-3 #top-puffs { display:none !important; }
@@ -645,7 +618,7 @@ body.design-3 .card-h .cb { padding:0 !important; }
 body.design-3 .card-h .cat {
   background:none !important;
   color:#999 !important;
-  font-family:'Courier New',monospace !important;
+  font-family:'IBM Plex Mono','Courier New',monospace !important;
   font-size:9px !important;
   font-weight:400 !important;
   letter-spacing:1px !important;
@@ -661,7 +634,7 @@ body.design-3 .card-h .ctitle {
   font-weight:700 !important;
   color:#111 !important;
   line-height:1.3 !important;
-  font-family:'Courier New',monospace !important;
+  font-family:'IBM Plex Mono','Courier New',monospace !important;
   -webkit-line-clamp:2 !important;
 }
 body.design-3 .card-h .ctime { color:#bbb !important;font-size:10px !important;font-family:monospace !important; }
@@ -671,10 +644,10 @@ body.design-3 .feed-label { color:#999 !important;border-top:1px solid #ddd !imp
 
 /* Article pages */
 body.design-3 .page { background:#fff !important; }
-body.design-3 .art-title { font-family:'Courier New',monospace !important;color:#111 !important;font-size:clamp(20px,3.5vw,34px) !important;font-weight:700 !important; }
-body.design-3 .ingress { color:#333 !important;font-family:'Courier New',monospace !important;font-size:15px !important;line-height:1.7 !important;border-color:#ddd !important; }
-body.design-3 .atext { color:#333 !important;font-family:'Courier New',monospace !important;font-size:14px !important;line-height:1.8 !important; }
-body.design-3 .art-quote { border-left:2px solid #111 !important;color:#444 !important;font-family:'Courier New',monospace !important;font-style:normal !important;font-size:15px !important; }
+body.design-3 .art-title { font-family:'IBM Plex Mono','Courier New',monospace !important;color:#111 !important;font-size:clamp(20px,3.5vw,34px) !important;font-weight:700 !important; }
+body.design-3 .ingress { color:#333 !important;font-family:'IBM Plex Mono','Courier New',monospace !important;font-size:15px !important;line-height:1.7 !important;border-color:#ddd !important; }
+body.design-3 .atext { color:#333 !important;font-family:'IBM Plex Mono','Courier New',monospace !important;font-size:14px !important;line-height:1.8 !important; }
+body.design-3 .art-quote { border-left:2px solid #111 !important;color:#444 !important;font-family:'IBM Plex Mono','Courier New',monospace !important;font-style:normal !important;font-size:15px !important; }
 body.design-3 .art-ab.ai { background:#111 !important;color:#fff !important;font-family:monospace !important; }
 body.design-3 .art-ab.hu { background:#666 !important;color:#fff !important; }
 body.design-3 .art-time { color:#999 !important;font-family:monospace !important; }
@@ -729,7 +702,200 @@ body.design-3.dark .hero-title { color:#e0e0e0 !important; }
 body.design-3.dark .sidebar { background:#0f0f0f !important;border-color:#222 !important; }
 body.design-3.dark .sn-title { color:#ccc !important; }
 body.design-3.dark #design-btn { color:#888 !important;border-color:#333 !important; }
+
+/* Design 1 — hero breathing room */
+body.design-1 .dm,
+body:not(.design-2):not(.design-3) .dm {
+  padding-top: 16px !important;
+}
+body.design-1 .hero,
+body:not(.design-2):not(.design-3) .hero {
+  margin-top: 0 !important;
+  border-radius: 2px !important;
+}
+
+
+/* Design 3 — news font (Georgia-based serif, feels like terminal news) */
+body.design-3 {
+  font-family: 'Georgia', 'Times New Roman', serif !important;
+}
+body.design-3 .card-h .ctitle {
+  font-family: 'Georgia', serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -.1px !important;
+}
+body.design-3 .card-h .cat {
+  font-family: 'Courier New', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  color: #999 !important;
+}
+body.design-3 .card-h .ctime {
+  font-family: 'Courier New', monospace !important;
+}
+body.design-3 .ni {
+  font-family: 'Courier New', monospace !important;
+}
+body.design-3 .hero-title {
+  font-family: 'Georgia', serif !important;
+  font-size: clamp(20px,3.5vw,30px) !important;
+  font-weight: 700 !important;
+  letter-spacing: -.3px !important;
+}
+body.design-3 .feed-label {
+  font-family: 'Courier New', monospace !important;
+}
+body.design-3 .art-title {
+  font-family: 'Georgia', serif !important;
+  font-size: clamp(22px,4vw,38px) !important;
+  letter-spacing: -.5px !important;
+}
+body.design-3 .ingress {
+  font-family: 'Georgia', serif !important;
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+  color: #333 !important;
+}
+body.design-3 .atext {
+  font-family: 'Georgia', serif !important;
+  font-size: 15px !important;
+  line-height: 1.85 !important;
+}
+body.design-3 .ticker-inner,
+body.design-3 .ticker span {
+  font-family: 'Courier New', monospace !important;
+}
+
+/* Design 2 — clean top section */
+body.design-2 .dm { padding-top: 0 !important; }
+
+/* Hero: full-width image, clean text below */
+body.design-2 .hero {
+  display: block !important;
+  height: auto !important;
+  max-height: none !important;
+  background: #fff !important;
+  border-bottom: 1px solid #eee !important;
+  overflow: hidden !important;
+}
+body.design-2 .hero > img {
+  width: 100% !important;
+  height: 320px !important;
+  object-fit: cover !important;
+  display: block !important;
+  filter: none !important;
+}
+body.design-2 .hero-content {
+  position: static !important;
+  background: #fff !important;
+  padding: 14px 16px 16px !important;
+  border-left: 3px solid #F5C500 !important;
+  margin: 0 !important;
+}
+body.design-2 .hero-content .cat {
+  background: #111 !important;
+  color: #F5C500 !important;
+  font-size: 9px !important;
+  letter-spacing: 1px !important;
+  padding: 2px 7px !important;
+  display: inline-block !important;
+  margin-bottom: 8px !important;
+}
+body.design-2 .hero-title {
+  color: #111 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: clamp(18px, 2.5vw, 26px) !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  line-height: 1.25 !important;
+}
+body.design-2 .hero-meta {
+  margin-top: 8px !important;
+}
+body.design-2 .hero-meta .ab {
+  background: #333 !important;
+  color: #fff !important;
+  font-size: 9px !important;
+}
+body.design-2 .hero-meta .time,
+body.design-2 .hero-meta .loc {
+  color: #888 !important;
+  font-size: 11px !important;
+}
+
+/* Top puffs: two clean cards, image + text below */
+body.design-2 #top-puffs {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 1px !important;
+  background: #eee !important;
+  border-bottom: 1px solid #eee !important;
+  margin-bottom: 0 !important;
+}
+body.design-2 .top-slot {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  background: #fff !important;
+  cursor: pointer !important;
+}
+body.design-2 .top-slot:hover { background: #fafafa !important; }
+body.design-2 .top-slot img {
+  width: 100% !important;
+  height: 160px !important;
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
+  filter: none !important;
+  display: block !important;
+}
+body.design-2 .top-slot .slot-content {
+  position: static !important;
+  background: none !important;
+  padding: 10px 12px 14px !important;
+  border-left: 3px solid #F5C500 !important;
+}
+body.design-2 .top-slot .slot-cat {
+  font-family: -apple-system, sans-serif !important;
+  font-size: 9px !important;
+  letter-spacing: .5px !important;
+  color: #888 !important;
+  margin-bottom: 4px !important;
+  text-transform: uppercase !important;
+}
+body.design-2 .top-slot .slot-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #111 !important;
+  line-height: 1.3 !important;
+  -webkit-line-clamp: 3 !important;
+}
+body.design-2 .slot-placeholder {
+  color: #ccc !important;
+  font-family: monospace !important;
+  font-size: 10px !important;
+  height: 160px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #f8f8f8 !important;
+}
+
+/* Dark mode for hero/puffs */
+body.design-2.dark .hero { background: #0f0f0f !important; border-color: #222 !important; }
+body.design-2.dark .hero > img { filter: brightness(.85) !important; }
+body.design-2.dark .hero-content { background: #0f0f0f !important; }
+body.design-2.dark .hero-title { color: #f0f0f0 !important; }
+body.design-2.dark .top-slot { background: #111 !important; }
+body.design-2.dark .top-slot:hover { background: #1a1a1a !important; }
+body.design-2.dark .top-slot .slot-title { color: #f0f0f0 !important; }
+body.design-2.dark #top-puffs { background: #222 !important; border-color: #222 !important; }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body class="dark">
 
