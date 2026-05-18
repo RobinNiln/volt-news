@@ -260,6 +260,20 @@ img { max-width: 100%; display: block; }
   .dl-inner { display: block !important; }
   .dsr { display: none !important; }
 }
+
+/* ── Admin responsive grids ─────────────────── */
+.admin-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pipeline-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:900px){
+  .admin-stats-grid{grid-template-columns:repeat(2,1fr)}
+  .pipeline-grid{grid-template-columns:1fr}
+  .las-mer-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .admin-stats-grid{grid-template-columns:repeat(2,1fr)}
+  .pipeline-grid{grid-template-columns:1fr}
+  .las-mer-grid{grid-template-columns:1fr 1fr}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -636,7 +650,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -746,7 +760,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -822,7 +836,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -898,7 +912,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1007,7 +1021,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1083,7 +1097,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1168,7 +1182,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1244,7 +1258,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1328,7 +1342,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1404,7 +1418,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1479,7 +1493,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1560,7 +1574,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1636,7 +1650,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1711,7 +1725,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1786,7 +1800,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1894,7 +1908,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -1969,7 +1983,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -2044,7 +2058,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -2129,7 +2143,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -2214,7 +2228,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -2409,7 +2423,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -2518,7 +2532,7 @@ img { max-width: 100%; display: block; }
 
     <div class="las-mer-section" style="margin:32px 0 0;padding-top:20px;border-top:2px solid #F5C500">
       <div style="font-family:monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:16px">LÄS MER</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="las-mer-grid">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer" onclick="showPage('riksbank')">
           <div style="width:100%;height:110px;position:relative;overflow:hidden">
             <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75);display:block">
@@ -2584,7 +2598,7 @@ img { max-width: 100%; display: block; }
 </div>
 
 <!-- Stats bar -->
-<div id="cms-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">
+<div id="cms-stats" class="admin-stats-grid" style="margin-bottom:20px">
   <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:2px">
     <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">SIGNALER</div>
     <div id="stat-signals" style="font-size:28px;font-weight:700;color:var(--v)">—</div>
@@ -2639,7 +2653,7 @@ img { max-width: 100%; display: block; }
   </div>
 
   <!-- Three columns -->
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+  <div class="pipeline-grid">
 
     <!-- Col 1: Signals -->
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;overflow:hidden">
