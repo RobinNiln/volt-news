@@ -384,6 +384,23 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg);bord
 .grid-2 .card .ctitle { color:var(--text) !important; text-shadow:none !important; }
 /* Remove any overlay from grid-2 */
 .grid-2 .card::after { display:none !important; }
+
+/* ── Card structure — explicit clean layout ─── */
+.card { cursor:pointer; overflow:hidden; transition:.15s; }
+.card:hover .ctitle { color:var(--v); }
+.card > img { display:block; width:100%; object-fit:cover; }
+.card .cb { padding:10px 12px 14px; background:none; position:static; }
+.card .cb .cat { display:inline-block; margin-bottom:5px; }
+.card .cb .ctitle { color:var(--text); }
+.card .cb .cmeta { margin-top:5px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+
+/* ── Large feature card ───────────────────────── */
+.card.feature-card { border-bottom:1px solid var(--border); }
+.card.feature-card > img { max-height:320px; }
+.card.feature-card .ctitle { font-family:Georgia,serif; font-size:clamp(20px,4vw,30px); }
+
+/* Ensure no accidental text-on-image anywhere */
+.card *[style*="position:absolute"] { position:static !important; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -495,20 +512,20 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg);bord
   <div class="ad"><div class="alabel">Annons</div><div class="abox"><div><div class="abrand">Vattenfall</div><div class="atag">100% förnybar el</div></div></div></div>
 
   <div class="grid-2" style="border-bottom:1px solid var(--border)">
-    <div class="card" onclick="showPage('eu-datalagring')" style="position:relative;overflow:hidden">
-      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700&q=80" alt="" style="width:100%;height:220px;object-fit:cover;display:block;filter:brightness(.6)">
-      <div style="background:#000;padding:12px 14px 14px">
-        <div style="display:inline-block;background:var(--v);color:#000;font-family:monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 7px;margin-bottom:8px">LULEÅ</div>
-        <div class="ctitle" style="font-size:clamp(18px,2.8vw,26px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:8px">Ny batterifabrik skapar 400 jobb — men bostadsbristen oroar</div>
-        <div class="cmeta" style="font-size:11px;color:#999">08:30 <span style="margin-left:6px">⊙ Luleå</span></div>
+    <div class="card" onclick="showPage('eu-datalagring')">
+      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700&q=80" alt="" style="width:100%;height:180px;object-fit:cover;display:block">
+      <div class="cb">
+        <div class="cat">Luleå</div>
+        <div class="ctitle">Ny batterifabrik skapar 400 jobb — men bostadsbristen oroar</div>
+        <div class="cmeta"><span class="ctime">08:30</span><span class="cloc">Luleå</span></div>
       </div>
     </div>
-    <div class="card" onclick="showPage('elpriser')" style="position:relative;overflow:hidden">
-      <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=700&q=80" alt="" style="width:100%;height:220px;object-fit:cover;display:block;filter:brightness(.6)">
-      <div style="background:#000;padding:12px 14px 14px">
-        <div style="display:inline-block;background:var(--v);color:#000;font-family:monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 7px;margin-bottom:8px">NORRKÖPING</div>
-        <div class="ctitle" style="font-size:clamp(18px,2.8vw,26px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:8px">Stadsbyggnadsplanen för Inre hamnen godkänns efter år av debatt</div>
-        <div class="cmeta" style="font-size:11px;color:#999">09:00 <span style="margin-left:6px">⊙ Norrköping</span></div>
+    <div class="card" onclick="showPage('elpriser')">
+      <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=700&q=80" alt="" style="width:100%;height:180px;object-fit:cover;display:block">
+      <div class="cb">
+        <div class="cat">Norrköping</div>
+        <div class="ctitle">Stadsbyggnadsplanen för Inre hamnen godkänns efter år av debatt</div>
+        <div class="cmeta"><span class="ctime">09:00</span><span class="cloc">Norrköping</span></div>
       </div>
     </div>
   </div>
@@ -565,7 +582,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg);bord
 
   <div class="feed-label" style="border-top:2px solid var(--v)">Klimat &amp; Miljö</div>
   <div class="card" onclick="showPage('bostadspriser')" style="border-bottom:1px solid var(--border)">
-    <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80" alt="" style="width:100%;height:48vw;max-height:320px;object-fit:cover;display:block;filter:brightness(.6)">
+    <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80" alt="" style="width:100%;height:48vw;max-height:320px;object-fit:cover;display:block">
     <div class="cb">
       <div class="cat" style="font-size:9px;padding:1px 6px;margin-bottom:6px">Klimat</div>
       <div class="ctitle" style="font-size:clamp(20px,4vw,32px)">Torkan i Mälardalen når rekordnivåer — bönder larmar om skördeförluster</div>
@@ -3050,46 +3067,53 @@ function clearTopSlot(slot) {
 }
 
 function renderTopSlots() {
-  // Slot 1 = hero (handled by setFeaturedHero)
   [2, 3].forEach(function(slot) {
     var el = document.getElementById('slot-puff' + slot);
     if (!el) return;
     var art = topSlots[slot];
     if (!art) {
-      el.innerHTML = '<div class="slot-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:var(--muted);font-family:monospace;font-size:10px;letter-spacing:1px">PUFF ' + slot + '</div>';
+      el.innerHTML = '<div class="slot-placeholder">PUFF ' + slot + '</div>';
+      el.onclick = null;
       return;
     }
     var catImages = {
       'Politik':'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
       'Ekonomi':'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80',
       'Samhälle':'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80',
-      'Samhalle':'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80',
       'Klimat':'https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=800&q=80',
       'Sport':'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&q=80',
       'Industri':'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80'
     };
-    var img = art.image || catImages[art.cat || 'Nyheter'] || catImages['Industri'];
+    var img = art.image || catImages[art.cat] || catImages['Industri'];
     var rawId = (art.id || '').replace(/^art-/, '');
     var pid = 'page-art-' + rawId;
 
     el.innerHTML = '';
     el.onclick = function(){ showPage(pid); };
+    el.style.cssText = '';
 
+    // Image on top
     var imgEl = document.createElement('img');
     imgEl.src = img;
+    imgEl.alt = '';
+    imgEl.style.cssText = 'width:100%;aspect-ratio:16/9;object-fit:cover;display:block';
     el.appendChild(imgEl);
 
-    var overlay = document.createElement('div');
-    overlay.className = 'slot-content';
+    // Text body below — NO overlay
+    var body = document.createElement('div');
+    body.className = 'slot-body';
+
     var catEl = document.createElement('div');
     catEl.className = 'slot-cat';
-    catEl.textContent = (art.cat || 'Nyheter').toUpperCase();
+    catEl.textContent = (art.cat || '').toUpperCase();
+    body.appendChild(catEl);
+
     var titleEl = document.createElement('div');
     titleEl.className = 'slot-title';
     titleEl.textContent = art.title || '';
-    overlay.appendChild(catEl);
-    overlay.appendChild(titleEl);
-    el.appendChild(overlay);
+    body.appendChild(titleEl);
+
+    el.appendChild(body);
   });
 }
 
