@@ -286,6 +286,104 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg);bord
   .card-h{grid-template-columns:1fr}
 }
 
+/* ── Trend chips (category filter) ──────────── */
+.trends{border-bottom:1px solid var(--border);margin-bottom:16px}
+.ti{display:flex;gap:4px;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ti::-webkit-scrollbar{display:none}
+.chip{background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:600;padding:5px 12px;cursor:pointer;border-radius:20px;white-space:nowrap;transition:.15s;font-family:inherit}
+.chip:hover{border-color:var(--text);color:var(--text)}
+.chip.on{background:var(--v);border-color:var(--v);color:#000}
+.cn{font-size:10px;opacity:.7}
+
+/* ── Hero — fix class names to match HTML ────── */
+.hero-content{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent 0%,rgba(0,0,0,.7) 50%,rgba(0,0,0,.95) 100%);padding:20px 16px 16px}
+.hero-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(20px,4vw,32px);font-weight:700;color:#ffffff !important;line-height:1.15;letter-spacing:-.3px;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.hero-meta{margin-top:8px;font-size:11px;color:rgba(255,255,255,.7);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* Hero cat badge */
+.hero .cat{background:var(--v) !important;color:#000 !important;margin-bottom:8px;display:inline-block}
+.hero .cat.red{background:var(--red) !important;color:#fff !important}
+
+/* Hero byline badges */
+.hero .ab{font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px;letter-spacing:.5px}
+.hero .ab.ai{background:rgba(245,197,0,.9);color:#000}
+.hero .ab.hu{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.hero .time,.hero .loc{color:rgba(255,255,255,.6);font-family:monospace;font-size:10px}
+
+/* ── Card byline badges ───────────────────────── */
+.ab{font-size:9px;font-weight:700;padding:2px 6px;border-radius:2px;letter-spacing:.3px;display:inline-block}
+.ab.ai{background:var(--v);color:#000}
+.ab.hu{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+.time,.loc{font-size:10px;color:var(--muted);font-family:monospace}
+.cloc{font-size:10px;color:var(--muted);font-family:monospace}
+
+/* ── Kronika card ────────────────────────────── */
+.kronika-card{background:var(--surface);border:1px solid var(--border);padding:16px;margin:16px 0;cursor:pointer}
+.kronika-card:hover .ctitle{color:var(--v)}
+.kronika-byline{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.kronika-mini-avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0}
+.kronika-mini-avatar img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.kronika-byline-text{font-size:12px;color:var(--mid);line-height:1.4}
+.kronika-byline-text strong{color:var(--text);display:block}
+
+/* ── cdesc (card description) ────────────────── */
+.cdesc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4;-webkit-line-clamp:2;-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden}
+
+/* ── Hero — rubrik UNDER bilden ─────────────── */
+.hero { position:relative; cursor:pointer; overflow:visible; background:var(--card); }
+.hero img { width:100%; aspect-ratio:16/7; object-fit:cover; display:block; transition:transform .3s; }
+.hero:hover img { transform:scale(1.01); }
+.hero-content {
+  position:static !important;
+  background:none !important;
+  padding:12px 0 16px !important;
+  border-left:3px solid var(--v) !important;
+  padding-left:12px !important;
+  margin-top:0 !important;
+}
+.hero-title {
+  font-family:Georgia,'Times New Roman',serif !important;
+  font-size:clamp(20px,4vw,32px) !important;
+  font-weight:700 !important;
+  color:var(--text) !important;
+  line-height:1.15 !important;
+  letter-spacing:-.3px !important;
+  text-shadow:none !important;
+}
+.hero-meta {
+  margin-top:8px !important;
+  font-size:11px !important;
+  color:var(--muted) !important;
+  display:flex !important;
+  gap:10px !important;
+  align-items:center !important;
+  flex-wrap:wrap !important;
+}
+.hero .cat { margin-bottom:6px; }
+.hero .ab.ai { background:var(--v); color:#000; }
+.hero .ab.hu { background:var(--surface); color:var(--muted); border:1px solid var(--border); }
+.hero .time, .hero .loc { color:var(--muted) !important; }
+
+/* ── Top puffs — rubrik UNDER bilden ─────────── */
+.top-slot { display:flex; flex-direction:column; cursor:pointer; overflow:hidden; background:var(--card); transition:.15s; }
+.top-slot:hover { background:var(--surface); }
+.top-slot img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; transition:transform .3s; }
+.top-slot:hover img { transform:scale(1.02); }
+.slot-body {
+  padding:10px 12px 12px !important;
+  position:static !important;
+  background:none !important;
+}
+.slot-title { color:var(--text) !important; text-shadow:none !important; }
+
+/* ── Grid-2 — rubrik UNDER bilden ────────────── */
+.grid-2 .card { background:var(--card); cursor:pointer; overflow:hidden; }
+.grid-2 .card img { width:100%; aspect-ratio:3/2; object-fit:cover; display:block; transition:transform .3s; }
+.grid-2 .card:hover img { transform:scale(1.02); }
+.grid-2 .card .cb { padding:10px 12px 14px; position:static; background:none; }
+.grid-2 .card .ctitle { color:var(--text) !important; text-shadow:none !important; }
+/* Remove any overlay from grid-2 */
+.grid-2 .card::after { display:none !important; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
