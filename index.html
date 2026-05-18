@@ -2602,54 +2602,101 @@ img { max-width: 100%; height: auto; }
 
 <!-- PIPELINE TAB -->
 <div id="cms-tab-pipeline">
+
+  <!-- Workflow guide -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--v);padding:14px 16px;margin-bottom:20px;border-radius:2px">
+    <div style="font-family:monospace;font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--v);margin-bottom:8px">SÅ HÄR FUNGERAR PIPELINE</div>
+    <div style="display:flex;gap:0;align-items:center;flex-wrap:wrap;gap:6px">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mid)">
+        <div style="width:20px;height:20px;border-radius:50%;background:var(--v);color:#000;font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+        <span>Klicka <strong style="color:var(--text)">HÄMTA SIGNALER</strong> för att läsa in nyheter från alla 32 källor</span>
+      </div>
+      <span style="color:var(--border);font-size:16px">→</span>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mid)">
+        <div style="width:20px;height:20px;border-radius:50%;background:var(--v);color:#000;font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+        <span>Klicka <strong style="color:var(--text)">ANALYSERA</strong> för att låta AI välja de 5 viktigaste trenderna</span>
+      </div>
+      <span style="color:var(--border);font-size:16px">→</span>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mid)">
+        <div style="width:20px;height:20px;border-radius:50%;background:var(--v);color:#000;font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+        <span>Klicka <strong style="color:var(--text)">GENERERA UTKAST</strong> på en trend och granska artikeln</span>
+      </div>
+      <span style="color:var(--border);font-size:16px">→</span>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mid)">
+        <div style="width:20px;height:20px;border-radius:50%;background:var(--v);color:#000;font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+        <span>Klicka <strong style="color:var(--text)">PUBLICERA</strong> för att lägga ut artikeln på sajten</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three columns -->
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
 
     <!-- Col 1: Signals -->
-    <div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px">SIGNALER</div>
-        <button onclick="cmsRunSignals()" id="btn-signals" style="background:none;border:1px solid var(--border);color:var(--text);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px;font-family:monospace">UPPDATERA</button>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;overflow:hidden">
+      <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--card)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--v);color:#000;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+          <div style="font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text)">SIGNALER</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px">AI läser nyheter från 32 källor och grupperar artiklar som handlar om samma händelse. Varje grupp kallas en signal.</div>
+        <button onclick="cmsRunSignals()" id="btn-signals" style="background:var(--v);color:#000;border:none;padding:7px 14px;font-size:10px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;width:100%;letter-spacing:.5px">HÄMTA SIGNALER</button>
       </div>
-      <div id="signals-list" style="display:flex;flex-direction:column;gap:6px"></div>
+      <div id="signals-list" style="display:flex;flex-direction:column;gap:0;max-height:500px;overflow-y:auto"></div>
+      <div id="signals-empty" style="padding:24px 14px;text-align:center;font-size:11px;color:var(--muted);font-family:monospace">Klicka HÄMTA SIGNALER för att börja</div>
     </div>
 
     <!-- Col 2: Trends -->
-    <div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px">TRENDER</div>
-        <button onclick="cmsRunTrends()" id="btn-trends" style="background:none;border:1px solid var(--border);color:var(--text);padding:4px 10px;font-size:10px;cursor:pointer;border-radius:2px;font-family:monospace">ANALYSERA</button>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;overflow:hidden">
+      <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--card)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--v);color:#000;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+          <div style="font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text)">TRENDER</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px">Claude Haiku analyserar signalerna och väljer de 5 mest relevanta nyheterna. Välj kategori för att filtrera.</div>
+        <div id="trend-tabs" style="display:flex;gap:0;margin-bottom:10px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none">
+          <button onclick="setTrendTab('generellt')" id="ttab-generellt" style="background:var(--v);color:#000;border:none;border-bottom:2px solid var(--v);padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">GENERELLT</button>
+          <button onclick="setTrendTab('sport')" id="ttab-sport" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">SPORT</button>
+          <button onclick="setTrendTab('naringsliv')" id="ttab-naringsliv" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÄRINGSLIV</button>
+          <button onclick="setTrendTab('ekonomi')" id="ttab-ekonomi" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">EKONOMI</button>
+          <button onclick="setTrendTab('noje')" id="ttab-noje" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÖJE</button>
+          <button onclick="setTrendTab('internationellt')" id="ttab-internationellt" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">INTERNATIONELLT</button>
+        </div>
+        <button onclick="cmsRunTrends()" id="btn-trends" style="background:var(--v);color:#000;border:none;padding:7px 14px;font-size:10px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace;width:100%;letter-spacing:.5px">ANALYSERA MED AI</button>
       </div>
-      
-      <div id="trend-tabs" style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border);overflow-x:auto">
-        <button onclick="setTrendTab('generellt')" id="ttab-generellt" style="background:var(--v);color:#000;border:none;border-bottom:2px solid var(--v);padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">GENERELLT</button>
-        <button onclick="setTrendTab('sport')" id="ttab-sport" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">SPORT</button>
-        <button onclick="setTrendTab('naringsliv')" id="ttab-naringsliv" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÄRINGSLIV</button>
-        <button onclick="setTrendTab('ekonomi')" id="ttab-ekonomi" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">EKONOMI</button>
-        <button onclick="setTrendTab('noje')" id="ttab-noje" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">NÖJE</button>
-        <button onclick="setTrendTab('internationellt')" id="ttab-internationellt" style="background:none;color:var(--muted);border:none;border-bottom:2px solid transparent;padding:5px 10px;font-size:9px;font-weight:700;cursor:pointer;font-family:monospace;letter-spacing:.5px;white-space:nowrap">INTERNATIONELLT</button>
-      </div>
-      <div id="trends-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="trends-list" style="display:flex;flex-direction:column;gap:0;max-height:500px;overflow-y:auto"></div>
+      <div id="trends-empty" style="padding:24px 14px;text-align:center;font-size:11px;color:var(--muted);font-family:monospace">Hämta signaler och klicka ANALYSERA MED AI</div>
     </div>
 
     <!-- Col 3: Drafts -->
-    <div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:1px">UTKAST</div>
-        <div id="draft-status" style="font-family:monospace;font-size:9px;color:var(--muted)"></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:2px;overflow:hidden">
+      <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--card)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--v);color:#000;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+          <div style="font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text)">UTKAST</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:6px">Claude Sonnet skriver ett fullständigt artikelutkast. Granska, redigera vid behov och publicera.</div>
+        <div id="draft-status" style="font-family:monospace;font-size:10px;color:var(--v);min-height:18px"></div>
       </div>
-      <div id="drafts-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="drafts-list" style="display:flex;flex-direction:column;gap:0;max-height:500px;overflow-y:auto"></div>
+      <div id="drafts-empty" style="padding:24px 14px;text-align:center;font-size:11px;color:var(--muted);font-family:monospace">Välj en trend och klicka GENERERA UTKAST</div>
     </div>
 
   </div>
 
-  <!-- Log -->
-  <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:14px">
-    <div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">PIPELINE LOG</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:1px">PIPELINE LOG</div><span id="pipeline-running" style="display:none;width:6px;height:6px;border-radius:50%;background:var(--v);animation:pulse 1s infinite"></span></div><div id="pipeline-log" style="font-family:monospace;font-size:11px;color:var(--muted);max-height:120px;overflow-y:auto"></div>
+  <!-- Pipeline log -->
+  <div style="margin-top:16px;border:1px solid var(--border);border-radius:2px;overflow:hidden">
+    <div style="padding:8px 14px;border-bottom:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:8px">
+      <div style="font-family:monospace;font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--muted)">PIPELINE LOG</div>
+      <span id="pipeline-running" style="display:none;width:6px;height:6px;border-radius:50%;background:var(--v);animation:pulse 1s infinite"></span>
+      <span style="font-size:9px;color:var(--muted);font-family:monospace">Realtidslogg över AI-aktivitet</span>
+    </div>
+    <div id="pipeline-log" style="padding:8px 14px;max-height:160px;overflow-y:auto;font-family:monospace;font-size:10px;color:var(--muted);line-height:1.8"></div>
   </div>
+
 </div>
 
-<!-- ARTICLES TAB -->
+<!-- ARTICLES TAB --><!-- ARTICLES TAB -->
 <div id="cms-tab-articles" style="display:none">
   <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
     <button onclick="openNewArticle()" style="background:var(--v);color:#000;border:none;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;border-radius:2px;font-family:monospace">+ NY ARTIKEL</button>
@@ -3094,6 +3141,8 @@ function loadSignals() {
 }
 
 function renderSignals(sigs) {
+  var empty = document.getElementById('signals-empty');
+  if (empty) empty.style.display = (sigs && sigs.length) ? 'none' : 'block';
   var el = gid('signals-list');
   if (!el) return;
   el.innerHTML = '';
@@ -3199,6 +3248,8 @@ function loadTrends(cb) {
 }
 
 function renderTrends(ts) {
+  var empty = document.getElementById('trends-empty');
+  if (empty) empty.style.display = (ts && ts.length) ? 'none' : 'block';
   var el = gid('trends-list');
   if (!el) return;
   el.innerHTML = '';
@@ -3309,6 +3360,9 @@ function cmsDraftReview(trendId) {
 }
 
 function renderDraft(trendId, draft) {
+  var empty = document.getElementById('drafts-empty');
+  if (empty) empty.style.display = 'none';
+
   var el = gid('drafts-list');
   if (!el) return;
   var existing = document.getElementById('draft-' + trendId);
