@@ -38,9 +38,9 @@ body.light .logo-light{display:block}
 @media(max-width:600px){#design-slogan{display:none}}
 
 /* ── Ticker (32px, fixed at top:52px) ─────────── */
-.ticker{position:fixed;top:52px;left:0;right:0;z-index:199;background:var(--surface);border-bottom:1px solid var(--border);height:32px;display:flex;align-items:center;overflow:hidden}
+.ticker{position:fixed;top:52px;left:0;right:0;z-index:199;background:var(--surface);border-bottom:1px solid var(--border);height:32px;display:flex;align-items:center;overflow:hidden;max-width:100vw}
 .tlabel{flex-shrink:0;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--v);padding:0 12px;white-space:nowrap;font-family:monospace;border-right:1px solid var(--border);height:100%;display:flex;align-items:center}
-.ttrack{display:flex;white-space:nowrap;animation:ticker-scroll 60s linear infinite;gap:0}
+.ttrack{display:inline-flex;white-space:nowrap;animation:ticker-scroll 60s linear infinite;gap:0;min-width:max-content}
 .ttrack:hover{animation-play-state:paused}
 .ttrack span{font-size:11px;color:var(--mid);padding:0 24px;border-right:1px solid var(--border);height:32px;display:inline-flex;align-items:center;cursor:pointer;transition:color .15s}
 .ttrack span:hover{color:var(--v)}
@@ -240,6 +240,17 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg);bord
   .card-h{grid-template-columns:1fr}
 }
 
+/* ── Width containment fixes ─────────────────── */
+html { overflow-x: hidden; }
+body { overflow-x: hidden; max-width: 100vw; }
+.dl { overflow: hidden; }
+.ticker { overflow: hidden; max-width: 100vw; }
+.ttrack { will-change: transform; }
+.dm { overflow: hidden; }
+/* Prevent any child from breaking out */
+.card, .card-h, .grid-2, .top-puffs-grid, .hero { max-width: 100%; }
+img { max-width: 100%; height: auto; }
+.card > img, .card-h > img, .hero > img, .top-slot > img { width: 100%; height: auto; max-width: 100%; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
