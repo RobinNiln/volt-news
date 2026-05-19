@@ -331,6 +331,147 @@ html, body { overflow-x: hidden; }
 /* Source name clearer */
 .src-name { font-weight: 600; color: var(--text); font-size: 12px; margin-bottom: 3px; }
 .src-hl { font-size: 13px; color: var(--mid); }
+
+/* ── Article text spacing ────────────────────── */
+.atext { font-size:15px; line-height:1.85; color:var(--mid); margin-bottom:20px; display:block; }
+.atext + .atext { margin-top:0; }
+
+/* Section headings in articles */
+.art-section-header {
+  display:flex; align-items:center; gap:8px;
+  margin:32px 0 14px;
+  font-size:11px; font-weight:700; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--text); font-family:monospace;
+}
+.art-section-header + * { margin-top:0; }
+
+/* Ändringslogg */
+.upd-log {
+  margin:28px 0;
+  padding:0;
+  background:none;
+  border:none;
+  border-left:none;
+}
+.upd-item {
+  display:flex; gap:12px; align-items:flex-start;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13px; line-height:1.6;
+}
+.upd-item:first-child { border-top:1px solid var(--border); }
+.upd-time { color:var(--v); font-family:monospace; font-size:12px; flex-shrink:0; padding-top:1px; font-weight:700; }
+.upd-text { color:var(--mid); }
+
+/* Sources box */
+.art-sources {
+  margin:28px 0;
+  border:1px solid rgba(255,255,255,.12) !important;
+  border-radius:3px;
+  overflow:hidden;
+}
+body.light .art-sources { border-color:var(--border) !important; }
+.art-sources-hdr {
+  background:var(--surface);
+  padding:10px 16px;
+  font-size:10px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--text);
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+body.light .art-sources-hdr { border-color:var(--border); }
+.art-sources a {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px;
+  border-top:1px solid rgba(255,255,255,.07);
+  gap:14px; text-decoration:none; transition:.1s;
+}
+body.light .art-sources a { border-color:var(--border); }
+.art-sources a:hover { background:rgba(255,255,255,.04); }
+body.light .art-sources a:hover { background:var(--surface); }
+.src-name { font-size:11px; font-weight:600; color:var(--muted); margin-bottom:3px; }
+.src-hl { font-size:13px; font-weight:600; color:var(--text); line-height:1.35; }
+.src-btn {
+  background:var(--v); color:#000;
+  font-size:9px; font-weight:700; padding:4px 10px;
+  border-radius:2px; flex-shrink:0; letter-spacing:.5px; font-family:monospace;
+}
+
+/* Quote */
+.art-quote {
+  border-left:3px solid var(--v);
+  padding:14px 18px;
+  margin:24px 0;
+  font-family:Georgia,serif;
+  font-size:18px; font-style:italic;
+  color:var(--text); line-height:1.55;
+  background:rgba(245,197,0,.04);
+}
+body.light .art-quote { background:rgba(245,197,0,.06); }
+
+/* ── Boxes — more visible in dark mode ──────── */
+.ad, .dabox {
+  border:1px solid rgba(255,255,255,.1) !important;
+  border-radius:3px;
+}
+body.light .ad, body.light .dabox { border-color:var(--border) !important; }
+
+.kronika-card {
+  border:1px solid rgba(255,255,255,.1) !important;
+  border-left:3px solid var(--v) !important;
+}
+body.light .kronika-card { border-color:var(--border) !important; border-left-color:var(--v) !important; }
+
+.sn-box {
+  border:1px solid rgba(255,255,255,.1) !important;
+}
+body.light .sn-box { border-color:var(--border) !important; }
+
+/* Sidebar ad */
+.dsr-sticky .ad, .dsr-sticky .dabox {
+  border:1px solid rgba(255,255,255,.12) !important;
+}
+
+/* ── Läs mer cards — clearer in dark mode ────── */
+.las-mer-card {
+  border:1px solid rgba(255,255,255,.1) !important;
+  background:var(--surface) !important;
+}
+body.light .las-mer-card { border-color:var(--border) !important; }
+.las-mer-card:hover { border-color:var(--v) !important; }
+
+/* Las mer card body */
+.las-mer-body { background:var(--surface); }
+.las-mer-title { color:var(--text) !important; }
+.las-mer-time { color:var(--muted) !important; }
+
+/* ── Card-h — slightly visible border ────────── */
+.card-h { border-bottom:1px solid rgba(255,255,255,.08) !important; }
+body.light .card-h { border-bottom-color:var(--border) !important; }
+
+/* Feed label clearer */
+.feed-label { 
+  border-top:2px solid var(--v) !important;
+  color:var(--muted) !important;
+  margin-top:16px;
+  padding-top:10px;
+}
+
+/* Top puffs grid separator */
+.top-puffs-grid { 
+  background:rgba(255,255,255,.08) !important;
+  border-bottom:1px solid rgba(255,255,255,.08) !important;
+}
+body.light .top-puffs-grid { background:var(--border) !important; }
+
+/* Top slot card */
+.top-slot { 
+  background:var(--card) !important;
+  border-bottom:none !important;
+}
+
+/* Grid-2 separator */
+.grid-2 { background:rgba(255,255,255,.08) !important; }
+body.light .grid-2 { background:var(--border) !important; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
