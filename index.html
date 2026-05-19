@@ -293,6 +293,44 @@ html, body { overflow-x: hidden; }
   box-sizing: border-box;
   max-width: 100%;
 }
+
+/* ── Article body hierarchy fixes ───────────── */
+.atext { margin-bottom: 20px; }
+.atext + .atext { margin-top: 0; }
+
+/* Section headers inside articles */
+.art-section-header {
+  display: flex; align-items: center; gap: 8px;
+  margin: 28px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text); font-family: monospace;
+}
+
+/* Update log spacing */
+.upd-log { margin: 28px 0; }
+.upd-item { padding: 6px 0; border-bottom: 1px solid var(--border); }
+.upd-item:last-child { border: none; }
+
+/* Sources spacing */
+.art-sources { margin: 28px 0; }
+.art-sources a { gap: 14px; }
+.src-hl { line-height: 1.35; }
+
+/* Quote spacing */
+.art-quote { margin: 24px 0; line-height: 1.55; }
+.art-quote + p, p + .art-quote { margin-top: 0; }
+
+/* Byline more breathing room */
+.art-byline { margin-bottom: 20px; padding-bottom: 20px; }
+
+/* Ingress more presence */
+.ingress { margin-bottom: 24px; font-size: 18px; }
+
+/* Source name clearer */
+.src-name { font-weight: 600; color: var(--text); font-size: 12px; margin-bottom: 3px; }
+.src-hl { font-size: 13px; color: var(--mid); }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -375,10 +413,6 @@ html, body { overflow-x: hidden; }
         <div class="slot-cat"></div>
         <div class="slot-title"></div>
       </div>
-    </div>
-  </div>
-    <div id="slot-puff3" class="top-slot" data-slot="3" onclick="topSlotClick(3)" style="min-height:160px;cursor:pointer;position:relative;overflow:hidden">
-      <div class="slot-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:var(--muted);font-family:monospace;font-size:10px;letter-spacing:1px">PUFF 3</div>
     </div>
   </div>
 
