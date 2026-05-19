@@ -47,11 +47,9 @@ body.light .logo-light{display:block}
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* ── Layout ─────────────────────────────────── */
-.dl{max-width:1160px;margin:0 auto;padding:0 14px}
-@media(min-width:900px){
-  .dl-inner{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start}
-}
-.dm{min-width:0;overflow:hidden;max-width:100%}
+.dl{max-width:1160px;margin:0 auto;padding:0 16px;box-sizing:border-box;width:100%}
+
+.dm{min-width:0;overflow:hidden;width:100%;box-sizing:border-box}
 
 /* ── Trend chips nav ─────────────────────────── */
 .trends{border-bottom:1px solid var(--border);margin-bottom:16px}
@@ -67,7 +65,7 @@ body.light .logo-light{display:block}
 .hero:hover .hero-title{color:var(--v)}
 .hero>img{width:100%;max-height:420px;object-fit:cover;display:block}
 .hero-content{padding:12px 0 4px;border-left:3px solid var(--v);padding-left:12px;margin-top:0}
-.hero-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(20px,3.5vw,30px);font-weight:700;color:var(--text);line-height:1.15;letter-spacing:-.3px;transition:color .15s}
+.hero-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(22px,4vw,36px);font-weight:700;color:var(--text);line-height:1.1;letter-spacing:-.4px;transition:color .15s}
 .hero-meta{margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .hero .cat{margin-bottom:6px;display:inline-block}
 
@@ -78,7 +76,7 @@ body.light .logo-light{display:block}
 .top-slot>img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
 .slot-body{padding:10px 12px 12px}
 .slot-cat{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--v);text-transform:uppercase;margin-bottom:4px}
-.slot-title{font-family:Georgia,serif;font-size:clamp(13px,1.8vw,16px);font-weight:700;color:var(--text);line-height:1.3;transition:color .15s;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.slot-title{font-family:Georgia,serif;font-size:clamp(15px,2vw,18px);font-weight:700;color:var(--text);line-height:1.25;transition:color .15s;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .slot-placeholder{aspect-ratio:16/9;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:monospace;letter-spacing:1px;color:var(--muted)}
 
 /* ── Dynamic feed ────────────────────────────── */
@@ -89,7 +87,7 @@ body.light .logo-light{display:block}
 .card-h:hover .ctitle{color:var(--v)}
 .card-h>img{width:96px;height:68px;object-fit:cover;display:block}
 .cb{min-width:0}
-.ctitle{font-family:Georgia,serif;font-size:clamp(13px,2vw,15px);font-weight:700;color:var(--text);line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;transition:color .15s}
+.ctitle{font-family:Georgia,serif;font-size:clamp(15px,2.2vw,18px);font-weight:700;color:var(--text);line-height:1.28;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;transition:color .15s}
 .cmeta{margin-top:5px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .ctime{font-size:10px;color:var(--muted);font-family:monospace}
 .cloc{font-size:10px;color:var(--muted)}
@@ -166,7 +164,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg);bord
 .art-page{max-width:680px;margin:0 auto}
 .art-body{padding:20px 16px 40px}
 .art-cat{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--v);margin-bottom:10px}
-.art-title{font-family:Georgia,serif;font-size:clamp(24px,5vw,40px);font-weight:700;line-height:1.1;letter-spacing:-.3px;color:var(--text);margin-bottom:14px}
+.art-title{font-family:Georgia,serif;font-size:clamp(28px,5.5vw,46px);font-weight:700;line-height:1.08;letter-spacing:-.5px;color:var(--text);margin-bottom:14px}
 .art-byline{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .art-ab{font-size:9px;font-weight:700;padding:3px 7px;letter-spacing:.5px;border-radius:2px}
 .art-ab.ai{background:var(--v);color:#000}
@@ -228,7 +226,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg);bord
   .top-puffs-grid{grid-template-columns:1fr;background:none;gap:1px}
   .las-mer-grid{grid-template-columns:1fr 1fr}
   .card-h>img{width:80px;height:60px}
-  .ctitle{font-size:13px}
+  .ctitle{font-size:15px}
   .hero>img{max-height:240px}
   .art-title{font-size:24px}
   .ingress{font-size:15px}
@@ -253,7 +251,7 @@ img { max-width: 100%; height: auto; }
 .card > img, .card-h > img, .hero > img, .top-slot > img { width: 100%; height: auto; max-width: 100%; }
 
 /* ── Overflow containment ────────────────────── */
-.dl-inner, .dm, .dsr { overflow: hidden; }
+.dl-inner { overflow: hidden; } .dsr { overflow: hidden; }
 .grid-2, .top-puffs-grid, .card, .card-h, .top-slot, .hero { max-width: 100%; overflow: hidden; }
 img { max-width: 100%; display: block; }
 @media(max-width:899px) {
@@ -273,6 +271,27 @@ img { max-width: 100%; display: block; }
   .admin-stats-grid{grid-template-columns:repeat(2,1fr)}
   .pipeline-grid{grid-template-columns:1fr}
   .las-mer-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ── Definitive width fix ────────────────────── */
+html, body { overflow-x: hidden; }
+.dl { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 16px; box-sizing: border-box; }
+@media(min-width:900px) {
+  .dl-inner { display: grid; grid-template-columns: minmax(0,1fr) 280px; gap: 24px; align-items: start; width: 100%; box-sizing: border-box; }
+}
+@media(max-width:899px) {
+  .dl-inner { display: block; width: 100%; }
+  .dsr { display: none !important; }
+}
+.dm { width: 100%; min-width: 0; box-sizing: border-box; overflow: hidden; }
+.dsr { width: 280px; min-width: 0; box-sizing: border-box; }
+/* All sections inside dm get same width */
+.hero, .top-puffs-grid, #dynamic-feed, .feed-label,
+.card-h, .grid-2, .kronika-card, .card, .ad, .dabox,
+.interlude-box, .las-mer-section {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -828,7 +847,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Erik Thedéen, riksbankschef</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">10:30</span><span class="upd-text"><strong>Nytt:</strong> Kronkursen stärktes 0,4 procent mot euron efter beskedet.</span></div>
       <div class="upd-item"><span class="upd-time">09:00</span><span class="upd-text">Riksbankens beslut publicerades klockan 09:00.</span></div>
     </div>
@@ -904,7 +923,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Andreas Carlson, infrastrukturminister</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">14:00</span><span class="upd-text"><strong>Nytt:</strong> Oppositionspartierna begär en extra budgetdebatt i riksdagen.</span></div>
       <div class="upd-item"><span class="upd-time">10:02</span><span class="upd-text">Propositionen presenterades vid en presskonferens i Regeringskansliet.</span></div>
     </div>
@@ -1089,7 +1108,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Börje Ekholm, VD Ericsson</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">15:00</span><span class="upd-text"><strong>Nytt:</strong> IF Metall och Unionen begär omedelbar central förhandling.</span></div>
       <div class="upd-item"><span class="upd-time">07:30</span><span class="upd-text">Varselbeskedet presenterades vid en kapitalmarknadsdag i Stockholm.</span></div>
     </div>
@@ -1250,7 +1269,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Oscar Hiljemark, tränare IFK Norrköping</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">22:30</span><span class="upd-text"><strong>Nytt:</strong> UEFA-lottningen för kvalomgången sker 28 april.</span></div>
       <div class="upd-item"><span class="upd-time">21:15</span><span class="upd-text">Slutresultat: IFK Norrköping–Häcken 2–1.</span></div>
     </div>
@@ -1326,7 +1345,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Niklas Nordström, kommunstyrelsens ordförande Luleå</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">08:30</span><span class="upd-text"><strong>Nytt:</strong> Fortum bekräftar: byggstart hösten 2026.</span></div>
     </div>
     <div class="mod-local">
@@ -1410,7 +1429,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Källa nära statsministern</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">16:45</span><span class="upd-text"><strong>Nytt:</strong> Statsrådsberedningen bekräftar att ett nytt förhandlingsmöte äger rum på fredag.</span></div>
       <div class="upd-item"><span class="upd-time">08:20</span><span class="upd-text">Uppgifterna om budgetkris publicerades av TT tidigt på morgonen.</span></div>
     </div>
@@ -1486,7 +1505,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Romina Pourmokhtari, klimatminister</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">10:15</span><span class="upd-text"><strong>Nytt:</strong> Rapporten finns tillgänglig på Naturvårdsverkets webbplats.</span></div>
     </div>
 
@@ -1642,7 +1661,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Victor Öhman, matchhjälte Luleå HF</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">22:45</span><span class="upd-text"><strong>Nytt:</strong> SM-finalens spelschema presenteras på fredag.</span></div>
       <div class="upd-item"><span class="upd-time">21:30</span><span class="upd-text">Övertidsmål av Öhman — Luleå till final.</span></div>
     </div>
@@ -1718,7 +1737,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Armand Duplantis</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">20:10</span><span class="upd-text"><strong>Nytt:</strong> Världsrekord bekräftat av World Athletics.</span></div>
     </div>
 
@@ -1793,7 +1812,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">EU-kommissionens talesperson</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">14:30</span><span class="upd-text"><strong>Nytt:</strong> IMY: 'Vi välkomnar att frågan prövas.'</span></div>
     </div>
 
@@ -1976,7 +1995,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Jim Rowan, VD Volvo Cars</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">08:00</span><span class="upd-text"><strong>Nytt:</strong> Volvo Cars-aktien steg 3,2 procent vid öppningen.</span></div>
     </div>
 
@@ -2051,7 +2070,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Bostadsborgarrådet Dennis Wedin</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">11:30</span><span class="upd-text"><strong>Nytt:</strong> Kommunfullmäktige debatterar frågan 29 april.</span></div>
     </div>
 
@@ -2126,7 +2145,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">VA-chef Västerås stad</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">14:00</span><span class="upd-text"><strong>Nytt:</strong> Krisledningsnämnden samlas för extrainsatt möte på torsdag kväll.</span></div>
       <div class="upd-item"><span class="upd-time">10:00</span><span class="upd-text">Kommunen går ut med bevattningsförbud och vattensparbegäran.</span></div>
     </div>
@@ -2211,7 +2230,7 @@ img { max-width: 100%; display: block; }
     <p class="atext" style="font-size:12px;color:var(--muted);margin-top:-10px">Viktor Lindqvist, studentkårens ordförande</p>
 
     <div class="mod-updates">
-      <div class="mod-label mod-label-muted">Uppdateringar</div>
+      <div class="mod-label mod-label-muted">Uppdateringar på samma ämne</div>
       <div class="upd-item"><span class="upd-time">15:30</span><span class="upd-text"><strong>Nytt:</strong> Rektor lovar skriftligt svar inom en vecka.</span></div>
       <div class="upd-item"><span class="upd-time">11:40</span><span class="upd-text">Demonstrationen samlade uppskattningsvis 400 studenter.</span></div>
     </div>
@@ -2891,10 +2910,7 @@ function toggleTheme(){
 function updateLogos(){
   var isLight=document.body.classList.contains('light');
   document.querySelectorAll('.logo-dark').forEach(function(el){ el.style.display=isLight?'none':'block'; });
-  document.querySelectorAll('.logo-light').forEach(function(el){ el.style.display=isLight?'block':'none'; });
-}
-</script>
-<script>
+  document.querySelectorAll('.logo-light').forEach(fu<script>
 var activeTrendTab = 'generellt';
 var trendsByTab = { generellt: [], sport: [], naringsliv: [], ekonomi: [], noje: [], internationellt: [] };
 
@@ -4342,6 +4358,9 @@ window.addEventListener('load', function() {
       arts.forEach(function(a){ injectFeed(a); });
       var featured = arts.find(function(a){ return a.featured; });
       if (featured) setFeaturedHero(featured);
+    }).catch(function(){});
+});
+</script> setFeaturedHero(featured);
     }).catch(function(){});
 });
 </script>
