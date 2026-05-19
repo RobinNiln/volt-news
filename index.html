@@ -639,6 +639,7 @@ html, body { overflow-x: hidden; }
 </aside>
 </div>
 </div>
+</div><!-- /page-start -->
 
 <div class="page" id="page-lakarbrist">
 <div class="art-page">
@@ -3079,18 +3080,13 @@ function renderSidebarLatest(arts) {
 
 
 function toggleTheme(){
-  const b=document.body;
-  const btn=document.getElementById('theme-btn');
-  const isDark=b.classList.contains('dark');
-  if(isDark){
-    b.classList.replace('dark','light');
-    btn.textContent='☾ Mörkt';
-    localStorage.setItem('grid-theme','light');
-  } else {
-    b.classList.replace('light','dark');
-    btn.textContent='● Ljust';
-    localStorage.setItem('grid-theme','dark');
-  }
+  var b = document.body;
+  var btn = document.getElementById('theme-btn');
+  var goLight = b.classList.contains('dark');
+  b.classList.remove('dark','light');
+  b.classList.add(goLight ? 'light' : 'dark');
+  localStorage.setItem('grid-theme', goLight ? 'light' : 'dark');
+  if(btn) btn.textContent = goLight ? '☾ Mörkt' : '☀ Ljust';
   updateLogos();
 }
 function updateLogos(){
